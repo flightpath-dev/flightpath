@@ -1,0 +1,14 @@
+version: v2
+plugins:
+  # Protocol Buffers for TypeScript
+  - remote: buf.build/bufbuild/es:v2.10.1
+    out: gen/ts
+    opt:
+      - target=ts
+      - import_extension=.js
+  
+  # Connect for TypeScript
+  - remote: buf.build/connectrpc/es:v1.3.0
+    out: gen/ts
+    opt:
+      - target=ts

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package flightpath;
+
+option go_package = "github.com/flightpath-dev/flightpath/gen/go/flightpath;flightpath";
+
+// Handle drone connection
+service ConnectionService {
+  // TODO: Change the name to something more sensible
+  // Stream heartbeats
+  rpc StreamHeartbeats(StreamHeartbeatsRequest) returns (stream StreamHeartbeatsResponse);
+}
+
+message StreamHeartbeatsRequest {
+}
+
+message StreamHeartbeatsResponse {
+  // Timestamp when this Heartbeats data was captured
+  int64 timestamp_ms = 1;
+}
+
