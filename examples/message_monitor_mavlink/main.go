@@ -9,6 +9,7 @@ import (
 
 	"github.com/bluenviron/gomavlib/v3"
 	"github.com/bluenviron/gomavlib/v3/pkg/dialects/common"
+	"github.com/flightpath-dev/flightpath/internal/config"
 	"github.com/flightpath-dev/flightpath/internal/mavlink"
 	mavcommon "github.com/flightpath-dev/flightpath/internal/mavlink/dialects/common"
 )
@@ -17,30 +18,51 @@ import (
 // Message Monitor using MAVLink
 // ------------------------------------------------------------------------------------------------
 // This example shows how to act as a GCS by listening to the PX4 autopilot's broadcast messages.
-// It uses gomavlib to connect to UDP port 14550 where the PX4 broadcasts its messages using MAVLink.
+// It uses gomavlib to connect to MAVLink endpoints (Serial, UDP, or TCP) and displays
+// all received messages with counts.
+//
+// Configuration is loaded from environment variables with sensible defaults:
+//   - Default: UDP server on port 14550 (standard PX4 SITL port)
+//   - See main() function for all available environment variables
 //
 // To run this example:
 //  1. Start a PX4 SITL (see docs/px4-sitl-setup.md)
-//  2. Run this example:
+//
+//  2. Run the example using the default configuration (UDP server on port 14550):
 //     go run examples/message_monitor_mavlink/main.go
 //
-// You should see the PX4's broadcast message types and counts printed to the console.
+//  3. Or configure a serial connection via environment variables:
+//     export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=serial
+//     export FLIGHTPATH_MAVLINK_SERIAL_DEVICE=/dev/cu.usbserial-D30JAXGS
+//     export FLIGHTPATH_MAVLINK_SERIAL_BAUD=57600
+//
+//     go run examples/message_monitor_mavlink/main.go
+//
+//  4. Or configure a UDP server connection via environment variables:
+//     export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=udp-server
+//     export FLIGHTPATH_MAVLINK_UDP_ADDRESS=0.0.0.0:14550
+//
+//     go run examples/message_monitor_mavlink/main.go
+//
+// Once started, you should see the PX4's broadcast message types and counts printed to the console.
 // Additionally, the latest HEARTBEAT message is printed in detail.
 // ------------------------------------------------------------------------------------------------
 
 func main() {
-	// Create a node which acts as a GCS, communicating with a UDP endpoint in server mode.
-	// We use port 14550 because that's where the PX4 broadcasts its messages.
+	cfg, err := config.Load()
+	if err != nil {
+		panic(fmt.Errorf("failed to load configuration: %w", err))
+	}
+
+	// Create a node which acts as a GCS, communicating with the configured endpoint.
 	// We use system ID 254 to coexist with QGroundControl (which uses 255).
 	node := &gomavlib.Node{
-		Endpoints: []gomavlib.EndpointConf{
-			gomavlib.EndpointUDPServer{Address: "0.0.0.0:14550"},
-		},
+		Endpoints:   []gomavlib.EndpointConf{cfg.MAVLink.Endpoint},
 		Dialect:     common.Dialect,
 		OutVersion:  gomavlib.V2,
 		OutSystemID: 254,
 	}
-	err := node.Initialize()
+	err = node.Initialize()
 	if err != nil {
 		panic(err)
 	}

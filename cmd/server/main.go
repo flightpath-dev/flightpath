@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -16,7 +17,10 @@ import (
 
 func main() {
 	// Load configuration from environment variables (with sensible defaults)
-	cfg := config.Load()
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatalf("Failed to load configuration: %v", err)
+	}
 
 	// Create server
 	srv := server.NewServer(cfg)

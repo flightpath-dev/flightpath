@@ -115,7 +115,7 @@ func DecodePX4CustomMode(customMode uint32) map[string]interface{} {
 	subMode := uint8((customMode >> 24) & 0xFF)
 
 	result := map[string]interface{}{
-		"raw":           fmt.Sprintf("0x%X", customMode),
+		"raw":           fmt.Sprintf("0x%08X", customMode),
 		"main_mode":     fmt.Sprintf("0x%02X", uint8(mainMode)),
 		"main_mode_str": mainModeNames[mainMode],
 		"sub_mode":      fmt.Sprintf("0x%02X", subMode),
