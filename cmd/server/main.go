@@ -6,9 +6,12 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
+	"github.com/bluenviron/gomavlib/v3"
+	"github.com/bluenviron/gomavlib/v3/pkg/dialects/common"
 	"github.com/flightpath-dev/flightpath/gen/go/flightpath/flightpathconnect"
 	"github.com/flightpath-dev/flightpath/internal/config"
 	"github.com/flightpath-dev/flightpath/internal/server"
@@ -22,14 +25,43 @@ func main() {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
 
+	// Initialize MAVLink node
+	// We use system ID 254 to coexist with QGroundControl (which uses 255).
+	log.Println("📡 Initializing MAVLink node...")
+	node := &gomavlib.Node{
+		Endpoints:   []gomavlib.EndpointConf{cfg.MAVLink.Endpoint},
+		Dialect:     common.Dialect,
+		OutVersion:  gomavlib.V2,
+		OutSystemID: 254,
+	}
+	err = node.Initialize()
+	if err != nil {
+		log.Fatalf("Failed to initialize MAVLink node: %v", err)
+	}
+	log.Println("✅ MAVLink node initialized successfully")
+
+	// Use sync.Once to ensure node is closed exactly once
+	var nodeCloseOnce sync.Once
+	closeNode := func() {
+		nodeCloseOnce.Do(func() {
+			log.Println("🔌 Closing MAVLink node...")
+			if node != nil {
+				node.Close()
+			}
+		})
+	}
+
+	// Ensure node is closed on any exit path
+	defer closeNode()
+
 	// Create server
 	srv := server.NewServer(cfg)
 
 	// Register services
-	registerServices(srv)
+	registerServices(srv, node)
 
 	// Setup graceful shutdown
-	go handleShutdown(srv)
+	go handleShutdown(srv, node, closeNode)
 
 	// Start server
 	if err := srv.Start(); err != nil && err != http.ErrServerClosed {
@@ -38,11 +70,12 @@ func main() {
 }
 
 // Register all services
-func registerServices(srv *server.Server) {
+func registerServices(srv *server.Server, node *gomavlib.Node) {
 	// Create shared service context
 	ctx := &services.ServiceContext{
 		Config: srv.Config(),
 		Logger: srv.Logger(),
+		Node:   node,
 	}
 
 	// ConnectionService
@@ -52,7 +85,7 @@ func registerServices(srv *server.Server) {
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals
-func handleShutdown(srv *server.Server) {
+func handleShutdown(srv *server.Server, node *gomavlib.Node, closeNode func()) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 
@@ -68,6 +101,9 @@ func handleShutdown(srv *server.Server) {
 	if err := srv.Shutdown(ctx); err != nil {
 		srv.Logger().Printf("Error during server shutdown: %v", err)
 	}
+
+	// Close MAVLink node (sync.Once ensures this is only called once)
+	closeNode()
 
 	srv.Logger().Println("✅ Cleanup complete")
 	os.Exit(0)

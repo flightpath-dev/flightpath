@@ -6,16 +6,203 @@ option go_package = "github.com/flightpath-dev/flightpath/gen/go/flightpath;flig
 
 // Handle drone connection
 service ConnectionService {
-  // TODO: Change the name to something more sensible
-  // Stream heartbeats
-  rpc StreamHeartbeats(StreamHeartbeatsRequest) returns (stream StreamHeartbeatsResponse);
+  // SubscribeHeartbeat streams HEARTBEAT messages from the MAVLink connection.
+  // Each message includes the heartbeat data with system/component IDs and enriched mode information.
+  rpc SubscribeHeartbeat(SubscribeHeartbeatRequest) returns (stream SubscribeHeartbeatResponse);
 }
 
-message StreamHeartbeatsRequest {
+message SubscribeHeartbeatRequest {
 }
 
-message StreamHeartbeatsResponse {
-  // Timestamp when this Heartbeats data was captured
+message SubscribeHeartbeatResponse {
+  // Timestamp when this heartbeat data was captured (milliseconds since Unix epoch)
   int64 timestamp_ms = 1;
+  // System ID of the component sending the heartbeat
+  uint32 system_id = 2;
+  // Component ID of the component sending the heartbeat
+  uint32 component_id = 3;
+  // Heartbeat message data
+  Heartbeat heartbeat = 4;
+}
+
+message Heartbeat {
+  // Vehicle type
+  MavType type = 1;
+  // Autopilot type
+  MavAutopilot autopilot = 2;
+  // Base mode flags (structured bitfield)
+  BaseMode base_mode = 3;
+  // Custom mode (platform-agnostic abstraction based on PX4)
+  CustomMode custom_mode = 4;
+  // System status
+  MavState system_status = 5;
+  // MAVLink protocol version
+  uint32 mavlink_version = 6;
+}
+
+// BaseMode represents the MAV_MODE_FLAG bitfield as structured boolean flags.
+// Bits are ordered from least significant (bit 0) to most significant (bit 7),
+// matching https://mavlink.io/en/messages/common.html#MAV_MODE_FLAG.
+message BaseMode {
+  // Bit 0 (1): Custom mode is enabled
+  bool custom_mode_enabled = 1;
+  // Bit 1 (2): Test mode enabled
+  bool test_enabled = 2;
+  // Bit 2 (4): Autonomous mode enabled
+  bool auto_enabled = 3;
+  // Bit 3 (8): Guided mode enabled
+  bool guided_enabled = 4;
+  // Bit 4 (16): Stabilize mode enabled
+  bool stabilize_enabled = 5;
+  // Bit 5 (32): Hardware in the loop simulation enabled
+  bool hil_enabled = 6;
+  // Bit 6 (64): Manual input is enabled
+  bool manual_input_enabled = 7;
+  // Bit 7 (128): Safety switch is currently engaged (armed)
+  bool safety_armed = 8;
+}
+
+// CustomMode represents flight mode as platform-agnostic abstractions
+message CustomMode {
+  // Main flight mode
+  MainMode main_mode = 1;
+  // Sub mode (context-dependent based on main mode)
+  SubMode sub_mode = 2;
+}
+
+// MavType represents vehicle types from MAVLink MAV_TYPE enum
+enum MavType {
+  MAV_TYPE_UNSPECIFIED = 0;
+  MAV_TYPE_FIXED_WING = 1;
+  MAV_TYPE_QUADROTOR = 2;
+  MAV_TYPE_COAXIAL = 3;
+  MAV_TYPE_HELICOPTER = 4;
+  MAV_TYPE_ANTENNA_TRACKER = 5;
+  MAV_TYPE_GCS = 6;
+  MAV_TYPE_AIRSHIP = 7;
+  MAV_TYPE_FREE_BALLOON = 8;
+  MAV_TYPE_ROCKET = 9;
+  MAV_TYPE_GROUND_ROVER = 10;
+  MAV_TYPE_SURFACE_BOAT = 11;
+  MAV_TYPE_SUBMARINE = 12;
+  MAV_TYPE_HEXAROTOR = 13;
+  MAV_TYPE_OCTOROTOR = 14;
+  MAV_TYPE_TRICOPTER = 15;
+  MAV_TYPE_FLAPPING_WING = 16;
+  MAV_TYPE_KITE = 17;
+  MAV_TYPE_ONBOARD_CONTROLLER = 18;
+  MAV_TYPE_VTOL_TAILSITTER_DUOROTOR = 19;
+  MAV_TYPE_VTOL_TAILSITTER_QUADROTOR = 20;
+  MAV_TYPE_VTOL_TILTROTOR = 21;
+  MAV_TYPE_VTOL_FIXEDROTOR = 22;
+  MAV_TYPE_VTOL_TAILSITTER = 23;
+  MAV_TYPE_VTOL_TILTWING = 24;
+  MAV_TYPE_VTOL_RESERVED5 = 25;
+  MAV_TYPE_GIMBAL = 26;
+  MAV_TYPE_ADSB = 27;
+  MAV_TYPE_PARAFOIL = 28;
+  MAV_TYPE_DODECAROTOR = 29;
+  MAV_TYPE_CAMERA = 30;
+  MAV_TYPE_CHARGING_STATION = 31;
+  MAV_TYPE_FLARM = 32;
+  MAV_TYPE_SERVO = 33;
+  MAV_TYPE_ODID = 34;
+  MAV_TYPE_DECAROTOR = 35;
+  MAV_TYPE_BATTERY = 36;
+  MAV_TYPE_PARACHUTE = 37;
+  MAV_TYPE_LOG = 38;
+  MAV_TYPE_OSD = 39;
+  MAV_TYPE_IMU = 40;
+  MAV_TYPE_GPS = 41;
+  MAV_TYPE_WINCH = 42;
+  MAV_TYPE_GENERIC_MULTIROTOR = 43;
+  MAV_TYPE_ILLUMINATOR = 44;
+  MAV_TYPE_SPACECRAFT_ORBITER = 45;
+  MAV_TYPE_GROUND_QUADRUPED = 46;
+  MAV_TYPE_VTOL_GYRODYNE = 47;
+  MAV_TYPE_GRIPPER = 48;
+  MAV_TYPE_RADIO = 49;
+}
+
+// MavAutopilot represents autopilot types from MAVLink MAV_AUTOPILOT enum
+enum MavAutopilot {
+  MAV_AUTOPILOT_UNSPECIFIED = 0;
+  MAV_AUTOPILOT_RESERVED = 1;
+  MAV_AUTOPILOT_SLUGS = 2;
+  MAV_AUTOPILOT_ARDUPILOTMEGA = 3;
+  MAV_AUTOPILOT_OPENPILOT = 4;
+  MAV_AUTOPILOT_GENERIC_WAYPOINTS_ONLY = 5;
+  MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY = 6;
+  MAV_AUTOPILOT_GENERIC_MISSION_FULL = 7;
+  MAV_AUTOPILOT_INVALID = 8;
+  MAV_AUTOPILOT_PPZ = 9;
+  MAV_AUTOPILOT_UDB = 10;
+  MAV_AUTOPILOT_FP = 11;
+  MAV_AUTOPILOT_PX4 = 12;
+  MAV_AUTOPILOT_SMACCMPILOT = 13;
+  MAV_AUTOPILOT_AUTOQUAD = 14;
+  MAV_AUTOPILOT_ARMAZILA = 15;
+  MAV_AUTOPILOT_AEROB = 16;
+  MAV_AUTOPILOT_ASLUAV = 17;
+  MAV_AUTOPILOT_SMARTAP = 18;
+  MAV_AUTOPILOT_AIRRAILS = 19;
+  MAV_AUTOPILOT_REFLEX = 20;
+}
+
+// MavState represents system states from MAVLink MAV_STATE enum
+enum MavState {
+  MAV_STATE_UNSPECIFIED = 0;
+  MAV_STATE_BOOT = 1;
+  MAV_STATE_CALIBRATING = 2;
+  MAV_STATE_STANDBY = 3;
+  MAV_STATE_ACTIVE = 4;
+  MAV_STATE_CRITICAL = 5;
+  MAV_STATE_EMERGENCY = 6;
+  MAV_STATE_POWEROFF = 7;
+  MAV_STATE_FLIGHT_TERMINATION = 8;
+}
+
+// MainMode represents main flight modes (platform-agnostic abstraction based on PX4)
+enum MainMode {
+  MAIN_MODE_UNSPECIFIED = 0;
+  MAIN_MODE_MANUAL = 1;
+  MAIN_MODE_ALTCTL = 2;
+  MAIN_MODE_POSCTL = 3;
+  MAIN_MODE_AUTO = 4;
+  MAIN_MODE_ACRO = 5;
+  MAIN_MODE_OFFBOARD = 6;
+  MAIN_MODE_STABILIZED = 7;
+  MAIN_MODE_RATTITUDE_LEGACY = 8;
+  MAIN_MODE_SIMPLE = 9;
+  MAIN_MODE_TERMINATION = 10;
+  MAIN_MODE_ALTITUDE_CRUISE = 11;
+}
+
+// SubMode represents sub flight modes (platform-agnostic abstraction based on PX4)
+enum SubMode {
+  SUB_MODE_UNSPECIFIED = 0;
+  // AUTO mode sub-modes
+  SUB_MODE_READY = 1;
+  SUB_MODE_TAKEOFF = 2;
+  SUB_MODE_LOITER = 3;
+  SUB_MODE_MISSION = 4;
+  SUB_MODE_RTL = 5;
+  SUB_MODE_LAND = 6;
+  SUB_MODE_FOLLOW_TARGET = 7;
+  SUB_MODE_PRECLAND = 8;
+  SUB_MODE_VTOL_TAKEOFF = 9;
+  // POSCTL mode sub-modes
+  SUB_MODE_POSCTL = 10;
+  SUB_MODE_ORBIT = 11;
+  SUB_MODE_SLOW = 12;
+  // External sub-modes
+  SUB_MODE_EXTERNAL1 = 13;
+  SUB_MODE_EXTERNAL2 = 14;
+  SUB_MODE_EXTERNAL3 = 15;
+  SUB_MODE_EXTERNAL4 = 16;
+  SUB_MODE_EXTERNAL5 = 17;
+  SUB_MODE_EXTERNAL6 = 18;
+  SUB_MODE_EXTERNAL7 = 19;
+  SUB_MODE_EXTERNAL8 = 20;
 }
 

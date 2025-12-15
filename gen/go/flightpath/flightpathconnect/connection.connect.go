@@ -33,21 +33,22 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// ConnectionServiceStreamHeartbeatsProcedure is the fully-qualified name of the ConnectionService's
-	// StreamHeartbeats RPC.
-	ConnectionServiceStreamHeartbeatsProcedure = "/flightpath.ConnectionService/StreamHeartbeats"
+	// ConnectionServiceSubscribeHeartbeatProcedure is the fully-qualified name of the
+	// ConnectionService's SubscribeHeartbeat RPC.
+	ConnectionServiceSubscribeHeartbeatProcedure = "/flightpath.ConnectionService/SubscribeHeartbeat"
 )
 
 // These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
 var (
-	connectionServiceServiceDescriptor                = flightpath.File_flightpath_connection_proto.Services().ByName("ConnectionService")
-	connectionServiceStreamHeartbeatsMethodDescriptor = connectionServiceServiceDescriptor.Methods().ByName("StreamHeartbeats")
+	connectionServiceServiceDescriptor                  = flightpath.File_flightpath_connection_proto.Services().ByName("ConnectionService")
+	connectionServiceSubscribeHeartbeatMethodDescriptor = connectionServiceServiceDescriptor.Methods().ByName("SubscribeHeartbeat")
 )
 
 // ConnectionServiceClient is a client for the flightpath.ConnectionService service.
 type ConnectionServiceClient interface {
-	// Stream heartbeats
-	StreamHeartbeats(context.Context, *connect.Request[flightpath.StreamHeartbeatsRequest]) (*connect.ServerStreamForClient[flightpath.StreamHeartbeatsResponse], error)
+	// SubscribeHeartbeat streams HEARTBEAT messages from the MAVLink connection.
+	// Each message includes the heartbeat data with system/component IDs and enriched mode information.
+	SubscribeHeartbeat(context.Context, *connect.Request[flightpath.SubscribeHeartbeatRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeHeartbeatResponse], error)
 }
 
 // NewConnectionServiceClient constructs a client for the flightpath.ConnectionService service. By
@@ -60,10 +61,10 @@ type ConnectionServiceClient interface {
 func NewConnectionServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) ConnectionServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &connectionServiceClient{
-		streamHeartbeats: connect.NewClient[flightpath.StreamHeartbeatsRequest, flightpath.StreamHeartbeatsResponse](
+		subscribeHeartbeat: connect.NewClient[flightpath.SubscribeHeartbeatRequest, flightpath.SubscribeHeartbeatResponse](
 			httpClient,
-			baseURL+ConnectionServiceStreamHeartbeatsProcedure,
-			connect.WithSchema(connectionServiceStreamHeartbeatsMethodDescriptor),
+			baseURL+ConnectionServiceSubscribeHeartbeatProcedure,
+			connect.WithSchema(connectionServiceSubscribeHeartbeatMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -71,18 +72,19 @@ func NewConnectionServiceClient(httpClient connect.HTTPClient, baseURL string, o
 
 // connectionServiceClient implements ConnectionServiceClient.
 type connectionServiceClient struct {
-	streamHeartbeats *connect.Client[flightpath.StreamHeartbeatsRequest, flightpath.StreamHeartbeatsResponse]
+	subscribeHeartbeat *connect.Client[flightpath.SubscribeHeartbeatRequest, flightpath.SubscribeHeartbeatResponse]
 }
 
-// StreamHeartbeats calls flightpath.ConnectionService.StreamHeartbeats.
-func (c *connectionServiceClient) StreamHeartbeats(ctx context.Context, req *connect.Request[flightpath.StreamHeartbeatsRequest]) (*connect.ServerStreamForClient[flightpath.StreamHeartbeatsResponse], error) {
-	return c.streamHeartbeats.CallServerStream(ctx, req)
+// SubscribeHeartbeat calls flightpath.ConnectionService.SubscribeHeartbeat.
+func (c *connectionServiceClient) SubscribeHeartbeat(ctx context.Context, req *connect.Request[flightpath.SubscribeHeartbeatRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeHeartbeatResponse], error) {
+	return c.subscribeHeartbeat.CallServerStream(ctx, req)
 }
 
 // ConnectionServiceHandler is an implementation of the flightpath.ConnectionService service.
 type ConnectionServiceHandler interface {
-	// Stream heartbeats
-	StreamHeartbeats(context.Context, *connect.Request[flightpath.StreamHeartbeatsRequest], *connect.ServerStream[flightpath.StreamHeartbeatsResponse]) error
+	// SubscribeHeartbeat streams HEARTBEAT messages from the MAVLink connection.
+	// Each message includes the heartbeat data with system/component IDs and enriched mode information.
+	SubscribeHeartbeat(context.Context, *connect.Request[flightpath.SubscribeHeartbeatRequest], *connect.ServerStream[flightpath.SubscribeHeartbeatResponse]) error
 }
 
 // NewConnectionServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -91,16 +93,16 @@ type ConnectionServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewConnectionServiceHandler(svc ConnectionServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	connectionServiceStreamHeartbeatsHandler := connect.NewServerStreamHandler(
-		ConnectionServiceStreamHeartbeatsProcedure,
-		svc.StreamHeartbeats,
-		connect.WithSchema(connectionServiceStreamHeartbeatsMethodDescriptor),
+	connectionServiceSubscribeHeartbeatHandler := connect.NewServerStreamHandler(
+		ConnectionServiceSubscribeHeartbeatProcedure,
+		svc.SubscribeHeartbeat,
+		connect.WithSchema(connectionServiceSubscribeHeartbeatMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/flightpath.ConnectionService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case ConnectionServiceStreamHeartbeatsProcedure:
-			connectionServiceStreamHeartbeatsHandler.ServeHTTP(w, r)
+		case ConnectionServiceSubscribeHeartbeatProcedure:
+			connectionServiceSubscribeHeartbeatHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -110,6 +112,6 @@ func NewConnectionServiceHandler(svc ConnectionServiceHandler, opts ...connect.H
 // UnimplementedConnectionServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedConnectionServiceHandler struct{}
 
-func (UnimplementedConnectionServiceHandler) StreamHeartbeats(context.Context, *connect.Request[flightpath.StreamHeartbeatsRequest], *connect.ServerStream[flightpath.StreamHeartbeatsResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.ConnectionService.StreamHeartbeats is not implemented"))
+func (UnimplementedConnectionServiceHandler) SubscribeHeartbeat(context.Context, *connect.Request[flightpath.SubscribeHeartbeatRequest], *connect.ServerStream[flightpath.SubscribeHeartbeatResponse]) error {
+	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.ConnectionService.SubscribeHeartbeat is not implemented"))
 }

@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { StreamHeartbeatsRequest, StreamHeartbeatsResponse } from "./connection_pb.js";
+import { SubscribeHeartbeatRequest, SubscribeHeartbeatResponse } from "./connection_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -15,14 +15,15 @@ export const ConnectionService = {
   typeName: "flightpath.ConnectionService",
   methods: {
     /**
-     * Stream heartbeats
+     * SubscribeHeartbeat streams HEARTBEAT messages from the MAVLink connection.
+     * Each message includes the heartbeat data with system/component IDs and enriched mode information.
      *
-     * @generated from rpc flightpath.ConnectionService.StreamHeartbeats
+     * @generated from rpc flightpath.ConnectionService.SubscribeHeartbeat
      */
-    streamHeartbeats: {
-      name: "StreamHeartbeats",
-      I: StreamHeartbeatsRequest,
-      O: StreamHeartbeatsResponse,
+    subscribeHeartbeat: {
+      name: "SubscribeHeartbeat",
+      I: SubscribeHeartbeatRequest,
+      O: SubscribeHeartbeatResponse,
       kind: MethodKind.ServerStreaming,
     },
   }

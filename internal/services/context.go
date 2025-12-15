@@ -3,6 +3,7 @@ package services
 import (
 	"log"
 
+	"github.com/bluenviron/gomavlib/v3"
 	"github.com/flightpath-dev/flightpath/internal/config"
 )
 
@@ -12,4 +13,5 @@ import (
 type ServiceContext struct {
 	Config *config.Config
 	Logger *log.Logger
+	Node   *gomavlib.Node
 }

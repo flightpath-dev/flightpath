@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sort"
+	"strings"
 	"syscall"
 	"time"
 
@@ -20,7 +22,8 @@ import (
 // ------------------------------------------------------------------------------------------------
 // This example shows how to connect to the Flightpath gRPC server and stream heartbeat messages.
 // It uses the Connect RPC client to communicate with the server and displays all received
-// heartbeat messages with timestamps.
+// heartbeat messages with detailed information including system/component IDs, vehicle type,
+// autopilot type, flight modes, and system status.
 //
 // Configuration is loaded from environment variables with sensible defaults:
 //   - Default: http://localhost:8080 (standard Flightpath server address)
@@ -38,7 +41,7 @@ import (
 //
 //     go run examples/message_monitor_flightpath/main.go
 //
-// Once started, you should see heartbeat messages with timestamps printed to the console.
+// Once started, you should see heartbeat messages with detailed information printed to the console.
 // Press Ctrl+C to stop the stream.
 // ------------------------------------------------------------------------------------------------
 
@@ -57,8 +60,11 @@ func main() {
 	// Setup graceful shutdown on Ctrl+C
 	ctx := handleShutdown()
 
-	// Stream heartbeats
-	streamHeartbeats(ctx, connectionService, serverURL)
+	// Subscribe to heartbeats
+	messageCounts := make(map[string]int)
+	var latestHeartbeat *flightpath.SubscribeHeartbeatResponse
+
+	subscribeHeartbeat(ctx, connectionService, serverURL, messageCounts, &latestHeartbeat)
 }
 
 // createClient creates the HTTP client and connection service client
@@ -86,25 +92,31 @@ func handleShutdown() context.Context {
 	go func() {
 		<-sigChan
 		fmt.Println("\nStopping...")
-		cancel() // Cancel the context, which signals StreamHeartbeats to stop
+		cancel() // Cancel the context, which signals SubscribeHeartbeat to stop
 	}()
 
 	return ctx
 }
 
-// streamHeartbeats connects to the server and streams heartbeat messages
-func streamHeartbeats(ctx context.Context, connectionService flightpathconnect.ConnectionServiceClient, serverURL string) {
-	fmt.Printf("Connecting to StreamHeartbeats endpoint: %s\n", serverURL)
+// subscribeHeartbeat connects to the server and streams heartbeat messages
+func subscribeHeartbeat(
+	ctx context.Context,
+	connectionService flightpathconnect.ConnectionServiceClient,
+	serverURL string,
+	messageCounts map[string]int,
+	latestHeartbeat **flightpath.SubscribeHeartbeatResponse,
+) {
+	fmt.Printf("Connecting to SubscribeHeartbeat endpoint: %s\n", serverURL)
 	fmt.Println("Press Ctrl+C to stop")
 	fmt.Println("")
 
-	// Create StreamHeartbeats request
-	req := connect.NewRequest(&flightpath.StreamHeartbeatsRequest{})
+	// Create SubscribeHeartbeat request
+	req := connect.NewRequest(&flightpath.SubscribeHeartbeatRequest{})
 
-	// Call StreamHeartbeats to start the stream, pass ctx for cancellation when user presses Ctrl+C
-	stream, err := connectionService.StreamHeartbeats(ctx, req)
+	// Call SubscribeHeartbeat to start the stream, pass ctx for cancellation when user presses Ctrl+C
+	stream, err := connectionService.SubscribeHeartbeat(ctx, req)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error calling StreamHeartbeats: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error calling SubscribeHeartbeat: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -112,22 +124,93 @@ func streamHeartbeats(ctx context.Context, connectionService flightpathconnect.C
 	for stream.Receive() {
 		// Get the message from the stream
 		msg := stream.Msg()
-		// Convert the timestamp to a human-readable format
-		timestamp := time.Unix(0, msg.TimestampMs*int64(time.Millisecond))
-		fmt.Printf("Received heartbeat: timestamp = %d ms (%s)\n",
-			msg.TimestampMs,
-			timestamp.Format("2006-01-02 15:04:05"),
-		)
+
+		// Update message count
+		messageCounts["HEARTBEAT"]++
+
+		// Update latest heartbeat
+		*latestHeartbeat = msg
+
+		// Render dashboard after processing each message
+		renderDashboard(messageCounts, *latestHeartbeat)
 	}
 
 	// Receive loop exited, check if there was an error from the stream
 	if err := stream.Err(); err != nil {
 		// Check if the error is due to context cancellation (user pressed Ctrl+C)
 		if err == context.Canceled {
-			fmt.Println("Stream canceled by user")
+			fmt.Println("\nStream canceled by user")
 			return
 		}
 		fmt.Fprintf(os.Stderr, "Stream error: %v\n", err)
 		os.Exit(1)
 	}
+}
+
+// renderDashboard
+// Renders a dashboard showing message counts and latest heartbeat information.
+// Clears the screen and displays all information in a single update to minimize flicker.
+func renderDashboard(messageCounts map[string]int, latestHeartbeat *flightpath.SubscribeHeartbeatResponse) {
+	var buf strings.Builder
+
+	// Clear screen and move cursor to top
+	buf.WriteString("\033[2J\033[H")
+
+	// Header
+	buf.WriteString("=== Flightpath Message Monitor ===\n\n")
+
+	// Latest HEARTBEAT message
+	if latestHeartbeat != nil {
+		buf.WriteString("Latest HEARTBEAT:\n")
+		buf.WriteString("----------------\n")
+
+		// Convert the timestamp to a human-readable format
+		timestamp := time.Unix(0, latestHeartbeat.TimestampMs*int64(time.Millisecond))
+		buf.WriteString(fmt.Sprintf("Timestamp: %s (%d ms)\n", timestamp.Format("2006-01-02 15:04:05.000"), latestHeartbeat.TimestampMs))
+		buf.WriteString(fmt.Sprintf("System ID: %d, Component ID: %d\n", latestHeartbeat.SystemId, latestHeartbeat.ComponentId))
+
+		if latestHeartbeat.Heartbeat != nil {
+			hb := latestHeartbeat.Heartbeat
+			buf.WriteString(fmt.Sprintf("Vehicle Type: %s\n", hb.Type.String()))
+			buf.WriteString(fmt.Sprintf("Autopilot: %s\n", hb.Autopilot.String()))
+			buf.WriteString(fmt.Sprintf("System Status: %s\n", hb.SystemStatus.String()))
+			buf.WriteString(fmt.Sprintf("MAVLink Version: %d\n", hb.MavlinkVersion))
+
+			if hb.BaseMode != nil {
+				bm := hb.BaseMode
+				buf.WriteString(fmt.Sprintf(
+					"Base Mode: custom_mode=%v, test=%v, auto=%v, guided=%v, stabilize=%v, hil=%v, manual=%v, safety=%v\n",
+					bm.CustomModeEnabled, bm.TestEnabled, bm.AutoEnabled, bm.GuidedEnabled,
+					bm.StabilizeEnabled, bm.HilEnabled, bm.ManualInputEnabled, bm.SafetyArmed))
+			}
+
+			if hb.CustomMode != nil {
+				cm := hb.CustomMode
+				buf.WriteString(fmt.Sprintf("Custom Mode: %s / %s\n", cm.MainMode.String(), cm.SubMode.String()))
+			}
+		}
+
+		buf.WriteString("\n")
+	}
+
+	// Message counts table
+	buf.WriteString("Message Counts:\n")
+	buf.WriteString("---------------\n")
+
+	// Sort message types by name for consistent display
+	messageTypes := make([]string, 0, len(messageCounts))
+	for msgType := range messageCounts {
+		messageTypes = append(messageTypes, msgType)
+	}
+	sort.Strings(messageTypes)
+
+	// Print message counts
+	for _, msgType := range messageTypes {
+		buf.WriteString(fmt.Sprintf("  %-30s %d\n", msgType, messageCounts[msgType]))
+	}
+
+	buf.WriteString("\n")
+
+	// Write everything at once to minimize flicker
+	fmt.Fprint(os.Stdout, buf.String())
 }

@@ -34,3 +34,4 @@ func HeartbeatMessageToMap(msg *common.MessageHeartbeat) (map[string]interface{}
 ## Reference documentation
 - MAVLink Protocol: https://mavlink.io/en/
 - gomavlib – a library that implements the Mavlink protocol in Go: https://github.com/bluenviron/gomavlib
+- Protobuf Style Guide: https://buf.build/docs/best-practices/style-guide/

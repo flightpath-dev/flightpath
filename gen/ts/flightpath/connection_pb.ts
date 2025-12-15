@@ -2,47 +2,858 @@
 // @generated from file flightpath/connection.proto (package flightpath, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file flightpath/connection.proto.
  */
 export const file_flightpath_connection: GenFile = /*@__PURE__*/
-  fileDesc("ChtmbGlnaHRwYXRoL2Nvbm5lY3Rpb24ucHJvdG8SCmZsaWdodHBhdGgiGQoXU3RyZWFtSGVhcnRiZWF0c1JlcXVlc3QiMAoYU3RyZWFtSGVhcnRiZWF0c1Jlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAzJ0ChFDb25uZWN0aW9uU2VydmljZRJfChBTdHJlYW1IZWFydGJlYXRzEiMuZmxpZ2h0cGF0aC5TdHJlYW1IZWFydGJlYXRzUmVxdWVzdBokLmZsaWdodHBhdGguU3RyZWFtSGVhcnRiZWF0c1Jlc3BvbnNlMAFCQ1pBZ2l0aHViLmNvbS9mbGlnaHRwYXRoLWRldi9mbGlnaHRwYXRoL2dlbi9nby9mbGlnaHRwYXRoO2ZsaWdodHBhdGhiBnByb3RvMw");
+  fileDesc("ChtmbGlnaHRwYXRoL2Nvbm5lY3Rpb24ucHJvdG8SCmZsaWdodHBhdGgiGwoZU3Vic2NyaWJlSGVhcnRiZWF0UmVxdWVzdCKFAQoaU3Vic2NyaWJlSGVhcnRiZWF0UmVzcG9uc2USFAoMdGltZXN0YW1wX21zGAEgASgDEhEKCXN5c3RlbV9pZBgCIAEoDRIUCgxjb21wb25lbnRfaWQYAyABKA0SKAoJaGVhcnRiZWF0GAQgASgLMhUuZmxpZ2h0cGF0aC5IZWFydGJlYXQi9wEKCUhlYXJ0YmVhdBIhCgR0eXBlGAEgASgOMhMuZmxpZ2h0cGF0aC5NYXZUeXBlEisKCWF1dG9waWxvdBgCIAEoDjIYLmZsaWdodHBhdGguTWF2QXV0b3BpbG90EicKCWJhc2VfbW9kZRgDIAEoCzIULmZsaWdodHBhdGguQmFzZU1vZGUSKwoLY3VzdG9tX21vZGUYBCABKAsyFi5mbGlnaHRwYXRoLkN1c3RvbU1vZGUSKwoNc3lzdGVtX3N0YXR1cxgFIAEoDjIULmZsaWdodHBhdGguTWF2U3RhdGUSFwoPbWF2bGlua192ZXJzaW9uGAYgASgNIs8BCghCYXNlTW9kZRIbChNjdXN0b21fbW9kZV9lbmFibGVkGAEgASgIEhQKDHRlc3RfZW5hYmxlZBgCIAEoCBIUCgxhdXRvX2VuYWJsZWQYAyABKAgSFgoOZ3VpZGVkX2VuYWJsZWQYBCABKAgSGQoRc3RhYmlsaXplX2VuYWJsZWQYBSABKAgSEwoLaGlsX2VuYWJsZWQYBiABKAgSHAoUbWFudWFsX2lucHV0X2VuYWJsZWQYByABKAgSFAoMc2FmZXR5X2FybWVkGAggASgIIlwKCkN1c3RvbU1vZGUSJwoJbWFpbl9tb2RlGAEgASgOMhQuZmxpZ2h0cGF0aC5NYWluTW9kZRIlCghzdWJfbW9kZRgCIAEoDjITLmZsaWdodHBhdGguU3ViTW9kZSrrCQoHTWF2VHlwZRIYChRNQVZfVFlQRV9VTlNQRUNJRklFRBAAEhcKE01BVl9UWVBFX0ZJWEVEX1dJTkcQARIWChJNQVZfVFlQRV9RVUFEUk9UT1IQAhIUChBNQVZfVFlQRV9DT0FYSUFMEAMSFwoTTUFWX1RZUEVfSEVMSUNPUFRFUhAEEhwKGE1BVl9UWVBFX0FOVEVOTkFfVFJBQ0tFUhAFEhAKDE1BVl9UWVBFX0dDUxAGEhQKEE1BVl9UWVBFX0FJUlNISVAQBxIZChVNQVZfVFlQRV9GUkVFX0JBTExPT04QCBITCg9NQVZfVFlQRV9ST0NLRVQQCRIZChVNQVZfVFlQRV9HUk9VTkRfUk9WRVIQChIZChVNQVZfVFlQRV9TVVJGQUNFX0JPQVQQCxIWChJNQVZfVFlQRV9TVUJNQVJJTkUQDBIWChJNQVZfVFlQRV9IRVhBUk9UT1IQDRIWChJNQVZfVFlQRV9PQ1RPUk9UT1IQDhIWChJNQVZfVFlQRV9UUklDT1BURVIQDxIaChZNQVZfVFlQRV9GTEFQUElOR19XSU5HEBASEQoNTUFWX1RZUEVfS0lURRAREh8KG01BVl9UWVBFX09OQk9BUkRfQ09OVFJPTExFUhASEiUKIU1BVl9UWVBFX1ZUT0xfVEFJTFNJVFRFUl9EVU9ST1RPUhATEiYKIk1BVl9UWVBFX1ZUT0xfVEFJTFNJVFRFUl9RVUFEUk9UT1IQFBIbChdNQVZfVFlQRV9WVE9MX1RJTFRST1RPUhAVEhwKGE1BVl9UWVBFX1ZUT0xfRklYRURST1RPUhAWEhwKGE1BVl9UWVBFX1ZUT0xfVEFJTFNJVFRFUhAXEhoKFk1BVl9UWVBFX1ZUT0xfVElMVFdJTkcQGBIbChdNQVZfVFlQRV9WVE9MX1JFU0VSVkVENRAZEhMKD01BVl9UWVBFX0dJTUJBTBAaEhEKDU1BVl9UWVBFX0FEU0IQGxIVChFNQVZfVFlQRV9QQVJBRk9JTBAcEhgKFE1BVl9UWVBFX0RPREVDQVJPVE9SEB0SEwoPTUFWX1RZUEVfQ0FNRVJBEB4SHQoZTUFWX1RZUEVfQ0hBUkdJTkdfU1RBVElPThAfEhIKDk1BVl9UWVBFX0ZMQVJNECASEgoOTUFWX1RZUEVfU0VSVk8QIRIRCg1NQVZfVFlQRV9PRElEECISFgoSTUFWX1RZUEVfREVDQVJPVE9SECMSFAoQTUFWX1RZUEVfQkFUVEVSWRAkEhYKEk1BVl9UWVBFX1BBUkFDSFVURRAlEhAKDE1BVl9UWVBFX0xPRxAmEhAKDE1BVl9UWVBFX09TRBAnEhAKDE1BVl9UWVBFX0lNVRAoEhAKDE1BVl9UWVBFX0dQUxApEhIKDk1BVl9UWVBFX1dJTkNIECoSHwobTUFWX1RZUEVfR0VORVJJQ19NVUxUSVJPVE9SECsSGAoUTUFWX1RZUEVfSUxMVU1JTkFUT1IQLBIfChtNQVZfVFlQRV9TUEFDRUNSQUZUX09SQklURVIQLRIdChlNQVZfVFlQRV9HUk9VTkRfUVVBRFJVUEVEEC4SGgoWTUFWX1RZUEVfVlRPTF9HWVJPRFlORRAvEhQKEE1BVl9UWVBFX0dSSVBQRVIQMBISCg5NQVZfVFlQRV9SQURJTxAxKoMFCgxNYXZBdXRvcGlsb3QSHQoZTUFWX0FVVE9QSUxPVF9VTlNQRUNJRklFRBAAEhoKFk1BVl9BVVRPUElMT1RfUkVTRVJWRUQQARIXChNNQVZfQVVUT1BJTE9UX1NMVUdTEAISHwobTUFWX0FVVE9QSUxPVF9BUkRVUElMT1RNRUdBEAMSGwoXTUFWX0FVVE9QSUxPVF9PUEVOUElMT1QQBBIoCiRNQVZfQVVUT1BJTE9UX0dFTkVSSUNfV0FZUE9JTlRTX09OTFkQBRI+CjpNQVZfQVVUT1BJTE9UX0dFTkVSSUNfV0FZUE9JTlRTX0FORF9TSU1QTEVfTkFWSUdBVElPTl9PTkxZEAYSJgoiTUFWX0FVVE9QSUxPVF9HRU5FUklDX01JU1NJT05fRlVMTBAHEhkKFU1BVl9BVVRPUElMT1RfSU5WQUxJRBAIEhUKEU1BVl9BVVRPUElMT1RfUFBaEAkSFQoRTUFWX0FVVE9QSUxPVF9VREIQChIUChBNQVZfQVVUT1BJTE9UX0ZQEAsSFQoRTUFWX0FVVE9QSUxPVF9QWDQQDBIdChlNQVZfQVVUT1BJTE9UX1NNQUNDTVBJTE9UEA0SGgoWTUFWX0FVVE9QSUxPVF9BVVRPUVVBRBAOEhoKFk1BVl9BVVRPUElMT1RfQVJNQVpJTEEQDxIXChNNQVZfQVVUT1BJTE9UX0FFUk9CEBASGAoUTUFWX0FVVE9QSUxPVF9BU0xVQVYQERIZChVNQVZfQVVUT1BJTE9UX1NNQVJUQVAQEhIaChZNQVZfQVVUT1BJTE9UX0FJUlJBSUxTEBMSGAoUTUFWX0FVVE9QSUxPVF9SRUZMRVgQFCrsAQoITWF2U3RhdGUSGQoVTUFWX1NUQVRFX1VOU1BFQ0lGSUVEEAASEgoOTUFWX1NUQVRFX0JPT1QQARIZChVNQVZfU1RBVEVfQ0FMSUJSQVRJTkcQAhIVChFNQVZfU1RBVEVfU1RBTkRCWRADEhQKEE1BVl9TVEFURV9BQ1RJVkUQBBIWChJNQVZfU1RBVEVfQ1JJVElDQUwQBRIXChNNQVZfU1RBVEVfRU1FUkdFTkNZEAYSFgoSTUFWX1NUQVRFX1BPV0VST0ZGEAcSIAocTUFWX1NUQVRFX0ZMSUdIVF9URVJNSU5BVElPThAIKrECCghNYWluTW9kZRIZChVNQUlOX01PREVfVU5TUEVDSUZJRUQQABIUChBNQUlOX01PREVfTUFOVUFMEAESFAoQTUFJTl9NT0RFX0FMVENUTBACEhQKEE1BSU5fTU9ERV9QT1NDVEwQAxISCg5NQUlOX01PREVfQVVUTxAEEhIKDk1BSU5fTU9ERV9BQ1JPEAUSFgoSTUFJTl9NT0RFX09GRkJPQVJEEAYSGAoUTUFJTl9NT0RFX1NUQUJJTElaRUQQBxIeChpNQUlOX01PREVfUkFUVElUVURFX0xFR0FDWRAIEhQKEE1BSU5fTU9ERV9TSU1QTEUQCRIZChVNQUlOX01PREVfVEVSTUlOQVRJT04QChIdChlNQUlOX01PREVfQUxUSVRVREVfQ1JVSVNFEAsq5wMKB1N1Yk1vZGUSGAoUU1VCX01PREVfVU5TUEVDSUZJRUQQABISCg5TVUJfTU9ERV9SRUFEWRABEhQKEFNVQl9NT0RFX1RBS0VPRkYQAhITCg9TVUJfTU9ERV9MT0lURVIQAxIUChBTVUJfTU9ERV9NSVNTSU9OEAQSEAoMU1VCX01PREVfUlRMEAUSEQoNU1VCX01PREVfTEFORBAGEhoKFlNVQl9NT0RFX0ZPTExPV19UQVJHRVQQBxIVChFTVUJfTU9ERV9QUkVDTEFORBAIEhkKFVNVQl9NT0RFX1ZUT0xfVEFLRU9GRhAJEhMKD1NVQl9NT0RFX1BPU0NUTBAKEhIKDlNVQl9NT0RFX09SQklUEAsSEQoNU1VCX01PREVfU0xPVxAMEhYKElNVQl9NT0RFX0VYVEVSTkFMMRANEhYKElNVQl9NT0RFX0VYVEVSTkFMMhAOEhYKElNVQl9NT0RFX0VYVEVSTkFMMxAPEhYKElNVQl9NT0RFX0VYVEVSTkFMNBAQEhYKElNVQl9NT0RFX0VYVEVSTkFMNRAREhYKElNVQl9NT0RFX0VYVEVSTkFMNhASEhYKElNVQl9NT0RFX0VYVEVSTkFMNxATEhYKElNVQl9NT0RFX0VYVEVSTkFMOBAUMnoKEUNvbm5lY3Rpb25TZXJ2aWNlEmUKElN1YnNjcmliZUhlYXJ0YmVhdBIlLmZsaWdodHBhdGguU3Vic2NyaWJlSGVhcnRiZWF0UmVxdWVzdBomLmZsaWdodHBhdGguU3Vic2NyaWJlSGVhcnRiZWF0UmVzcG9uc2UwAUJDWkFnaXRodWIuY29tL2ZsaWdodHBhdGgtZGV2L2ZsaWdodHBhdGgvZ2VuL2dvL2ZsaWdodHBhdGg7ZmxpZ2h0cGF0aGIGcHJvdG8z");
 
 /**
- * @generated from message flightpath.StreamHeartbeatsRequest
+ * @generated from message flightpath.SubscribeHeartbeatRequest
  */
-export type StreamHeartbeatsRequest = Message<"flightpath.StreamHeartbeatsRequest"> & {
+export type SubscribeHeartbeatRequest = Message<"flightpath.SubscribeHeartbeatRequest"> & {
 };
 
 /**
- * Describes the message flightpath.StreamHeartbeatsRequest.
- * Use `create(StreamHeartbeatsRequestSchema)` to create a new message.
+ * Describes the message flightpath.SubscribeHeartbeatRequest.
+ * Use `create(SubscribeHeartbeatRequestSchema)` to create a new message.
  */
-export const StreamHeartbeatsRequestSchema: GenMessage<StreamHeartbeatsRequest> = /*@__PURE__*/
+export const SubscribeHeartbeatRequestSchema: GenMessage<SubscribeHeartbeatRequest> = /*@__PURE__*/
   messageDesc(file_flightpath_connection, 0);
 
 /**
- * @generated from message flightpath.StreamHeartbeatsResponse
+ * @generated from message flightpath.SubscribeHeartbeatResponse
  */
-export type StreamHeartbeatsResponse = Message<"flightpath.StreamHeartbeatsResponse"> & {
+export type SubscribeHeartbeatResponse = Message<"flightpath.SubscribeHeartbeatResponse"> & {
   /**
-   * Timestamp when this Heartbeats data was captured
+   * Timestamp when this heartbeat data was captured (milliseconds since Unix epoch)
    *
    * @generated from field: int64 timestamp_ms = 1;
    */
   timestampMs: bigint;
+
+  /**
+   * System ID of the component sending the heartbeat
+   *
+   * @generated from field: uint32 system_id = 2;
+   */
+  systemId: number;
+
+  /**
+   * Component ID of the component sending the heartbeat
+   *
+   * @generated from field: uint32 component_id = 3;
+   */
+  componentId: number;
+
+  /**
+   * Heartbeat message data
+   *
+   * @generated from field: flightpath.Heartbeat heartbeat = 4;
+   */
+  heartbeat?: Heartbeat;
 };
 
 /**
- * Describes the message flightpath.StreamHeartbeatsResponse.
- * Use `create(StreamHeartbeatsResponseSchema)` to create a new message.
+ * Describes the message flightpath.SubscribeHeartbeatResponse.
+ * Use `create(SubscribeHeartbeatResponseSchema)` to create a new message.
  */
-export const StreamHeartbeatsResponseSchema: GenMessage<StreamHeartbeatsResponse> = /*@__PURE__*/
+export const SubscribeHeartbeatResponseSchema: GenMessage<SubscribeHeartbeatResponse> = /*@__PURE__*/
   messageDesc(file_flightpath_connection, 1);
+
+/**
+ * @generated from message flightpath.Heartbeat
+ */
+export type Heartbeat = Message<"flightpath.Heartbeat"> & {
+  /**
+   * Vehicle type
+   *
+   * @generated from field: flightpath.MavType type = 1;
+   */
+  type: MavType;
+
+  /**
+   * Autopilot type
+   *
+   * @generated from field: flightpath.MavAutopilot autopilot = 2;
+   */
+  autopilot: MavAutopilot;
+
+  /**
+   * Base mode flags (structured bitfield)
+   *
+   * @generated from field: flightpath.BaseMode base_mode = 3;
+   */
+  baseMode?: BaseMode;
+
+  /**
+   * Custom mode (platform-agnostic abstraction based on PX4)
+   *
+   * @generated from field: flightpath.CustomMode custom_mode = 4;
+   */
+  customMode?: CustomMode;
+
+  /**
+   * System status
+   *
+   * @generated from field: flightpath.MavState system_status = 5;
+   */
+  systemStatus: MavState;
+
+  /**
+   * MAVLink protocol version
+   *
+   * @generated from field: uint32 mavlink_version = 6;
+   */
+  mavlinkVersion: number;
+};
+
+/**
+ * Describes the message flightpath.Heartbeat.
+ * Use `create(HeartbeatSchema)` to create a new message.
+ */
+export const HeartbeatSchema: GenMessage<Heartbeat> = /*@__PURE__*/
+  messageDesc(file_flightpath_connection, 2);
+
+/**
+ * BaseMode represents the MAV_MODE_FLAG bitfield as structured boolean flags.
+ * Bits are ordered from least significant (bit 0) to most significant (bit 7),
+ * matching https://mavlink.io/en/messages/common.html#MAV_MODE_FLAG.
+ *
+ * @generated from message flightpath.BaseMode
+ */
+export type BaseMode = Message<"flightpath.BaseMode"> & {
+  /**
+   * Bit 0 (1): Custom mode is enabled
+   *
+   * @generated from field: bool custom_mode_enabled = 1;
+   */
+  customModeEnabled: boolean;
+
+  /**
+   * Bit 1 (2): Test mode enabled
+   *
+   * @generated from field: bool test_enabled = 2;
+   */
+  testEnabled: boolean;
+
+  /**
+   * Bit 2 (4): Autonomous mode enabled
+   *
+   * @generated from field: bool auto_enabled = 3;
+   */
+  autoEnabled: boolean;
+
+  /**
+   * Bit 3 (8): Guided mode enabled
+   *
+   * @generated from field: bool guided_enabled = 4;
+   */
+  guidedEnabled: boolean;
+
+  /**
+   * Bit 4 (16): Stabilize mode enabled
+   *
+   * @generated from field: bool stabilize_enabled = 5;
+   */
+  stabilizeEnabled: boolean;
+
+  /**
+   * Bit 5 (32): Hardware in the loop simulation enabled
+   *
+   * @generated from field: bool hil_enabled = 6;
+   */
+  hilEnabled: boolean;
+
+  /**
+   * Bit 6 (64): Manual input is enabled
+   *
+   * @generated from field: bool manual_input_enabled = 7;
+   */
+  manualInputEnabled: boolean;
+
+  /**
+   * Bit 7 (128): Safety switch is currently engaged (armed)
+   *
+   * @generated from field: bool safety_armed = 8;
+   */
+  safetyArmed: boolean;
+};
+
+/**
+ * Describes the message flightpath.BaseMode.
+ * Use `create(BaseModeSchema)` to create a new message.
+ */
+export const BaseModeSchema: GenMessage<BaseMode> = /*@__PURE__*/
+  messageDesc(file_flightpath_connection, 3);
+
+/**
+ * CustomMode represents flight mode as platform-agnostic abstractions
+ *
+ * @generated from message flightpath.CustomMode
+ */
+export type CustomMode = Message<"flightpath.CustomMode"> & {
+  /**
+   * Main flight mode
+   *
+   * @generated from field: flightpath.MainMode main_mode = 1;
+   */
+  mainMode: MainMode;
+
+  /**
+   * Sub mode (context-dependent based on main mode)
+   *
+   * @generated from field: flightpath.SubMode sub_mode = 2;
+   */
+  subMode: SubMode;
+};
+
+/**
+ * Describes the message flightpath.CustomMode.
+ * Use `create(CustomModeSchema)` to create a new message.
+ */
+export const CustomModeSchema: GenMessage<CustomMode> = /*@__PURE__*/
+  messageDesc(file_flightpath_connection, 4);
+
+/**
+ * MavType represents vehicle types from MAVLink MAV_TYPE enum
+ *
+ * @generated from enum flightpath.MavType
+ */
+export enum MavType {
+  /**
+   * @generated from enum value: MAV_TYPE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: MAV_TYPE_FIXED_WING = 1;
+   */
+  FIXED_WING = 1,
+
+  /**
+   * @generated from enum value: MAV_TYPE_QUADROTOR = 2;
+   */
+  QUADROTOR = 2,
+
+  /**
+   * @generated from enum value: MAV_TYPE_COAXIAL = 3;
+   */
+  COAXIAL = 3,
+
+  /**
+   * @generated from enum value: MAV_TYPE_HELICOPTER = 4;
+   */
+  HELICOPTER = 4,
+
+  /**
+   * @generated from enum value: MAV_TYPE_ANTENNA_TRACKER = 5;
+   */
+  ANTENNA_TRACKER = 5,
+
+  /**
+   * @generated from enum value: MAV_TYPE_GCS = 6;
+   */
+  GCS = 6,
+
+  /**
+   * @generated from enum value: MAV_TYPE_AIRSHIP = 7;
+   */
+  AIRSHIP = 7,
+
+  /**
+   * @generated from enum value: MAV_TYPE_FREE_BALLOON = 8;
+   */
+  FREE_BALLOON = 8,
+
+  /**
+   * @generated from enum value: MAV_TYPE_ROCKET = 9;
+   */
+  ROCKET = 9,
+
+  /**
+   * @generated from enum value: MAV_TYPE_GROUND_ROVER = 10;
+   */
+  GROUND_ROVER = 10,
+
+  /**
+   * @generated from enum value: MAV_TYPE_SURFACE_BOAT = 11;
+   */
+  SURFACE_BOAT = 11,
+
+  /**
+   * @generated from enum value: MAV_TYPE_SUBMARINE = 12;
+   */
+  SUBMARINE = 12,
+
+  /**
+   * @generated from enum value: MAV_TYPE_HEXAROTOR = 13;
+   */
+  HEXAROTOR = 13,
+
+  /**
+   * @generated from enum value: MAV_TYPE_OCTOROTOR = 14;
+   */
+  OCTOROTOR = 14,
+
+  /**
+   * @generated from enum value: MAV_TYPE_TRICOPTER = 15;
+   */
+  TRICOPTER = 15,
+
+  /**
+   * @generated from enum value: MAV_TYPE_FLAPPING_WING = 16;
+   */
+  FLAPPING_WING = 16,
+
+  /**
+   * @generated from enum value: MAV_TYPE_KITE = 17;
+   */
+  KITE = 17,
+
+  /**
+   * @generated from enum value: MAV_TYPE_ONBOARD_CONTROLLER = 18;
+   */
+  ONBOARD_CONTROLLER = 18,
+
+  /**
+   * @generated from enum value: MAV_TYPE_VTOL_TAILSITTER_DUOROTOR = 19;
+   */
+  VTOL_TAILSITTER_DUOROTOR = 19,
+
+  /**
+   * @generated from enum value: MAV_TYPE_VTOL_TAILSITTER_QUADROTOR = 20;
+   */
+  VTOL_TAILSITTER_QUADROTOR = 20,
+
+  /**
+   * @generated from enum value: MAV_TYPE_VTOL_TILTROTOR = 21;
+   */
+  VTOL_TILTROTOR = 21,
+
+  /**
+   * @generated from enum value: MAV_TYPE_VTOL_FIXEDROTOR = 22;
+   */
+  VTOL_FIXEDROTOR = 22,
+
+  /**
+   * @generated from enum value: MAV_TYPE_VTOL_TAILSITTER = 23;
+   */
+  VTOL_TAILSITTER = 23,
+
+  /**
+   * @generated from enum value: MAV_TYPE_VTOL_TILTWING = 24;
+   */
+  VTOL_TILTWING = 24,
+
+  /**
+   * @generated from enum value: MAV_TYPE_VTOL_RESERVED5 = 25;
+   */
+  VTOL_RESERVED5 = 25,
+
+  /**
+   * @generated from enum value: MAV_TYPE_GIMBAL = 26;
+   */
+  GIMBAL = 26,
+
+  /**
+   * @generated from enum value: MAV_TYPE_ADSB = 27;
+   */
+  ADSB = 27,
+
+  /**
+   * @generated from enum value: MAV_TYPE_PARAFOIL = 28;
+   */
+  PARAFOIL = 28,
+
+  /**
+   * @generated from enum value: MAV_TYPE_DODECAROTOR = 29;
+   */
+  DODECAROTOR = 29,
+
+  /**
+   * @generated from enum value: MAV_TYPE_CAMERA = 30;
+   */
+  CAMERA = 30,
+
+  /**
+   * @generated from enum value: MAV_TYPE_CHARGING_STATION = 31;
+   */
+  CHARGING_STATION = 31,
+
+  /**
+   * @generated from enum value: MAV_TYPE_FLARM = 32;
+   */
+  FLARM = 32,
+
+  /**
+   * @generated from enum value: MAV_TYPE_SERVO = 33;
+   */
+  SERVO = 33,
+
+  /**
+   * @generated from enum value: MAV_TYPE_ODID = 34;
+   */
+  ODID = 34,
+
+  /**
+   * @generated from enum value: MAV_TYPE_DECAROTOR = 35;
+   */
+  DECAROTOR = 35,
+
+  /**
+   * @generated from enum value: MAV_TYPE_BATTERY = 36;
+   */
+  BATTERY = 36,
+
+  /**
+   * @generated from enum value: MAV_TYPE_PARACHUTE = 37;
+   */
+  PARACHUTE = 37,
+
+  /**
+   * @generated from enum value: MAV_TYPE_LOG = 38;
+   */
+  LOG = 38,
+
+  /**
+   * @generated from enum value: MAV_TYPE_OSD = 39;
+   */
+  OSD = 39,
+
+  /**
+   * @generated from enum value: MAV_TYPE_IMU = 40;
+   */
+  IMU = 40,
+
+  /**
+   * @generated from enum value: MAV_TYPE_GPS = 41;
+   */
+  GPS = 41,
+
+  /**
+   * @generated from enum value: MAV_TYPE_WINCH = 42;
+   */
+  WINCH = 42,
+
+  /**
+   * @generated from enum value: MAV_TYPE_GENERIC_MULTIROTOR = 43;
+   */
+  GENERIC_MULTIROTOR = 43,
+
+  /**
+   * @generated from enum value: MAV_TYPE_ILLUMINATOR = 44;
+   */
+  ILLUMINATOR = 44,
+
+  /**
+   * @generated from enum value: MAV_TYPE_SPACECRAFT_ORBITER = 45;
+   */
+  SPACECRAFT_ORBITER = 45,
+
+  /**
+   * @generated from enum value: MAV_TYPE_GROUND_QUADRUPED = 46;
+   */
+  GROUND_QUADRUPED = 46,
+
+  /**
+   * @generated from enum value: MAV_TYPE_VTOL_GYRODYNE = 47;
+   */
+  VTOL_GYRODYNE = 47,
+
+  /**
+   * @generated from enum value: MAV_TYPE_GRIPPER = 48;
+   */
+  GRIPPER = 48,
+
+  /**
+   * @generated from enum value: MAV_TYPE_RADIO = 49;
+   */
+  RADIO = 49,
+}
+
+/**
+ * Describes the enum flightpath.MavType.
+ */
+export const MavTypeSchema: GenEnum<MavType> = /*@__PURE__*/
+  enumDesc(file_flightpath_connection, 0);
+
+/**
+ * MavAutopilot represents autopilot types from MAVLink MAV_AUTOPILOT enum
+ *
+ * @generated from enum flightpath.MavAutopilot
+ */
+export enum MavAutopilot {
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_RESERVED = 1;
+   */
+  RESERVED = 1,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_SLUGS = 2;
+   */
+  SLUGS = 2,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_ARDUPILOTMEGA = 3;
+   */
+  ARDUPILOTMEGA = 3,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_OPENPILOT = 4;
+   */
+  OPENPILOT = 4,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_GENERIC_WAYPOINTS_ONLY = 5;
+   */
+  GENERIC_WAYPOINTS_ONLY = 5,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY = 6;
+   */
+  GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY = 6,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_GENERIC_MISSION_FULL = 7;
+   */
+  GENERIC_MISSION_FULL = 7,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_INVALID = 8;
+   */
+  INVALID = 8,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_PPZ = 9;
+   */
+  PPZ = 9,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_UDB = 10;
+   */
+  UDB = 10,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_FP = 11;
+   */
+  FP = 11,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_PX4 = 12;
+   */
+  PX4 = 12,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_SMACCMPILOT = 13;
+   */
+  SMACCMPILOT = 13,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_AUTOQUAD = 14;
+   */
+  AUTOQUAD = 14,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_ARMAZILA = 15;
+   */
+  ARMAZILA = 15,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_AEROB = 16;
+   */
+  AEROB = 16,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_ASLUAV = 17;
+   */
+  ASLUAV = 17,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_SMARTAP = 18;
+   */
+  SMARTAP = 18,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_AIRRAILS = 19;
+   */
+  AIRRAILS = 19,
+
+  /**
+   * @generated from enum value: MAV_AUTOPILOT_REFLEX = 20;
+   */
+  REFLEX = 20,
+}
+
+/**
+ * Describes the enum flightpath.MavAutopilot.
+ */
+export const MavAutopilotSchema: GenEnum<MavAutopilot> = /*@__PURE__*/
+  enumDesc(file_flightpath_connection, 1);
+
+/**
+ * MavState represents system states from MAVLink MAV_STATE enum
+ *
+ * @generated from enum flightpath.MavState
+ */
+export enum MavState {
+  /**
+   * @generated from enum value: MAV_STATE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: MAV_STATE_BOOT = 1;
+   */
+  BOOT = 1,
+
+  /**
+   * @generated from enum value: MAV_STATE_CALIBRATING = 2;
+   */
+  CALIBRATING = 2,
+
+  /**
+   * @generated from enum value: MAV_STATE_STANDBY = 3;
+   */
+  STANDBY = 3,
+
+  /**
+   * @generated from enum value: MAV_STATE_ACTIVE = 4;
+   */
+  ACTIVE = 4,
+
+  /**
+   * @generated from enum value: MAV_STATE_CRITICAL = 5;
+   */
+  CRITICAL = 5,
+
+  /**
+   * @generated from enum value: MAV_STATE_EMERGENCY = 6;
+   */
+  EMERGENCY = 6,
+
+  /**
+   * @generated from enum value: MAV_STATE_POWEROFF = 7;
+   */
+  POWEROFF = 7,
+
+  /**
+   * @generated from enum value: MAV_STATE_FLIGHT_TERMINATION = 8;
+   */
+  FLIGHT_TERMINATION = 8,
+}
+
+/**
+ * Describes the enum flightpath.MavState.
+ */
+export const MavStateSchema: GenEnum<MavState> = /*@__PURE__*/
+  enumDesc(file_flightpath_connection, 2);
+
+/**
+ * MainMode represents main flight modes (platform-agnostic abstraction based on PX4)
+ *
+ * @generated from enum flightpath.MainMode
+ */
+export enum MainMode {
+  /**
+   * @generated from enum value: MAIN_MODE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: MAIN_MODE_MANUAL = 1;
+   */
+  MANUAL = 1,
+
+  /**
+   * @generated from enum value: MAIN_MODE_ALTCTL = 2;
+   */
+  ALTCTL = 2,
+
+  /**
+   * @generated from enum value: MAIN_MODE_POSCTL = 3;
+   */
+  POSCTL = 3,
+
+  /**
+   * @generated from enum value: MAIN_MODE_AUTO = 4;
+   */
+  AUTO = 4,
+
+  /**
+   * @generated from enum value: MAIN_MODE_ACRO = 5;
+   */
+  ACRO = 5,
+
+  /**
+   * @generated from enum value: MAIN_MODE_OFFBOARD = 6;
+   */
+  OFFBOARD = 6,
+
+  /**
+   * @generated from enum value: MAIN_MODE_STABILIZED = 7;
+   */
+  STABILIZED = 7,
+
+  /**
+   * @generated from enum value: MAIN_MODE_RATTITUDE_LEGACY = 8;
+   */
+  RATTITUDE_LEGACY = 8,
+
+  /**
+   * @generated from enum value: MAIN_MODE_SIMPLE = 9;
+   */
+  SIMPLE = 9,
+
+  /**
+   * @generated from enum value: MAIN_MODE_TERMINATION = 10;
+   */
+  TERMINATION = 10,
+
+  /**
+   * @generated from enum value: MAIN_MODE_ALTITUDE_CRUISE = 11;
+   */
+  ALTITUDE_CRUISE = 11,
+}
+
+/**
+ * Describes the enum flightpath.MainMode.
+ */
+export const MainModeSchema: GenEnum<MainMode> = /*@__PURE__*/
+  enumDesc(file_flightpath_connection, 3);
+
+/**
+ * SubMode represents sub flight modes (platform-agnostic abstraction based on PX4)
+ *
+ * @generated from enum flightpath.SubMode
+ */
+export enum SubMode {
+  /**
+   * @generated from enum value: SUB_MODE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * AUTO mode sub-modes
+   *
+   * @generated from enum value: SUB_MODE_READY = 1;
+   */
+  READY = 1,
+
+  /**
+   * @generated from enum value: SUB_MODE_TAKEOFF = 2;
+   */
+  TAKEOFF = 2,
+
+  /**
+   * @generated from enum value: SUB_MODE_LOITER = 3;
+   */
+  LOITER = 3,
+
+  /**
+   * @generated from enum value: SUB_MODE_MISSION = 4;
+   */
+  MISSION = 4,
+
+  /**
+   * @generated from enum value: SUB_MODE_RTL = 5;
+   */
+  RTL = 5,
+
+  /**
+   * @generated from enum value: SUB_MODE_LAND = 6;
+   */
+  LAND = 6,
+
+  /**
+   * @generated from enum value: SUB_MODE_FOLLOW_TARGET = 7;
+   */
+  FOLLOW_TARGET = 7,
+
+  /**
+   * @generated from enum value: SUB_MODE_PRECLAND = 8;
+   */
+  PRECLAND = 8,
+
+  /**
+   * @generated from enum value: SUB_MODE_VTOL_TAKEOFF = 9;
+   */
+  VTOL_TAKEOFF = 9,
+
+  /**
+   * POSCTL mode sub-modes
+   *
+   * @generated from enum value: SUB_MODE_POSCTL = 10;
+   */
+  POSCTL = 10,
+
+  /**
+   * @generated from enum value: SUB_MODE_ORBIT = 11;
+   */
+  ORBIT = 11,
+
+  /**
+   * @generated from enum value: SUB_MODE_SLOW = 12;
+   */
+  SLOW = 12,
+
+  /**
+   * External sub-modes
+   *
+   * @generated from enum value: SUB_MODE_EXTERNAL1 = 13;
+   */
+  EXTERNAL1 = 13,
+
+  /**
+   * @generated from enum value: SUB_MODE_EXTERNAL2 = 14;
+   */
+  EXTERNAL2 = 14,
+
+  /**
+   * @generated from enum value: SUB_MODE_EXTERNAL3 = 15;
+   */
+  EXTERNAL3 = 15,
+
+  /**
+   * @generated from enum value: SUB_MODE_EXTERNAL4 = 16;
+   */
+  EXTERNAL4 = 16,
+
+  /**
+   * @generated from enum value: SUB_MODE_EXTERNAL5 = 17;
+   */
+  EXTERNAL5 = 17,
+
+  /**
+   * @generated from enum value: SUB_MODE_EXTERNAL6 = 18;
+   */
+  EXTERNAL6 = 18,
+
+  /**
+   * @generated from enum value: SUB_MODE_EXTERNAL7 = 19;
+   */
+  EXTERNAL7 = 19,
+
+  /**
+   * @generated from enum value: SUB_MODE_EXTERNAL8 = 20;
+   */
+  EXTERNAL8 = 20,
+}
+
+/**
+ * Describes the enum flightpath.SubMode.
+ */
+export const SubModeSchema: GenEnum<SubMode> = /*@__PURE__*/
+  enumDesc(file_flightpath_connection, 4);
 
 /**
  * Handle drone connection
@@ -51,14 +862,15 @@ export const StreamHeartbeatsResponseSchema: GenMessage<StreamHeartbeatsResponse
  */
 export const ConnectionService: GenService<{
   /**
-   * Stream heartbeats
+   * SubscribeHeartbeat streams HEARTBEAT messages from the MAVLink connection.
+   * Each message includes the heartbeat data with system/component IDs and enriched mode information.
    *
-   * @generated from rpc flightpath.ConnectionService.StreamHeartbeats
+   * @generated from rpc flightpath.ConnectionService.SubscribeHeartbeat
    */
-  streamHeartbeats: {
+  subscribeHeartbeat: {
     methodKind: "server_streaming";
-    input: typeof StreamHeartbeatsRequestSchema;
-    output: typeof StreamHeartbeatsResponseSchema;
+    input: typeof SubscribeHeartbeatRequestSchema;
+    output: typeof SubscribeHeartbeatResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_flightpath_connection, 0);
