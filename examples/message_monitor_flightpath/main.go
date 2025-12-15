@@ -27,22 +27,19 @@ import (
 //
 // Configuration is loaded from environment variables with sensible defaults:
 //   - Default: http://localhost:8080 (standard Flightpath server address)
-//   - See main() function for all available environment variables
+//   - See config.Load() function for all available environment variables
 //
 // To run this example:
-//  1. Start the Flightpath server (see cmd/server/main.go)
+//  1. Start a PX4 SITL (see docs/px4-sitl-setup.md)
 //
-//  2. Run the example using the default configuration:
+//  2. Start the Flightpath server using the default configuration
+//     (MAVLink running as a UDP server on port 14550 and gRPC running on http://localhost:8080)
+//     go run cmd/server/main.go
+//
+//  3. Run this example using the default configuration (connecting to the gRPC server at http://localhost:8080)
 //     go run examples/message_monitor_flightpath/main.go
 //
-//  3. Or configure a different server URL via environment variables:
-//     export FLIGHTPATH_GRPC_HOST=localhost
-//     export FLIGHTPATH_GRPC_PORT=9090
-//
-//     go run examples/message_monitor_flightpath/main.go
-//
-// Once started, you should see heartbeat messages with detailed information printed to the console.
-// Press Ctrl+C to stop the stream.
+// Once started, you should see PX4 heartbeat messages and message counts printed to the console.
 // ------------------------------------------------------------------------------------------------
 
 func main() {
@@ -60,11 +57,12 @@ func main() {
 	// Setup graceful shutdown on Ctrl+C
 	ctx := handleShutdown()
 
-	// Subscribe to heartbeats
-	messageCounts := make(map[string]int)
+	// Data structures for tracking message counts and details
 	var latestHeartbeat *flightpath.SubscribeHeartbeatResponse
+	messageCounts := make(map[string]int)
 
-	subscribeHeartbeat(ctx, connectionService, serverURL, messageCounts, &latestHeartbeat)
+	// Subscribe to heartbeats
+	subscribeHeartbeat(ctx, connectionService, serverURL, &latestHeartbeat, messageCounts)
 }
 
 // createClient creates the HTTP client and connection service client
@@ -103,8 +101,8 @@ func subscribeHeartbeat(
 	ctx context.Context,
 	connectionService flightpathconnect.ConnectionServiceClient,
 	serverURL string,
-	messageCounts map[string]int,
 	latestHeartbeat **flightpath.SubscribeHeartbeatResponse,
+	messageCounts map[string]int,
 ) {
 	fmt.Printf("Connecting to SubscribeHeartbeat endpoint: %s\n", serverURL)
 	fmt.Println("Press Ctrl+C to stop")
@@ -132,7 +130,7 @@ func subscribeHeartbeat(
 		*latestHeartbeat = msg
 
 		// Render dashboard after processing each message
-		renderDashboard(messageCounts, *latestHeartbeat)
+		renderDashboard(*latestHeartbeat, messageCounts)
 	}
 
 	// Receive loop exited, check if there was an error from the stream
@@ -150,7 +148,7 @@ func subscribeHeartbeat(
 // renderDashboard
 // Renders a dashboard showing message counts and latest heartbeat information.
 // Clears the screen and displays all information in a single update to minimize flicker.
-func renderDashboard(messageCounts map[string]int, latestHeartbeat *flightpath.SubscribeHeartbeatResponse) {
+func renderDashboard(latestHeartbeat *flightpath.SubscribeHeartbeatResponse, messageCounts map[string]int) {
 	var buf strings.Builder
 
 	// Clear screen and move cursor to top
@@ -167,6 +165,8 @@ func renderDashboard(messageCounts map[string]int, latestHeartbeat *flightpath.S
 		// Convert the timestamp to a human-readable format
 		timestamp := time.Unix(0, latestHeartbeat.TimestampMs*int64(time.Millisecond))
 		buf.WriteString(fmt.Sprintf("Timestamp: %s (%d ms)\n", timestamp.Format("2006-01-02 15:04:05.000"), latestHeartbeat.TimestampMs))
+
+		// Print system and component IDs
 		buf.WriteString(fmt.Sprintf("System ID: %d, Component ID: %d\n", latestHeartbeat.SystemId, latestHeartbeat.ComponentId))
 
 		if latestHeartbeat.Heartbeat != nil {

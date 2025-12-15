@@ -6,8 +6,7 @@ option go_package = "github.com/flightpath-dev/flightpath/gen/go/flightpath;flig
 
 // Handle drone connection
 service ConnectionService {
-  // SubscribeHeartbeat streams HEARTBEAT messages from the MAVLink connection.
-  // Each message includes the heartbeat data with system/component IDs and enriched mode information.
+  // Subscribe to HEARTBEAT messages from the drone
   rpc SubscribeHeartbeat(SubscribeHeartbeatRequest) returns (stream SubscribeHeartbeatResponse);
 }
 
@@ -17,10 +16,13 @@ message SubscribeHeartbeatRequest {
 message SubscribeHeartbeatResponse {
   // Timestamp when this heartbeat data was captured (milliseconds since Unix epoch)
   int64 timestamp_ms = 1;
+
   // System ID of the component sending the heartbeat
   uint32 system_id = 2;
+
   // Component ID of the component sending the heartbeat
   uint32 component_id = 3;
+
   // Heartbeat message data
   Heartbeat heartbeat = 4;
 }
@@ -28,14 +30,19 @@ message SubscribeHeartbeatResponse {
 message Heartbeat {
   // Vehicle type
   MavType type = 1;
+
   // Autopilot type
   MavAutopilot autopilot = 2;
+
   // Base mode flags (structured bitfield)
   BaseMode base_mode = 3;
+
   // Custom mode (platform-agnostic abstraction based on PX4)
   CustomMode custom_mode = 4;
+
   // System status
   MavState system_status = 5;
+
   // MAVLink protocol version
   uint32 mavlink_version = 6;
 }
@@ -46,18 +53,25 @@ message Heartbeat {
 message BaseMode {
   // Bit 0 (1): Custom mode is enabled
   bool custom_mode_enabled = 1;
+
   // Bit 1 (2): Test mode enabled
   bool test_enabled = 2;
+
   // Bit 2 (4): Autonomous mode enabled
   bool auto_enabled = 3;
+
   // Bit 3 (8): Guided mode enabled
   bool guided_enabled = 4;
+
   // Bit 4 (16): Stabilize mode enabled
   bool stabilize_enabled = 5;
+
   // Bit 5 (32): Hardware in the loop simulation enabled
   bool hil_enabled = 6;
+
   // Bit 6 (64): Manual input is enabled
   bool manual_input_enabled = 7;
+
   // Bit 7 (128): Safety switch is currently engaged (armed)
   bool safety_armed = 8;
 }
@@ -66,6 +80,7 @@ message BaseMode {
 message CustomMode {
   // Main flight mode
   MainMode main_mode = 1;
+
   // Sub mode (context-dependent based on main mode)
   SubMode sub_mode = 2;
 }
@@ -181,20 +196,23 @@ enum MainMode {
 // SubMode represents sub flight modes (platform-agnostic abstraction based on PX4)
 enum SubMode {
   SUB_MODE_UNSPECIFIED = 0;
+
   // AUTO mode sub-modes
-  SUB_MODE_READY = 1;
-  SUB_MODE_TAKEOFF = 2;
-  SUB_MODE_LOITER = 3;
-  SUB_MODE_MISSION = 4;
-  SUB_MODE_RTL = 5;
-  SUB_MODE_LAND = 6;
-  SUB_MODE_FOLLOW_TARGET = 7;
-  SUB_MODE_PRECLAND = 8;
-  SUB_MODE_VTOL_TAKEOFF = 9;
+  SUB_MODE_AUTO_READY = 1;
+  SUB_MODE_AUTO_TAKEOFF = 2;
+  SUB_MODE_AUTO_LOITER = 3;
+  SUB_MODE_AUTO_MISSION = 4;
+  SUB_MODE_AUTO_RTL = 5;
+  SUB_MODE_AUTO_LAND = 6;
+  SUB_MODE_AUTO_FOLLOW_TARGET = 7;
+  SUB_MODE_AUTO_PRECLAND = 8;
+  SUB_MODE_AUTO_VTOL_TAKEOFF = 9;
+
   // POSCTL mode sub-modes
-  SUB_MODE_POSCTL = 10;
-  SUB_MODE_ORBIT = 11;
-  SUB_MODE_SLOW = 12;
+  SUB_MODE_POSCTL_POSCTL = 10;
+  SUB_MODE_POSCTL_ORBIT = 11;
+  SUB_MODE_POSCTL_SLOW = 12;
+
   // External sub-modes
   SUB_MODE_EXTERNAL1 = 13;
   SUB_MODE_EXTERNAL2 = 14;
@@ -205,4 +223,3 @@ enum SubMode {
   SUB_MODE_EXTERNAL7 = 19;
   SUB_MODE_EXTERNAL8 = 20;
 }
-

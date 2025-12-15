@@ -1,17 +1,18 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/bluenviron/gomavlib/v3"
 	"github.com/bluenviron/gomavlib/v3/pkg/dialects/common"
+	"github.com/flightpath-dev/flightpath/gen/go/flightpath"
 	"github.com/flightpath-dev/flightpath/internal/config"
-	"github.com/flightpath-dev/flightpath/internal/mavlink"
 	mavcommon "github.com/flightpath-dev/flightpath/internal/mavlink/dialects/common"
+	"github.com/flightpath-dev/flightpath/internal/mavlink/message_converters"
 )
 
 // ------------------------------------------------------------------------------------------------
@@ -23,12 +24,12 @@ import (
 //
 // Configuration is loaded from environment variables with sensible defaults:
 //   - Default: UDP server on port 14550 (standard PX4 SITL port)
-//   - See main() function for all available environment variables
+//   - See config.Load() function for all available environment variables
 //
 // To run this example:
 //  1. Start a PX4 SITL (see docs/px4-sitl-setup.md)
 //
-//  2. Run the example using the default configuration (UDP server on port 14550):
+//  2. Run this example using the default configuration (MAVLink running as a UDP server on port 14550)
 //     go run examples/message_monitor_mavlink/main.go
 //
 //  3. Or configure a serial connection via environment variables:
@@ -69,8 +70,8 @@ func main() {
 	defer node.Close()
 
 	// Data structures for tracking message counts and details
-	messageCounts := make(map[mavcommon.MavMessageId]int)
-	var latestHeartbeat string
+	var latestHeartbeat *flightpath.SubscribeHeartbeatResponse
+	messageCounts := make(map[string]int)
 
 	// Process incoming messages
 	for evt := range node.Events() {
@@ -81,46 +82,30 @@ func main() {
 
 			// Special handling for HEARTBEAT messages
 			if heartbeat, ok := msg.(*common.MessageHeartbeat); ok {
-				latestHeartbeat = processHeartbeatMessage(heartbeat, eventFrame.SystemID(), eventFrame.ComponentID(), messageCounts)
+				// Convert heartbeat to SubscribeHeartbeatResponse
+				pbHeartbeat := message_converters.HeartbeatToProtobuf(heartbeat)
+				latestHeartbeat = &flightpath.SubscribeHeartbeatResponse{
+					TimestampMs: time.Now().UnixMilli(),
+					SystemId:    uint32(eventFrame.SystemID()),
+					ComponentId: uint32(eventFrame.ComponentID()),
+					Heartbeat:   pbHeartbeat,
+				}
+				messageCounts["HEARTBEAT"]++
 			} else {
-				// For all other messages, just increment the count using the message ID
-				messageCounts[msgID]++
+				// For all other messages, just increment the count using the message ID as string
+				messageCounts[msgID.String()]++
 			}
 
 			// Render dashboard after processing each message
-			renderDashboard(messageCounts, latestHeartbeat)
+			renderDashboard(latestHeartbeat, messageCounts)
 		}
 	}
-}
-
-// processHeartbeatMessage
-// Processes a HEARTBEAT message by converting to map, marshaling to JSON, and formatting.
-// Increments the message count and returns a formatted string on success, or empty string on error.
-func processHeartbeatMessage(msg *common.MessageHeartbeat, systemID uint8, componentID uint8, messageCounts map[mavcommon.MavMessageId]int) string {
-	// Converts the message to a map with decoded fields for better readability
-	msgMap, err := mavlink.HeartbeatMessageToMap(msg)
-	if err != nil {
-		messageCounts[mavcommon.MavMessageIdHeartbeat]++
-		return ""
-	}
-
-	// Pretty print message map as JSON
-	msgJSON, err := json.MarshalIndent(msgMap, "", "  ")
-	if err != nil {
-		messageCounts[mavcommon.MavMessageIdHeartbeat]++
-		return ""
-	}
-
-	// Format with system and component IDs
-	formatted := fmt.Sprintf("System ID: %d, Component ID: %d\n%s", systemID, componentID, string(msgJSON))
-	messageCounts[mavcommon.MavMessageIdHeartbeat]++
-	return formatted
 }
 
 // renderDashboard
 // Renders a dashboard showing message counts and latest heartbeat information.
 // Clears the screen and displays all information in a single update to minimize flicker.
-func renderDashboard(messageCounts map[mavcommon.MavMessageId]int, latestHeartbeat string) {
+func renderDashboard(latestHeartbeat *flightpath.SubscribeHeartbeatResponse, messageCounts map[string]int) {
 	var buf strings.Builder
 
 	// Clear screen and move cursor to top
@@ -130,27 +115,55 @@ func renderDashboard(messageCounts map[mavcommon.MavMessageId]int, latestHeartbe
 	buf.WriteString("=== MAVLink Message Monitor ===\n\n")
 
 	// Latest HEARTBEAT message
-	if latestHeartbeat != "" {
+	if latestHeartbeat != nil {
 		buf.WriteString("Latest HEARTBEAT:\n")
-		buf.WriteString(latestHeartbeat)
-		buf.WriteString("\n\n")
+		buf.WriteString("----------------\n")
+
+		// Convert the timestamp to a human-readable format
+		timestamp := time.Unix(0, latestHeartbeat.TimestampMs*int64(time.Millisecond))
+		buf.WriteString(fmt.Sprintf("Timestamp: %s (%d ms)\n", timestamp.Format("2006-01-02 15:04:05.000"), latestHeartbeat.TimestampMs))
+
+		// Print system and component IDs
+		buf.WriteString(fmt.Sprintf("System ID: %d, Component ID: %d\n", latestHeartbeat.SystemId, latestHeartbeat.ComponentId))
+
+		if latestHeartbeat.Heartbeat != nil {
+			hb := latestHeartbeat.Heartbeat
+			buf.WriteString(fmt.Sprintf("Vehicle Type: %s\n", hb.Type.String()))
+			buf.WriteString(fmt.Sprintf("Autopilot: %s\n", hb.Autopilot.String()))
+			buf.WriteString(fmt.Sprintf("System Status: %s\n", hb.SystemStatus.String()))
+			buf.WriteString(fmt.Sprintf("MAVLink Version: %d\n", hb.MavlinkVersion))
+
+			if hb.BaseMode != nil {
+				bm := hb.BaseMode
+				buf.WriteString(fmt.Sprintf(
+					"Base Mode: custom_mode=%v, test=%v, auto=%v, guided=%v, stabilize=%v, hil=%v, manual=%v, safety=%v\n",
+					bm.CustomModeEnabled, bm.TestEnabled, bm.AutoEnabled, bm.GuidedEnabled,
+					bm.StabilizeEnabled, bm.HilEnabled, bm.ManualInputEnabled, bm.SafetyArmed))
+			}
+
+			if hb.CustomMode != nil {
+				cm := hb.CustomMode
+				buf.WriteString(fmt.Sprintf("Custom Mode: %s / %s\n", cm.MainMode.String(), cm.SubMode.String()))
+			}
+		}
+
+		buf.WriteString("\n")
 	}
 
 	// Message counts table
 	buf.WriteString("Message Counts:\n")
 	buf.WriteString("---------------\n")
 
-	// Sort message IDs by name for consistent display
-	messageIDs := make([]mavcommon.MavMessageId, 0, len(messageCounts))
-	for id := range messageCounts {
-		messageIDs = append(messageIDs, id)
+	// Sort message types by name for consistent display
+	messageTypes := make([]string, 0, len(messageCounts))
+	for msgType := range messageCounts {
+		messageTypes = append(messageTypes, msgType)
 	}
-	sort.Slice(messageIDs, func(i, j int) bool { return messageIDs[i].String() < messageIDs[j].String() })
+	sort.Strings(messageTypes)
 
-	// Print message counts with IDs in parentheses
-	for _, id := range messageIDs {
-		displayName := fmt.Sprintf("%s (%d)", id.String(), uint32(id))
-		buf.WriteString(fmt.Sprintf("  %-30s %d\n", displayName, messageCounts[id]))
+	// Print message counts
+	for _, msgType := range messageTypes {
+		buf.WriteString(fmt.Sprintf("  %-30s %d\n", msgType, messageCounts[msgType]))
 	}
 
 	buf.WriteString("\n")

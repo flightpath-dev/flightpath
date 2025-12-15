@@ -46,8 +46,7 @@ var (
 
 // ConnectionServiceClient is a client for the flightpath.ConnectionService service.
 type ConnectionServiceClient interface {
-	// SubscribeHeartbeat streams HEARTBEAT messages from the MAVLink connection.
-	// Each message includes the heartbeat data with system/component IDs and enriched mode information.
+	// Subscribe to HEARTBEAT messages from the drone
 	SubscribeHeartbeat(context.Context, *connect.Request[flightpath.SubscribeHeartbeatRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeHeartbeatResponse], error)
 }
 
@@ -82,8 +81,7 @@ func (c *connectionServiceClient) SubscribeHeartbeat(ctx context.Context, req *c
 
 // ConnectionServiceHandler is an implementation of the flightpath.ConnectionService service.
 type ConnectionServiceHandler interface {
-	// SubscribeHeartbeat streams HEARTBEAT messages from the MAVLink connection.
-	// Each message includes the heartbeat data with system/component IDs and enriched mode information.
+	// Subscribe to HEARTBEAT messages from the drone
 	SubscribeHeartbeat(context.Context, *connect.Request[flightpath.SubscribeHeartbeatRequest], *connect.ServerStream[flightpath.SubscribeHeartbeatResponse]) error
 }
 

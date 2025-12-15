@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "ALTCTL",
         "bitfield",
         "bluenviron",
         "connectrpc",
@@ -11,7 +12,9 @@
         "mavlink",
         "mavserver",
         "mavsdk",
+        "POSCTL",
         "protoc",
+        "QUADROTOR",
         "SITL",
         "vite"
     ]

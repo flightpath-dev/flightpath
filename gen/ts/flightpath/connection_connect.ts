@@ -15,8 +15,7 @@ export const ConnectionService = {
   typeName: "flightpath.ConnectionService",
   methods: {
     /**
-     * SubscribeHeartbeat streams HEARTBEAT messages from the MAVLink connection.
-     * Each message includes the heartbeat data with system/component IDs and enriched mode information.
+     * Subscribe to HEARTBEAT messages from the drone
      *
      * @generated from rpc flightpath.ConnectionService.SubscribeHeartbeat
      */
