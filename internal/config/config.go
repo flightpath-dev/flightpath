@@ -20,9 +20,9 @@ import (
 // Environment Variable Naming:
 // All environment variables are prefixed with FLIGHTPATH_ to avoid conflicts.
 // Examples:
-//   - FLIGHTPATH_PORT: Server port (default: 8080)
-//   - FLIGHTPATH_HOST: Server host (default: 0.0.0.0)
-//   - FLIGHTPATH_CORS_ORIGINS: Comma-separated CORS origins (default: localhost:5173,localhost:3000)
+//   - FLIGHTPATH_GRPC_PORT: gRPC server port (default: 8080)
+//   - FLIGHTPATH_GRPC_HOST: gRPC server host (default: 0.0.0.0)
+//   - FLIGHTPATH_GRPC_CORS_ORIGINS: Comma-separated CORS origins (default: localhost:5173,localhost:3000)
 //
 // This follows the convention over configuration principle: sensible defaults
 // with optional overrides for production environments.

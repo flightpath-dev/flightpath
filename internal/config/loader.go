@@ -18,9 +18,9 @@ import (
 // 3. Validate the final configuration (fail-fast)
 //
 // Environment Variables:
-//   - FLIGHTPATH_PORT: Server port (integer, 1-65535)
-//   - FLIGHTPATH_HOST: Server host (string, default: "0.0.0.0")
-//   - FLIGHTPATH_CORS_ORIGINS: Comma-separated list of allowed CORS origins
+//   - FLIGHTPATH_GRPC_PORT: gRPC server port (integer, 1-65535)
+//   - FLIGHTPATH_GRPC_HOST: gRPC server host (string, default: "0.0.0.0")
+//   - FLIGHTPATH_GRPC_CORS_ORIGINS: Comma-separated list of allowed CORS origins
 //   - FLIGHTPATH_MAVLINK_ENDPOINT_TYPE: MAVLink endpoint type (serial, udp-server, udp-client, tcp-server, tcp-client)
 //   - FLIGHTPATH_MAVLINK_SERIAL_DEVICE: Serial device path (required if type is "serial")
 //   - FLIGHTPATH_MAVLINK_SERIAL_BAUD: Serial baud rate (default: 57600, required if type is "serial")
@@ -29,23 +29,23 @@ import (
 //
 // Example usage:
 //
-//	export FLIGHTPATH_PORT=3000
+//	export FLIGHTPATH_GRPC_PORT=3000
 //	./server
 func Load() (*Config, error) {
 	cfg := Default()
 
 	// Override with environment variables if present
-	if port := os.Getenv("FLIGHTPATH_PORT"); port != "" {
+	if port := os.Getenv("FLIGHTPATH_GRPC_PORT"); port != "" {
 		if p, err := strconv.Atoi(port); err == nil {
 			cfg.Server.Port = p
 		}
 	}
 
-	if host := os.Getenv("FLIGHTPATH_HOST"); host != "" {
+	if host := os.Getenv("FLIGHTPATH_GRPC_HOST"); host != "" {
 		cfg.Server.Host = host
 	}
 
-	if corsOrigins := os.Getenv("FLIGHTPATH_CORS_ORIGINS"); corsOrigins != "" {
+	if corsOrigins := os.Getenv("FLIGHTPATH_GRPC_CORS_ORIGINS"); corsOrigins != "" {
 		// Split comma-separated values and trim whitespace
 		origins := strings.Split(corsOrigins, ",")
 		cfg.Server.CORSOrigins = make([]string, 0, len(origins))
