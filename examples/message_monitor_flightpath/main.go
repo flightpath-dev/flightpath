@@ -12,20 +12,53 @@ import (
 	"connectrpc.com/connect"
 	"github.com/flightpath-dev/flightpath/gen/go/flightpath"
 	"github.com/flightpath-dev/flightpath/gen/go/flightpath/flightpathconnect"
+	"github.com/flightpath-dev/flightpath/internal/config"
 )
 
+// ------------------------------------------------------------------------------------------------
+// Message Monitor using Flightpath gRPC API
+// ------------------------------------------------------------------------------------------------
+// This example shows how to connect to the Flightpath gRPC server and stream heartbeat messages.
+// It uses the Connect RPC client to communicate with the server and displays all received
+// heartbeat messages with timestamps.
+//
+// Configuration is loaded from environment variables with sensible defaults:
+//   - Default: http://localhost:8080 (standard Flightpath server address)
+//   - See main() function for all available environment variables
+//
+// To run this example:
+//  1. Start the Flightpath server (see cmd/server/main.go)
+//
+//  2. Run the example using the default configuration:
+//     go run examples/message_monitor_flightpath/main.go
+//
+//  3. Or configure a different server URL via environment variables:
+//     export FLIGHTPATH_GRPC_HOST=localhost
+//     export FLIGHTPATH_GRPC_PORT=9090
+//
+//     go run examples/message_monitor_flightpath/main.go
+//
+// Once started, you should see heartbeat messages with timestamps printed to the console.
+// Press Ctrl+C to stop the stream.
+// ------------------------------------------------------------------------------------------------
+
 func main() {
-	// Load configuration from environment variables (with sensible defaults)
-	cfg := Load()
+	cfg, err := config.Load()
+	if err != nil {
+		panic(fmt.Errorf("failed to load configuration: %w", err))
+	}
+
+	// Construct server URL from config
+	serverURL := fmt.Sprintf("http://%s", cfg.ServerAddr())
 
 	// Create connection service client
-	connectionService := createClient(cfg.ServerURL)
+	connectionService := createClient(serverURL)
 
 	// Setup graceful shutdown on Ctrl+C
 	ctx := handleShutdown()
 
 	// Stream heartbeats
-	streamHeartbeats(ctx, connectionService, cfg.ServerURL)
+	streamHeartbeats(ctx, connectionService, serverURL)
 }
 
 // createClient creates the HTTP client and connection service client
@@ -97,35 +130,4 @@ func streamHeartbeats(ctx context.Context, connectionService flightpathconnect.C
 		fmt.Fprintf(os.Stderr, "Stream error: %v\n", err)
 		os.Exit(1)
 	}
-}
-
-// ----------------------------------------------------------------------------
-// Configuration handling
-// ----------------------------------------------------------------------------
-
-// Config holds configuration for this example.
-// This follows the 12-factor app methodology: configuration via environment
-// variables with sensible defaults for local development.
-type Config struct {
-	ServerURL string // Server URL to connect to
-}
-
-// Default returns a Config with sensible defaults for local development.
-func Default() *Config {
-	return &Config{
-		ServerURL: "http://localhost:8080",
-	}
-}
-
-// Load loads configuration from environment variables, falling back to defaults.
-// Environment Variables:
-//   - FLIGHTPATH_SERVER_URL: Server URL (default: "http://localhost:8080")
-func Load() *Config {
-	cfg := Default()
-
-	if serverURL := os.Getenv("FLIGHTPATH_SERVER_URL"); serverURL != "" {
-		cfg.ServerURL = serverURL
-	}
-
-	return cfg
 }
