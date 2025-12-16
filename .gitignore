@@ -22,6 +22,7 @@ go.work
 .env.local
 
 # IDEs
+.cursor
 .idea/
 *.swp
 *.swo
