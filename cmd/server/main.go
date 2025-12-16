@@ -26,6 +26,23 @@ import (
 // MAVLink endpoint. It then starts the gRPC server, exposing the various services.
 //
 // See config.Load() function for all the available environment variables.
+//
+//  1. To run the server using the default configuration (MAVLink running as a UDP server on port 14550)
+//     go run cmd/server/main.go
+//
+//  2. Or configure a serial connection via environment variables:
+//     export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=serial
+//     export FLIGHTPATH_MAVLINK_SERIAL_DEVICE=/dev/cu.usbserial-D30JAXGS
+//     export FLIGHTPATH_MAVLINK_SERIAL_BAUD=57600
+//
+//     go run cmd/server/main.go
+//
+//  3. Or configure a UDP server connection via environment variables:
+//     export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=udp-server
+//     export FLIGHTPATH_MAVLINK_UDP_ADDRESS=0.0.0.0:14550
+//
+//     go run cmd/server/main.go
+//
 // ------------------------------------------------------------------------------------------------
 func main() {
 	// Load configuration from environment variables (with sensible defaults)

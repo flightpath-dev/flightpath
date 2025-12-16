@@ -50,6 +50,9 @@ flightpath/
 ```
 
 ## Quick Start
+
+### Prerequisites
+
 ```bash
 # 1. Clone repository
 git clone https://github.com/flightpath-dev/flightpath
@@ -57,14 +60,47 @@ cd flightpath
 
 # 2. Install dependencies
 go mod tidy
+```
 
-# 3. Start a PX4 SITL (see docs/px4-sitl-setup.md)
+### Run with a PX4 SITL
+
+```bash
+# 1. Start a PX4 SITL
 See [PX4 SITL Setup](docs/px4-sitl-setup.md)
 
-# 4. Run server
+# 2. Run server
 go run cmd/server/main.go
 
-# 4. Monitor messages from the PX4 SITL
+# 3. Monitor messages from the SITL
+go run examples/monitor_heartbeat_flightpath/main.go
+```
+
+### Run with a drone connected to a serial port
+
+```bash
+# 1. Turn on the drone
+
+# 2. Run the server with a serial port configuration 
+export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=serial
+export FLIGHTPATH_MAVLINK_SERIAL_DEVICE=/dev/cu.usbserial-D30JAXGS
+export FLIGHTPATH_MAVLINK_SERIAL_BAUD=57600
+go run cmd/server/main.go
+
+# 3. Monitor messages from the drone
+go run examples/monitor_heartbeat_flightpath/main.go
+```
+
+### Run with a drone connected over a UDP port
+
+```bash
+# 1. Turn on the drone
+
+# 2. Run the server with a UDP configuration
+export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=udp-server
+export FLIGHTPATH_MAVLINK_UDP_ADDRESS=0.0.0.0:14550
+go run cmd/server/main.go
+
+# 3. Monitor messages from the drone
 go run examples/monitor_heartbeat_flightpath/main.go
 ```
 

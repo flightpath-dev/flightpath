@@ -78,6 +78,9 @@ func main() {
 		subscribeRawGps(ctx, telemetryService, serverURL, &latestHeartbeat, &latestGpsRawInt, messageCounts, &mu)
 	}()
 
+	fmt.Println("Press Ctrl+C to stop")
+	fmt.Println("")
+
 	wg.Wait()
 }
 
@@ -132,8 +135,6 @@ func subscribeHeartbeat(
 	mu *sync.Mutex,
 ) {
 	fmt.Printf("Connecting to SubscribeHeartbeat endpoint: %s\n", serverURL)
-	fmt.Println("Press Ctrl+C to stop")
-	fmt.Println("")
 
 	// Create SubscribeHeartbeat request
 	req := connect.NewRequest(&flightpath.SubscribeHeartbeatRequest{})
