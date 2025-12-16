@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package flightpath;
+
+option go_package = "github.com/flightpath-dev/flightpath/gen/go/flightpath;flightpath";
+
+// Real-time telemetry data (position, attitude, sensors, status)
+service TelemetryService {
+  // Subscribe to GPS_RAW_INT messages from the drone
+  rpc SubscribeRawGps(SubscribeRawGpsRequest) returns (stream SubscribeRawGpsResponse);
+}
+
+// SubscribeRawGpsRequest is the request message for SubscribeRawGps
+message SubscribeRawGpsRequest {
+}
+
+// SubscribeRawGpsResponse contains GPS_RAW_INT message data
+message SubscribeRawGpsResponse {
+  // Timestamp when this GPS data was captured (milliseconds since Unix epoch)
+  int64 timestamp_ms = 1;
+
+  // System ID of the component sending the GPS data
+  uint32 system_id = 2;
+
+  // Component ID of the component sending the GPS data
+  uint32 component_id = 3;
+
+  // GPS_RAW_INT message data
+  GpsRawInt gps_raw_int = 4;
+}
+
+// GpsRawInt represents the GPS_RAW_INT MAVLink message
+// The global position, as returned by the Global Positioning System (GPS).
+// This is NOT the global position estimate of the system, but rather a RAW sensor value.
+message GpsRawInt {
+  // Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.
+  uint64 time_usec = 1;
+
+  // GPS fix type
+  GpsFixType fix_type = 2;
+
+  // Latitude (WGS84, EGM96 ellipsoid) in degrees * 1E7
+  int32 lat = 3;
+
+  // Longitude (WGS84, EGM96 ellipsoid) in degrees * 1E7
+  int32 lon = 4;
+
+  // Altitude (MSL). Positive for up. Note that virtually all GPS modules provide the MSL altitude in addition to the WGS84 altitude. (mm)
+  int32 alt = 5;
+
+  // GPS HDOP horizontal dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
+  uint32 eph = 6;
+
+  // GPS VDOP vertical dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
+  uint32 epv = 7;
+
+  // GPS ground speed (cm/s). If unknown, set to: UINT16_MAX
+  uint32 vel = 8;
+
+  // Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
+  uint32 cog = 9;
+
+  // Number of satellites visible. If unknown, set to UINT8_MAX
+  uint32 satellites_visible = 10;
+
+  // Altitude (above WGS84, EGM96 ellipsoid). Positive for up. (mm)
+  int32 alt_ellipsoid = 11;
+
+  // Position uncertainty (mm)
+  uint32 h_acc = 12;
+
+  // Altitude uncertainty (mm)
+  uint32 v_acc = 13;
+
+  // Speed uncertainty (mm/s)
+  uint32 vel_acc = 14;
+
+  // Heading / track uncertainty (degrees * 1E5)
+  uint32 hdg_acc = 15;
+
+  // Yaw in earth frame from north. Use 0 if this GPS does not provide yaw. Use UINT16_MAX if this GPS is configured to provide yaw and is currently unable to provide it. Use 36000 for north. (degrees * 100)
+  uint32 yaw = 16;
+}
+
+// GpsFixType represents GPS fix types from MAVLink GPS_FIX_TYPE enum
+// All values are incremented by 1 to accommodate GPS_FIX_TYPE_UNSPECIFIED
+enum GpsFixType {
+  GPS_FIX_TYPE_UNSPECIFIED = 0;
+  GPS_FIX_TYPE_NO_GPS = 1;
+  GPS_FIX_TYPE_NO_FIX = 2;
+  GPS_FIX_TYPE_2D_FIX = 3;
+  GPS_FIX_TYPE_3D_FIX = 4;
+  GPS_FIX_TYPE_DGPS = 5;
+  GPS_FIX_TYPE_RTK_FLOAT = 6;
+  GPS_FIX_TYPE_RTK_FIXED = 7;
+  GPS_FIX_TYPE_STATIC = 8;
+  GPS_FIX_TYPE_PPP = 9;
+}
+

@@ -12,9 +12,16 @@ import (
 
 // HeartbeatEvent contains a converted protobuf heartbeat message with its system/component IDs
 type HeartbeatEvent struct {
-	Heartbeat   *flightpath.Heartbeat
 	SystemID    uint8
 	ComponentID uint8
+	Heartbeat   *flightpath.Heartbeat
+}
+
+// GpsRawIntEvent contains a converted protobuf GPS_RAW_INT message with its system/component IDs
+type GpsRawIntEvent struct {
+	SystemID    uint8
+	ComponentID uint8
+	GpsRawInt   *flightpath.GpsRawInt
 }
 
 // MessageDispatcher
@@ -26,6 +33,10 @@ type MessageDispatcher struct {
 	// Heartbeat subscribers
 	heartbeatSubscribers []chan HeartbeatEvent
 	heartbeatMu          sync.RWMutex
+
+	// GPS_RAW_INT subscribers
+	gpsRawIntSubscribers []chan GpsRawIntEvent
+	gpsRawIntMu          sync.RWMutex
 
 	// Context for graceful shutdown
 	ctx    context.Context
@@ -40,6 +51,7 @@ func NewMessageDispatcher(node *gomavlib.Node) *MessageDispatcher {
 	return &MessageDispatcher{
 		node:                 node,
 		heartbeatSubscribers: make([]chan HeartbeatEvent, 0),
+		gpsRawIntSubscribers: make([]chan GpsRawIntEvent, 0),
 		ctx:                  ctx,
 		cancel:               cancel,
 	}
@@ -66,6 +78,13 @@ func (d *MessageDispatcher) Stop() {
 	}
 	d.heartbeatSubscribers = nil
 	d.heartbeatMu.Unlock()
+
+	d.gpsRawIntMu.Lock()
+	for _, ch := range d.gpsRawIntSubscribers {
+		close(ch)
+	}
+	d.gpsRawIntSubscribers = nil
+	d.gpsRawIntMu.Unlock()
 }
 
 // SubscribeHeartbeat
@@ -104,6 +123,42 @@ func (d *MessageDispatcher) UnsubscribeHeartbeat(ch chan HeartbeatEvent) {
 	}
 }
 
+// SubscribeGpsRawInt
+// Subscribes to GPS_RAW_INT messages. Returns a channel that will receive GPS_RAW_INT events.
+// The channel will be closed when the dispatcher stops or when UnsubscribeGpsRawInt is called.
+// The caller should handle context cancellation to unsubscribe.
+func (d *MessageDispatcher) SubscribeGpsRawInt(ctx context.Context) <-chan GpsRawIntEvent {
+	ch := make(chan GpsRawIntEvent, 10)
+
+	d.gpsRawIntMu.Lock()
+	d.gpsRawIntSubscribers = append(d.gpsRawIntSubscribers, ch)
+	d.gpsRawIntMu.Unlock()
+
+	// Unsubscribe when context is cancelled
+	go func() {
+		<-ctx.Done()
+		d.UnsubscribeGpsRawInt(ch)
+	}()
+
+	return ch
+}
+
+// UnsubscribeGpsRawInt
+// Removes a GPS_RAW_INT subscriber channel.
+func (d *MessageDispatcher) UnsubscribeGpsRawInt(ch chan GpsRawIntEvent) {
+	d.gpsRawIntMu.Lock()
+	defer d.gpsRawIntMu.Unlock()
+
+	for i, subscriber := range d.gpsRawIntSubscribers {
+		if subscriber == ch {
+			// Remove from slice
+			d.gpsRawIntSubscribers = append(d.gpsRawIntSubscribers[:i], d.gpsRawIntSubscribers[i+1:]...)
+			close(ch)
+			return
+		}
+	}
+}
+
 // run
 // Main dispatcher loop that reads from node.Events() and routes messages to subscribers.
 func (d *MessageDispatcher) run() {
@@ -134,6 +189,17 @@ func (d *MessageDispatcher) run() {
 					})
 				}
 
+				// Route GPS_RAW_INT messages
+				if gpsRawInt, ok := msg.(*common.MessageGpsRawInt); ok {
+					// Convert to protobuf once, then broadcast to all subscribers
+					pbGpsRawInt := message_converters.GpsRawIntToProtobuf(gpsRawInt)
+					d.broadcastGpsRawInt(GpsRawIntEvent{
+						GpsRawInt:   pbGpsRawInt,
+						SystemID:    eventFrame.SystemID(),
+						ComponentID: eventFrame.ComponentID(),
+					})
+				}
+
 				// Future: Add routing for other message types here
 				// e.g., ATTITUDE, GLOBAL_POSITION_INT, etc.
 			}
@@ -148,6 +214,24 @@ func (d *MessageDispatcher) broadcastHeartbeat(event HeartbeatEvent) {
 	subscribers := make([]chan HeartbeatEvent, len(d.heartbeatSubscribers))
 	copy(subscribers, d.heartbeatSubscribers)
 	d.heartbeatMu.RUnlock()
+
+	// Send to all subscribers (non-blocking)
+	for _, ch := range subscribers {
+		select {
+		case ch <- event:
+		default:
+			// Channel full, skip this subscriber to avoid blocking
+		}
+	}
+}
+
+// broadcastGpsRawInt
+// Broadcasts a GPS_RAW_INT event to all subscribers.
+func (d *MessageDispatcher) broadcastGpsRawInt(event GpsRawIntEvent) {
+	d.gpsRawIntMu.RLock()
+	subscribers := make([]chan GpsRawIntEvent, len(d.gpsRawIntSubscribers))
+	copy(subscribers, d.gpsRawIntSubscribers)
+	d.gpsRawIntMu.RUnlock()
 
 	// Send to all subscribers (non-blocking)
 	for _, ch := range subscribers {

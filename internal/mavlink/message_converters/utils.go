@@ -84,6 +84,15 @@ func FlightSubModeToProtobuf(subMode uint8) flightpath.SubMode {
 	return flightpath.SubMode(subMode)
 }
 
+// GpsFixTypeToProtobuf
+// Converts MAVLink GPS_FIX_TYPE to protobuf GpsFixType enum.
+// Proto enum values are incremented by 1 to accommodate GPS_FIX_TYPE_UNSPECIFIED at 0.
+// MAVLink 0 (NO_GPS) maps to proto 1 (NO_GPS), MAVLink 1 (NO_FIX) maps to proto 2 (NO_FIX), etc.
+func GpsFixTypeToProtobuf(fixType common.GPS_FIX_TYPE) flightpath.GpsFixType {
+	// Add 1 to MAVLink value to account for UNSPECIFIED at 0 in proto
+	return flightpath.GpsFixType(fixType + 1)
+}
+
 // MavAutopilotToProtobuf
 // Converts MAVLink MAV_AUTOPILOT to protobuf MavAutopilot enum.
 // Note: Direct cast assumes MAVLink enum values match protobuf enum values.

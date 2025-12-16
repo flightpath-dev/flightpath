@@ -97,6 +97,11 @@ func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *servi
 	connectionService := services.NewConnectionService(ctx)
 	connectionPath, connectionHandler := flightpathconnect.NewConnectionServiceHandler(connectionService)
 	srv.RegisterService(connectionPath, connectionHandler)
+
+	// TelemetryService
+	telemetryService := services.NewTelemetryService(ctx)
+	telemetryPath, telemetryHandler := flightpathconnect.NewTelemetryServiceHandler(telemetryService)
+	srv.RegisterService(telemetryPath, telemetryHandler)
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals
