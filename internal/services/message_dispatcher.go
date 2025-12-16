@@ -176,40 +176,32 @@ func (d *MessageDispatcher) run() {
 
 			// Process only frame events
 			if eventFrame, ok := evt.(*gomavlib.EventFrame); ok {
+				systemID := eventFrame.SystemID()
+				componentID := eventFrame.ComponentID()
 				msg := eventFrame.Message()
 
-				// Route HEARTBEAT messages
-				if heartbeat, ok := msg.(*common.MessageHeartbeat); ok {
-					// Convert to protobuf once, then broadcast to all subscribers
-					pbHeartbeat := message_converters.HeartbeatToProtobuf(heartbeat)
-					d.broadcastHeartbeat(HeartbeatEvent{
-						Heartbeat:   pbHeartbeat,
-						SystemID:    eventFrame.SystemID(),
-						ComponentID: eventFrame.ComponentID(),
-					})
+				// Route messages based on type
+				switch msg := msg.(type) {
+				case *common.MessageHeartbeat:
+					d.broadcastHeartbeat(systemID, componentID, msg)
+				case *common.MessageGpsRawInt:
+					d.broadcastGpsRawInt(systemID, componentID, msg)
 				}
-
-				// Route GPS_RAW_INT messages
-				if gpsRawInt, ok := msg.(*common.MessageGpsRawInt); ok {
-					// Convert to protobuf once, then broadcast to all subscribers
-					pbGpsRawInt := message_converters.GpsRawIntToProtobuf(gpsRawInt)
-					d.broadcastGpsRawInt(GpsRawIntEvent{
-						GpsRawInt:   pbGpsRawInt,
-						SystemID:    eventFrame.SystemID(),
-						ComponentID: eventFrame.ComponentID(),
-					})
-				}
-
-				// Future: Add routing for other message types here
-				// e.g., ATTITUDE, GLOBAL_POSITION_INT, etc.
 			}
 		}
 	}
 }
 
 // broadcastHeartbeat
-// Broadcasts a heartbeat event to all subscribers.
-func (d *MessageDispatcher) broadcastHeartbeat(event HeartbeatEvent) {
+// Converts a HEARTBEAT message to protobuf and broadcasts it to all subscribers.
+func (d *MessageDispatcher) broadcastHeartbeat(systemID, componentID uint8, msg *common.MessageHeartbeat) {
+	pbHeartbeat := message_converters.HeartbeatToProtobuf(msg)
+	event := HeartbeatEvent{
+		SystemID:    systemID,
+		ComponentID: componentID,
+		Heartbeat:   pbHeartbeat,
+	}
+
 	d.heartbeatMu.RLock()
 	subscribers := make([]chan HeartbeatEvent, len(d.heartbeatSubscribers))
 	copy(subscribers, d.heartbeatSubscribers)
@@ -226,8 +218,15 @@ func (d *MessageDispatcher) broadcastHeartbeat(event HeartbeatEvent) {
 }
 
 // broadcastGpsRawInt
-// Broadcasts a GPS_RAW_INT event to all subscribers.
-func (d *MessageDispatcher) broadcastGpsRawInt(event GpsRawIntEvent) {
+// Converts a GPS_RAW_INT message to protobuf and broadcasts it to all subscribers.
+func (d *MessageDispatcher) broadcastGpsRawInt(systemID, componentID uint8, msg *common.MessageGpsRawInt) {
+	pbGpsRawInt := message_converters.GpsRawIntToProtobuf(msg)
+	event := GpsRawIntEvent{
+		SystemID:    systemID,
+		ComponentID: componentID,
+		GpsRawInt:   pbGpsRawInt,
+	}
+
 	d.gpsRawIntMu.RLock()
 	subscribers := make([]chan GpsRawIntEvent, len(d.gpsRawIntSubscribers))
 	copy(subscribers, d.gpsRawIntSubscribers)
