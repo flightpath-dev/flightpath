@@ -1,15 +1,11 @@
 {
   "name": "@flightpath/flightpath",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Go platform exposing a gRPC API to control a drone",
   "type": "module",
   "files": [
     "gen/ts/**/*"
   ],
-  "scripts": {
-    "generate": "buf generate --template buf.gen.ts.yaml",
-    "lint": "buf lint"
-  },
   "keywords": [
     "drone",
     "flightpath",
@@ -17,23 +13,19 @@
     "connect-rpc",
     "typescript"
   ],
-  "author": "Flightpath Dev",
+  "author": "Naresh Bhatia",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flightpath.git"
+    "url": "git+https://github.com/flightpath-dev/flightpath.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "peerDependencies": {
-    "@bufbuild/protobuf": "^2.10.1",
-    "@connectrpc/connect": "^2.1.0"
-  },
-  "devDependencies": {
-    "@bufbuild/protobuf": "^2.10.1",
-    "@bufbuild/protoc-gen-es": "^2.10.1",
-    "@connectrpc/connect": "^2.1.1"
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.10.2",
+    "@connectrpc/connect": "^2.1.1",
+    "@connectrpc/connect-web": "^2.1.1"
   }
 }

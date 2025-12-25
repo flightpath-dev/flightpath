@@ -1,14 +1,19 @@
 version: v2
+
+managed:
+  enabled: true
+
 plugins:
-  # Protocol Buffers for TypeScript
-  - remote: buf.build/bufbuild/es:v2.10.1
+  # Generate TypeScript code
+  # The underlying local plugin is @bufbuild/protoc-gen-es
+  # See https://github.com/bufbuild/protobuf-es/blob/main/MANUAL.md
+  - remote: buf.build/bufbuild/es:v2.10.2
     out: gen/ts
+    # Generate any imported dependencies
+    include_imports: true
     opt:
       - target=ts
       - import_extension=.js
   
-  # Connect for TypeScript
-  - remote: buf.build/connectrpc/es:v1.3.0
-    out: gen/ts
-    opt:
-      - target=ts
+inputs:
+  - directory: proto

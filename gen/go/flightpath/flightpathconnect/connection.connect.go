@@ -38,12 +38,6 @@ const (
 	ConnectionServiceSubscribeHeartbeatProcedure = "/flightpath.ConnectionService/SubscribeHeartbeat"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	connectionServiceServiceDescriptor                  = flightpath.File_flightpath_connection_proto.Services().ByName("ConnectionService")
-	connectionServiceSubscribeHeartbeatMethodDescriptor = connectionServiceServiceDescriptor.Methods().ByName("SubscribeHeartbeat")
-)
-
 // ConnectionServiceClient is a client for the flightpath.ConnectionService service.
 type ConnectionServiceClient interface {
 	// Subscribe to HEARTBEAT messages from the drone
@@ -59,11 +53,12 @@ type ConnectionServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewConnectionServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) ConnectionServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	connectionServiceMethods := flightpath.File_flightpath_connection_proto.Services().ByName("ConnectionService").Methods()
 	return &connectionServiceClient{
 		subscribeHeartbeat: connect.NewClient[flightpath.SubscribeHeartbeatRequest, flightpath.SubscribeHeartbeatResponse](
 			httpClient,
 			baseURL+ConnectionServiceSubscribeHeartbeatProcedure,
-			connect.WithSchema(connectionServiceSubscribeHeartbeatMethodDescriptor),
+			connect.WithSchema(connectionServiceMethods.ByName("SubscribeHeartbeat")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -91,10 +86,11 @@ type ConnectionServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewConnectionServiceHandler(svc ConnectionServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	connectionServiceMethods := flightpath.File_flightpath_connection_proto.Services().ByName("ConnectionService").Methods()
 	connectionServiceSubscribeHeartbeatHandler := connect.NewServerStreamHandler(
 		ConnectionServiceSubscribeHeartbeatProcedure,
 		svc.SubscribeHeartbeat,
-		connect.WithSchema(connectionServiceSubscribeHeartbeatMethodDescriptor),
+		connect.WithSchema(connectionServiceMethods.ByName("SubscribeHeartbeat")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/flightpath.ConnectionService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

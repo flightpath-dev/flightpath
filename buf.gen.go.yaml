@@ -1,18 +1,21 @@
 version: v2
+
 managed:
   enabled: true
   override:
     - file_option: go_package_prefix
       value: github.com/flightpath-dev/flightpath/gen/go
+
 plugins:
-  # Go Protocol Buffers
-  - remote: buf.build/protocolbuffers/go:v1.31.0
+  # Generate base types for Go (message and enum types)
+  - remote: buf.build/protocolbuffers/go:v1.36.11
     out: gen/go
-    opt:
-      - paths=source_relative
+    opt: paths=source_relative
   
-  # Connect for Go (RPC framework)
-  - remote: buf.build/connectrpc/go:v1.14.0
+  # Generate Connect RPC service stubs for Go
+  - remote: buf.build/connectrpc/go:v1.19.1
     out: gen/go
-    opt:
-      - paths=source_relative
+    opt: paths=source_relative
+
+inputs:
+  - directory: proto

@@ -38,12 +38,6 @@ const (
 	TelemetryServiceSubscribeRawGpsProcedure = "/flightpath.TelemetryService/SubscribeRawGps"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	telemetryServiceServiceDescriptor               = flightpath.File_flightpath_telemetry_proto.Services().ByName("TelemetryService")
-	telemetryServiceSubscribeRawGpsMethodDescriptor = telemetryServiceServiceDescriptor.Methods().ByName("SubscribeRawGps")
-)
-
 // TelemetryServiceClient is a client for the flightpath.TelemetryService service.
 type TelemetryServiceClient interface {
 	// Subscribe to GPS_RAW_INT messages from the drone
@@ -59,11 +53,12 @@ type TelemetryServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewTelemetryServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) TelemetryServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	telemetryServiceMethods := flightpath.File_flightpath_telemetry_proto.Services().ByName("TelemetryService").Methods()
 	return &telemetryServiceClient{
 		subscribeRawGps: connect.NewClient[flightpath.SubscribeRawGpsRequest, flightpath.SubscribeRawGpsResponse](
 			httpClient,
 			baseURL+TelemetryServiceSubscribeRawGpsProcedure,
-			connect.WithSchema(telemetryServiceSubscribeRawGpsMethodDescriptor),
+			connect.WithSchema(telemetryServiceMethods.ByName("SubscribeRawGps")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -91,10 +86,11 @@ type TelemetryServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewTelemetryServiceHandler(svc TelemetryServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	telemetryServiceMethods := flightpath.File_flightpath_telemetry_proto.Services().ByName("TelemetryService").Methods()
 	telemetryServiceSubscribeRawGpsHandler := connect.NewServerStreamHandler(
 		TelemetryServiceSubscribeRawGpsProcedure,
 		svc.SubscribeRawGps,
-		connect.WithSchema(telemetryServiceSubscribeRawGpsMethodDescriptor),
+		connect.WithSchema(telemetryServiceMethods.ByName("SubscribeRawGps")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/flightpath.TelemetryService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
