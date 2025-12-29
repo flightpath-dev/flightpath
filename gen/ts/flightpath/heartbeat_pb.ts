@@ -66,6 +66,8 @@ export const SubscribeHeartbeatResponseSchema: GenMessage<SubscribeHeartbeatResp
   messageDesc(file_flightpath_heartbeat, 1);
 
 /**
+ * Heartbeat represents the HEARTBEAT (0) MAVLink message
+ *
  * @generated from message flightpath.Heartbeat
  */
 export type Heartbeat = Message<"flightpath.Heartbeat"> & {

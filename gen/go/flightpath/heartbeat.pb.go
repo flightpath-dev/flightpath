@@ -676,6 +676,7 @@ func (x *SubscribeHeartbeatResponse) GetHeartbeat() *Heartbeat {
 	return nil
 }
 
+// Heartbeat represents the HEARTBEAT (0) MAVLink message
 type Heartbeat struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Vehicle type

@@ -8,8 +8,7 @@ service HeartbeatService {
   rpc SubscribeHeartbeat(SubscribeHeartbeatRequest) returns (stream SubscribeHeartbeatResponse);
 }
 
-message SubscribeHeartbeatRequest {
-}
+message SubscribeHeartbeatRequest {}
 
 message SubscribeHeartbeatResponse {
   // Timestamp when this heartbeat data was captured (milliseconds since Unix epoch)
@@ -25,6 +24,7 @@ message SubscribeHeartbeatResponse {
   Heartbeat heartbeat = 4;
 }
 
+// Heartbeat represents the HEARTBEAT (0) MAVLink message
 message Heartbeat {
   // Vehicle type
   MavType type = 1;
@@ -221,4 +221,3 @@ enum SubMode {
   SUB_MODE_EXTERNAL7 = 19;
   SUB_MODE_EXTERNAL8 = 20;
 }
-

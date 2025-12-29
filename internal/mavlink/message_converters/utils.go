@@ -44,6 +44,113 @@ func BaseModeToProtobuf(baseMode common.MAV_MODE_FLAG) *flightpath.BaseMode {
 	}
 }
 
+// MavSysStatusSensorToProtobuf
+// Converts MAVLink onboard_control_sensors bitfield (uint32) to protobuf MavSysStatusSensor structured message.
+// MAVLink MAV_SYS_STATUS_SENSOR bit positions (from MAVLink spec):
+// Bit 31 (0x80000000): MAV_SYS_STATUS_EXTENSION_USED
+// Bit 30 (0x40000000): MAV_SYS_STATUS_SENSOR_PROPULSION
+// Bit 29 (0x20000000): MAV_SYS_STATUS_SENSOR_OBSTACLE_AVOIDANCE
+// Bit 28 (0x10000000): MAV_SYS_STATUS_SENSOR_PREARM_CHECK
+// Bit 27 (0x8000000):  MAV_SYS_STATUS_SENSOR_SATCOM
+// Bit 26 (0x4000000):  MAV_SYS_STATUS_SENSOR_PROXIMITY
+// Bit 25 (0x2000000):  MAV_SYS_STATUS_SENSOR_BATTERY
+// Bit 24 (0x1000000):  MAV_SYS_STATUS_SENSOR_LOGGING
+// Bit 23 (0x800000):   MAV_SYS_STATUS_SENSOR_REVERSE_MOTOR
+// Bit 22 (0x400000):   MAV_SYS_STATUS_SENSOR_TERRAIN
+// Bit 21 (0x200000):   MAV_SYS_STATUS_SENSOR_AHRS
+// Bit 20 (0x100000):   MAV_SYS_STATUS_SENSOR_GEOFENCE
+// Bit 19 (0x80000):    MAV_SYS_STATUS_SENSOR_3D_MAG2
+// Bit 18 (0x40000):    MAV_SYS_STATUS_SENSOR_3D_ACCEL2
+// Bit 17 (0x20000):    MAV_SYS_STATUS_SENSOR_3D_GYRO2
+// Bit 16 (0x10000):    MAV_SYS_STATUS_SENSOR_RC_RECEIVER
+// Bit 15 (0x8000):     MAV_SYS_STATUS_SENSOR_MOTOR_OUTPUTS
+// Bit 14 (0x4000):     MAV_SYS_STATUS_SENSOR_XY_POSITION_CONTROL
+// Bit 13 (0x2000):     MAV_SYS_STATUS_SENSOR_Z_ALTITUDE_CONTROL
+// Bit 12 (0x1000):     MAV_SYS_STATUS_SENSOR_YAW_POSITION
+// Bit 11 (0x800):      MAV_SYS_STATUS_SENSOR_ATTITUDE_STABILIZATION
+// Bit 10 (0x400):      MAV_SYS_STATUS_SENSOR_ANGULAR_RATE_CONTROL
+// Bit 9 (0x200):       MAV_SYS_STATUS_SENSOR_EXTERNAL_GROUND_TRUTH
+// Bit 8 (0x100):       MAV_SYS_STATUS_SENSOR_LASER_POSITION
+// Bit 7 (0x80):        MAV_SYS_STATUS_SENSOR_VISION_POSITION
+// Bit 6 (0x40):        MAV_SYS_STATUS_SENSOR_OPTICAL_FLOW
+// Bit 5 (0x20):        MAV_SYS_STATUS_SENSOR_GPS
+// Bit 4 (0x10):        MAV_SYS_STATUS_SENSOR_DIFFERENTIAL_PRESSURE
+// Bit 3 (0x08):        MAV_SYS_STATUS_SENSOR_ABSOLUTE_PRESSURE
+// Bit 2 (0x04):        MAV_SYS_STATUS_SENSOR_3D_MAG
+// Bit 1 (0x02):        MAV_SYS_STATUS_SENSOR_3D_ACCEL
+// Bit 0 (0x01):        MAV_SYS_STATUS_SENSOR_3D_GYRO
+func MavSysStatusSensorToProtobuf(sensors uint32) *flightpath.MavSysStatusSensor {
+	const (
+		MAV_SYS_STATUS_SENSOR_3D_GYRO                = 0x01
+		MAV_SYS_STATUS_SENSOR_3D_ACCEL               = 0x02
+		MAV_SYS_STATUS_SENSOR_3D_MAG                 = 0x04
+		MAV_SYS_STATUS_SENSOR_ABSOLUTE_PRESSURE      = 0x08
+		MAV_SYS_STATUS_SENSOR_DIFFERENTIAL_PRESSURE  = 0x10
+		MAV_SYS_STATUS_SENSOR_GPS                    = 0x20
+		MAV_SYS_STATUS_SENSOR_OPTICAL_FLOW           = 0x40
+		MAV_SYS_STATUS_SENSOR_VISION_POSITION        = 0x80
+		MAV_SYS_STATUS_SENSOR_LASER_POSITION         = 0x100
+		MAV_SYS_STATUS_SENSOR_EXTERNAL_GROUND_TRUTH  = 0x200
+		MAV_SYS_STATUS_SENSOR_ANGULAR_RATE_CONTROL   = 0x400
+		MAV_SYS_STATUS_SENSOR_ATTITUDE_STABILIZATION = 0x800
+		MAV_SYS_STATUS_SENSOR_YAW_POSITION           = 0x1000
+		MAV_SYS_STATUS_SENSOR_Z_ALTITUDE_CONTROL     = 0x2000
+		MAV_SYS_STATUS_SENSOR_XY_POSITION_CONTROL    = 0x4000
+		MAV_SYS_STATUS_SENSOR_MOTOR_OUTPUTS          = 0x8000
+		MAV_SYS_STATUS_SENSOR_RC_RECEIVER            = 0x10000
+		MAV_SYS_STATUS_SENSOR_3D_GYRO2               = 0x20000
+		MAV_SYS_STATUS_SENSOR_3D_ACCEL2              = 0x40000
+		MAV_SYS_STATUS_SENSOR_3D_MAG2                = 0x80000
+		MAV_SYS_STATUS_SENSOR_GEOFENCE               = 0x100000
+		MAV_SYS_STATUS_SENSOR_AHRS                   = 0x200000
+		MAV_SYS_STATUS_SENSOR_TERRAIN                = 0x400000
+		MAV_SYS_STATUS_SENSOR_REVERSE_MOTOR          = 0x800000
+		MAV_SYS_STATUS_SENSOR_LOGGING                = 0x1000000
+		MAV_SYS_STATUS_SENSOR_BATTERY                = 0x2000000
+		MAV_SYS_STATUS_SENSOR_PROXIMITY              = 0x4000000
+		MAV_SYS_STATUS_SENSOR_SATCOM                 = 0x8000000
+		MAV_SYS_STATUS_SENSOR_PREARM_CHECK           = 0x10000000
+		MAV_SYS_STATUS_SENSOR_OBSTACLE_AVOIDANCE     = 0x20000000
+		MAV_SYS_STATUS_SENSOR_PROPULSION             = 0x40000000
+		MAV_SYS_STATUS_EXTENSION_USED                = 0x80000000
+	)
+
+	return &flightpath.MavSysStatusSensor{
+		Sensor_3DGyro:               (sensors & MAV_SYS_STATUS_SENSOR_3D_GYRO) != 0,
+		Sensor_3DAccel:              (sensors & MAV_SYS_STATUS_SENSOR_3D_ACCEL) != 0,
+		Sensor_3DMag:                (sensors & MAV_SYS_STATUS_SENSOR_3D_MAG) != 0,
+		SensorAbsolutePressure:      (sensors & MAV_SYS_STATUS_SENSOR_ABSOLUTE_PRESSURE) != 0,
+		SensorDifferentialPressure:  (sensors & MAV_SYS_STATUS_SENSOR_DIFFERENTIAL_PRESSURE) != 0,
+		SensorGps:                   (sensors & MAV_SYS_STATUS_SENSOR_GPS) != 0,
+		SensorOpticalFlow:           (sensors & MAV_SYS_STATUS_SENSOR_OPTICAL_FLOW) != 0,
+		SensorVisionPosition:        (sensors & MAV_SYS_STATUS_SENSOR_VISION_POSITION) != 0,
+		SensorLaserPosition:         (sensors & MAV_SYS_STATUS_SENSOR_LASER_POSITION) != 0,
+		SensorExternalGroundTruth:   (sensors & MAV_SYS_STATUS_SENSOR_EXTERNAL_GROUND_TRUTH) != 0,
+		SensorAngularRateControl:    (sensors & MAV_SYS_STATUS_SENSOR_ANGULAR_RATE_CONTROL) != 0,
+		SensorAttitudeStabilization: (sensors & MAV_SYS_STATUS_SENSOR_ATTITUDE_STABILIZATION) != 0,
+		SensorYawPosition:           (sensors & MAV_SYS_STATUS_SENSOR_YAW_POSITION) != 0,
+		SensorZAltitudeControl:      (sensors & MAV_SYS_STATUS_SENSOR_Z_ALTITUDE_CONTROL) != 0,
+		SensorXyPositionControl:     (sensors & MAV_SYS_STATUS_SENSOR_XY_POSITION_CONTROL) != 0,
+		SensorMotorOutputs:          (sensors & MAV_SYS_STATUS_SENSOR_MOTOR_OUTPUTS) != 0,
+		SensorRcReceiver:            (sensors & MAV_SYS_STATUS_SENSOR_RC_RECEIVER) != 0,
+		Sensor_3DGyro2:              (sensors & MAV_SYS_STATUS_SENSOR_3D_GYRO2) != 0,
+		Sensor_3DAccel2:             (sensors & MAV_SYS_STATUS_SENSOR_3D_ACCEL2) != 0,
+		Sensor_3DMag2:               (sensors & MAV_SYS_STATUS_SENSOR_3D_MAG2) != 0,
+		SensorGeofence:              (sensors & MAV_SYS_STATUS_SENSOR_GEOFENCE) != 0,
+		SensorAhrs:                  (sensors & MAV_SYS_STATUS_SENSOR_AHRS) != 0,
+		SensorTerrain:               (sensors & MAV_SYS_STATUS_SENSOR_TERRAIN) != 0,
+		SensorReverseMotor:          (sensors & MAV_SYS_STATUS_SENSOR_REVERSE_MOTOR) != 0,
+		SensorLogging:               (sensors & MAV_SYS_STATUS_SENSOR_LOGGING) != 0,
+		SensorBattery:               (sensors & MAV_SYS_STATUS_SENSOR_BATTERY) != 0,
+		SensorProximity:             (sensors & MAV_SYS_STATUS_SENSOR_PROXIMITY) != 0,
+		SensorSatcom:                (sensors & MAV_SYS_STATUS_SENSOR_SATCOM) != 0,
+		SensorPrearmCheck:           (sensors & MAV_SYS_STATUS_SENSOR_PREARM_CHECK) != 0,
+		SensorObstacleAvoidance:     (sensors & MAV_SYS_STATUS_SENSOR_OBSTACLE_AVOIDANCE) != 0,
+		SensorPropulsion:            (sensors & MAV_SYS_STATUS_SENSOR_PROPULSION) != 0,
+		ExtensionUsed:               (sensors & MAV_SYS_STATUS_EXTENSION_USED) != 0,
+	}
+}
+
 // CustomModeToProtobuf
 // Converts MAVLink custom_mode uint32 to protobuf CustomMode message.
 // For PX4 autopilots, decodes the custom_mode into main_mode and sub_mode.

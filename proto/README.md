@@ -195,9 +195,9 @@ This repository uses semantic versioning (v1.0.0, v1.1.0, etc.) and manual relea
 
 7. **Create and push the tag**:
    ```bash
-   git tag -a v1.1.0 -m "Release v1.1.0"
+   git tag -a v0.0.1 -m "Release v0.0.1"
    git push origin main
-   git push origin v1.1.0
+   git push origin v0.0.1
    ```
 
 8. **Publish to npm** (if needed):
@@ -209,12 +209,12 @@ This repository uses semantic versioning (v1.0.0, v1.1.0, etc.) and manual relea
    
    **Go:**
    ```bash
-   go get github.com/flightpath-dev/flightpath@v1.1.0
+   go get github.com/flightpath-dev/flightpath@v0.0.1
    ```
    
    **TypeScript/JavaScript:**
    ```bash
-   npm install @flightpath/flightpath@1.1.0
+   npm install @flightpath/flightpath@0.0.1
    ```
 
 ### Versioning Guidelines

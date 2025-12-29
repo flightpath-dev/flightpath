@@ -96,6 +96,8 @@ func (d *MessageDispatcher) run() {
 					d.dispatchHeartbeat(systemID, componentID, msg)
 				case *common.MessageGpsRawInt:
 					d.dispatchGpsRawInt(systemID, componentID, msg)
+				case *common.MessageSysStatus:
+					d.dispatchSysStatus(systemID, componentID, msg)
 				}
 			}
 		}
@@ -127,5 +129,19 @@ func (d *MessageDispatcher) dispatchGpsRawInt(systemID, componentID uint8, msg *
 
 	if handler != nil {
 		handler.OnMessage(systemID, componentID, pbGpsRawInt)
+	}
+}
+
+// dispatchSysStatus
+// Converts a SYS_STATUS message to protobuf and dispatches it to the registered handler.
+func (d *MessageDispatcher) dispatchSysStatus(systemID, componentID uint8, msg *common.MessageSysStatus) {
+	pbSysStatus := message_converters.SysStatusToProtobuf(msg)
+
+	d.mu.RLock()
+	handler := d.handlers["common.MessageSysStatus"]
+	d.mu.RUnlock()
+
+	if handler != nil {
+		handler.OnMessage(systemID, componentID, pbSysStatus)
 	}
 }

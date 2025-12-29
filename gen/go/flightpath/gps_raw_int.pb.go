@@ -203,7 +203,7 @@ func (x *SubscribeRawGpsResponse) GetGpsRawInt() *GpsRawInt {
 	return nil
 }
 
-// GpsRawInt represents the GPS_RAW_INT MAVLink message
+// GpsRawInt represents the GPS_RAW_INT (24) MAVLink message
 // The global position, as returned by the Global Positioning System (GPS).
 // This is NOT the global position estimate of the system, but rather a RAW sensor value.
 type GpsRawInt struct {

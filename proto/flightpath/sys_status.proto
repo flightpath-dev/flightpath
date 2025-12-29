@@ -1,0 +1,181 @@
+syntax = "proto3";
+
+package flightpath;
+
+// SysStatusService handles SYS_STATUS messages from the drone
+service SysStatusService {
+  // Subscribe to SYS_STATUS messages from the drone
+  rpc SubscribeSysStatus(SubscribeSysStatusRequest) returns (stream SubscribeSysStatusResponse);
+}
+
+// SubscribeSysStatusRequest is the request message for SubscribeSysStatus
+message SubscribeSysStatusRequest {}
+
+// SubscribeSysStatusResponse contains SYS_STATUS message data
+message SubscribeSysStatusResponse {
+  // Timestamp when this system status data was captured (milliseconds since Unix epoch)
+  int64 timestamp_ms = 1;
+
+  // System ID of the component sending the system status
+  uint32 system_id = 2;
+
+  // Component ID of the component sending the system status
+  uint32 component_id = 3;
+
+  // SYS_STATUS message data
+  SysStatus sys_status = 4;
+}
+
+// SysStatus represents the SYS_STATUS (1) MAVLink message
+// Sensor and subsystem status information. Provides a compact representation of
+// sensor/subsystem status and a few other basic statistics.
+message SysStatus {
+  // Bitmap showing which onboard controllers and sensors are present.
+  // Value of 0: not present. Value of 1: present.
+  MavSysStatusSensor onboard_control_sensors_present = 1;
+
+  // Bitmap showing which onboard controllers and sensors are enabled.
+  // Value of 0: not enabled. Value of 1: enabled.
+  MavSysStatusSensor onboard_control_sensors_enabled = 2;
+
+  // Bitmap showing which onboard controllers and sensors have an error (or are operational).
+  // Value of 0: error. Value of 1: healthy.
+  MavSysStatusSensor onboard_control_sensors_health = 3;
+
+  // Maximum usage in percent of the mainloop time.
+  // Values: [0-1000] - should always be below 1000
+  uint32 load = 4;
+
+  // Battery voltage in millivolts.
+  // UINT16_MAX (65535): Voltage not sent by autopilot
+  uint32 voltage_battery = 5;
+
+  // Battery current in centiamperes (cA).
+  // -1: Current not sent by autopilot
+  int32 current_battery = 6;
+
+  // Battery energy remaining in percent.
+  // -1: Battery remaining energy not sent by autopilot
+  int32 battery_remaining = 7;
+
+  // Communication drop rate in centipercent (c%).
+  // Dropped packets on all links (packets that were corrupted on reception on the MAV).
+  uint32 drop_rate_comm = 8;
+
+  // Communication errors (UART, I2C, SPI, CAN).
+  // Dropped packets on all links (packets that were corrupted on reception on the MAV).
+  uint32 errors_comm = 9;
+
+  // Autopilot-specific errors
+  uint32 errors_count1 = 10;
+
+  // Autopilot-specific errors
+  uint32 errors_count2 = 11;
+
+  // Autopilot-specific errors
+  uint32 errors_count3 = 12;
+
+  // Autopilot-specific errors
+  uint32 errors_count4 = 13;
+}
+
+// MavSysStatusSensor represents the MAV_SYS_STATUS_SENSOR bitfield as structured boolean flags.
+// Bits are ordered from least significant (bit 0) to most significant (bit 31),
+// matching https://mavlink.io/en/messages/common.html#MAV_SYS_STATUS_SENSOR.
+message MavSysStatusSensor {
+  // Bit 0 (0x01): 3D gyro
+  bool sensor_3d_gyro = 1;
+
+  // Bit 1 (0x02): 3D accelerometer
+  bool sensor_3d_accel = 2;
+
+  // Bit 2 (0x04): 3D magnetometer
+  bool sensor_3d_mag = 3;
+
+  // Bit 3 (0x08): absolute pressure
+  bool sensor_absolute_pressure = 4;
+
+  // Bit 4 (0x10): differential pressure
+  bool sensor_differential_pressure = 5;
+
+  // Bit 5 (0x20): GPS
+  bool sensor_gps = 6;
+
+  // Bit 6 (0x40): optical flow
+  bool sensor_optical_flow = 7;
+
+  // Bit 7 (0x80): computer vision position
+  bool sensor_vision_position = 8;
+
+  // Bit 8 (0x100): laser based position
+  bool sensor_laser_position = 9;
+
+  // Bit 9 (0x200): external ground truth (Vicon or Leica)
+  bool sensor_external_ground_truth = 10;
+
+  // Bit 10 (0x400): 3D angular rate control
+  bool sensor_angular_rate_control = 11;
+
+  // Bit 11 (0x800): attitude stabilization
+  bool sensor_attitude_stabilization = 12;
+
+  // Bit 12 (0x1000): yaw position
+  bool sensor_yaw_position = 13;
+
+  // Bit 13 (0x2000): z/altitude control
+  bool sensor_z_altitude_control = 14;
+
+  // Bit 14 (0x4000): x/y position control
+  bool sensor_xy_position_control = 15;
+
+  // Bit 15 (0x8000): motor outputs / control
+  bool sensor_motor_outputs = 16;
+
+  // Bit 16 (0x10000): rc receiver
+  bool sensor_rc_receiver = 17;
+
+  // Bit 17 (0x20000): 2nd 3D gyro
+  bool sensor_3d_gyro2 = 18;
+
+  // Bit 18 (0x40000): 2nd 3D accelerometer
+  bool sensor_3d_accel2 = 19;
+
+  // Bit 19 (0x80000): 2nd 3D magnetometer
+  bool sensor_3d_mag2 = 20;
+
+  // Bit 20 (0x100000): geofence
+  bool sensor_geofence = 21;
+
+  // Bit 21 (0x200000): AHRS subsystem health
+  bool sensor_ahrs = 22;
+
+  // Bit 22 (0x400000): Terrain subsystem health
+  bool sensor_terrain = 23;
+
+  // Bit 23 (0x800000): Motors are reversed
+  bool sensor_reverse_motor = 24;
+
+  // Bit 24 (0x1000000): Logging
+  bool sensor_logging = 25;
+
+  // Bit 25 (0x2000000): Battery
+  bool sensor_battery = 26;
+
+  // Bit 26 (0x4000000): Proximity
+  bool sensor_proximity = 27;
+
+  // Bit 27 (0x8000000): Satellite Communication
+  bool sensor_satcom = 28;
+
+  // Bit 28 (0x10000000): pre-arm check status. Always healthy when armed
+  bool sensor_prearm_check = 29;
+
+  // Bit 29 (0x20000000): Avoidance/collision prevention
+  bool sensor_obstacle_avoidance = 30;
+
+  // Bit 30 (0x40000000): propulsion (actuator, esc, motor or propellor)
+  bool sensor_propulsion = 31;
+
+  // Bit 31 (0x80000000): Extension used (extended sensor status is present)
+  bool extension_used = 32;
+}

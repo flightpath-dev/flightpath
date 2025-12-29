@@ -119,6 +119,11 @@ func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *servi
 	gpsRawIntService := services.NewGpsRawIntService(ctx)
 	gpsRawIntPath, gpsRawIntHandler := flightpathconnect.NewGpsRawIntServiceHandler(gpsRawIntService)
 	srv.RegisterService(gpsRawIntPath, gpsRawIntHandler)
+
+	// SysStatusService
+	sysStatusService := services.NewSysStatusService(ctx)
+	sysStatusPath, sysStatusHandler := flightpathconnect.NewSysStatusServiceHandler(sysStatusService)
+	srv.RegisterService(sysStatusPath, sysStatusHandler)
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals
