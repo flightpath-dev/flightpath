@@ -92,7 +92,7 @@ func main() {
 	registerServices(srv, node, dispatcher)
 
 	// Setup graceful shutdown
-	go handleShutdown(srv, node, dispatcher, closeNode)
+	go handleShutdown(srv, dispatcher, closeNode)
 
 	// Start server
 	if err := srv.Start(); err != nil && err != http.ErrServerClosed {
@@ -124,10 +124,15 @@ func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *servi
 	sysStatusService := services.NewSysStatusService(ctx)
 	sysStatusPath, sysStatusHandler := flightpathconnect.NewSysStatusServiceHandler(sysStatusService)
 	srv.RegisterService(sysStatusPath, sysStatusHandler)
+
+	// ExtendedSysStateService
+	extendedSysStateService := services.NewExtendedSysStateService(ctx)
+	extendedSysStatePath, extendedSysStateHandler := flightpathconnect.NewExtendedSysStateServiceHandler(extendedSysStateService)
+	srv.RegisterService(extendedSysStatePath, extendedSysStateHandler)
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals
-func handleShutdown(srv *server.Server, node *gomavlib.Node, dispatcher *services.MessageDispatcher, closeNode func()) {
+func handleShutdown(srv *server.Server, dispatcher *services.MessageDispatcher, closeNode func()) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 

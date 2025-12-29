@@ -98,6 +98,8 @@ func (d *MessageDispatcher) run() {
 					d.dispatchGpsRawInt(systemID, componentID, msg)
 				case *common.MessageSysStatus:
 					d.dispatchSysStatus(systemID, componentID, msg)
+				case *common.MessageExtendedSysState:
+					d.dispatchExtendedSysState(systemID, componentID, msg)
 				}
 			}
 		}
@@ -143,5 +145,19 @@ func (d *MessageDispatcher) dispatchSysStatus(systemID, componentID uint8, msg *
 
 	if handler != nil {
 		handler.OnMessage(systemID, componentID, pbSysStatus)
+	}
+}
+
+// dispatchExtendedSysState
+// Converts an EXTENDED_SYS_STATE message to protobuf and dispatches it to the registered handler.
+func (d *MessageDispatcher) dispatchExtendedSysState(systemID, componentID uint8, msg *common.MessageExtendedSysState) {
+	pbExtendedSysState := message_converters.ExtendedSysStateToProtobuf(msg)
+
+	d.mu.RLock()
+	handler := d.handlers["common.MessageExtendedSysState"]
+	d.mu.RUnlock()
+
+	if handler != nil {
+		handler.OnMessage(systemID, componentID, pbExtendedSysState)
 	}
 }

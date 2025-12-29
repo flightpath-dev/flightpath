@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package flightpath;
+
+// ExtendedSysStateService handles EXTENDED_SYS_STATE (245) messages from the drone
+service ExtendedSysStateService {
+  // Subscribe to EXTENDED_SYS_STATE messages from the drone
+  rpc SubscribeExtendedSysState(SubscribeExtendedSysStateRequest) returns (stream SubscribeExtendedSysStateResponse);
+}
+
+// SubscribeExtendedSysStateRequest is the request message for SubscribeExtendedSysState
+message SubscribeExtendedSysStateRequest {}
+
+// SubscribeExtendedSysStateResponse contains EXTENDED_SYS_STATE message data
+message SubscribeExtendedSysStateResponse {
+  // Timestamp when this extended system state data was captured (milliseconds since Unix epoch)
+  int64 timestamp_ms = 1;
+
+  // System ID of the component sending the extended system state
+  uint32 system_id = 2;
+
+  // Component ID of the component sending the extended system state
+  uint32 component_id = 3;
+
+  // EXTENDED_SYS_STATE message data
+  ExtendedSysState extended_sys_state = 4;
+}
+
+// ExtendedSysState represents the EXTENDED_SYS_STATE (245) MAVLink message
+// Provides state for additional features including VTOL operation state and landed state.
+message ExtendedSysState {
+  // VTOL state if applicable. MAV_VTOL_STATE_UNSPECIFIED if the vehicle is not configured as VTOL.
+  MavVtolState vtol_state = 1;
+
+  // Landed state. MAV_LANDED_STATE_UNSPECIFIED if landed state is unknown.
+  MavLandedState landed_state = 2;
+}
+
+// MavVtolState represents VTOL states from MAVLink MAV_VTOL_STATE enum
+// MAVLink 0 (UNDEFINED) maps to proto 0 (UNSPECIFIED), MAVLink 1 (TRANSITION_TO_FW) maps to proto 1, etc.
+enum MavVtolState {
+  MAV_VTOL_STATE_UNSPECIFIED = 0; // MAVLink 0: VTOL state is undefined
+  MAV_VTOL_STATE_TRANSITION_TO_FW = 1; // MAVLink 1: Transitioning to fixed-wing
+  MAV_VTOL_STATE_TRANSITION_TO_MC = 2; // MAVLink 2: Transitioning to multi-copter
+  MAV_VTOL_STATE_MC = 3; // MAVLink 3: Multi-copter mode
+  MAV_VTOL_STATE_FW = 4; // MAVLink 4: Fixed-wing mode
+}
+
+// MavLandedState represents landed states from MAVLink MAV_LANDED_STATE enum
+// MAVLink 0 (UNDEFINED) maps to proto 0 (UNSPECIFIED), MAVLink 1 (ON_GROUND) maps to proto 1, etc.
+enum MavLandedState {
+  MAV_LANDED_STATE_UNSPECIFIED = 0; // MAVLink 0: Landed state is undefined
+  MAV_LANDED_STATE_ON_GROUND = 1; // MAVLink 1: On the ground
+  MAV_LANDED_STATE_IN_AIR = 2; // MAVLink 2: In the air
+  MAV_LANDED_STATE_TAKEOFF = 3; // MAVLink 3: Taking off
+  MAV_LANDED_STATE_LANDING = 4; // MAVLink 4: Landing
+}
