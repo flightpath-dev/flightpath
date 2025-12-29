@@ -1,6 +1,6 @@
 {
   "name": "@flightpath/flightpath",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Go platform exposing a gRPC API to control a drone",
   "type": "module",
   "files": [
