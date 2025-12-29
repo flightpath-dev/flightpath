@@ -129,6 +129,11 @@ func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *servi
 	extendedSysStateService := services.NewExtendedSysStateService(ctx)
 	extendedSysStatePath, extendedSysStateHandler := flightpathconnect.NewExtendedSysStateServiceHandler(extendedSysStateService)
 	srv.RegisterService(extendedSysStatePath, extendedSysStateHandler)
+
+	// StatusTextService
+	statusTextService := services.NewStatusTextService(ctx)
+	statusTextPath, statusTextHandler := flightpathconnect.NewStatusTextServiceHandler(statusTextService)
+	srv.RegisterService(statusTextPath, statusTextHandler)
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals

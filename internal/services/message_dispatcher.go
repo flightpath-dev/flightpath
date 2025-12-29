@@ -100,6 +100,8 @@ func (d *MessageDispatcher) run() {
 					d.dispatchSysStatus(systemID, componentID, msg)
 				case *common.MessageExtendedSysState:
 					d.dispatchExtendedSysState(systemID, componentID, msg)
+				case *common.MessageStatustext:
+					d.dispatchStatusText(systemID, componentID, msg)
 				}
 			}
 		}
@@ -159,5 +161,19 @@ func (d *MessageDispatcher) dispatchExtendedSysState(systemID, componentID uint8
 
 	if handler != nil {
 		handler.OnMessage(systemID, componentID, pbExtendedSysState)
+	}
+}
+
+// dispatchStatusText
+// Converts a STATUSTEXT message to protobuf and dispatches it to the registered handler.
+func (d *MessageDispatcher) dispatchStatusText(systemID, componentID uint8, msg *common.MessageStatustext) {
+	pbStatusText := message_converters.StatusTextToProtobuf(msg)
+
+	d.mu.RLock()
+	handler := d.handlers["common.MessageStatustext"]
+	d.mu.RUnlock()
+
+	if handler != nil {
+		handler.OnMessage(systemID, componentID, pbStatusText)
 	}
 }
