@@ -2,10 +2,8 @@ syntax = "proto3";
 
 package flightpath;
 
-option go_package = "github.com/flightpath-dev/flightpath/gen/go/flightpath;flightpath";
-
-// Real-time telemetry data (position, attitude, sensors, status)
-service TelemetryService {
+// GpsRawIntService handles GPS_RAW_INT messages from the drone
+service GpsRawIntService {
   // Subscribe to GPS_RAW_INT messages from the drone
   rpc SubscribeRawGps(SubscribeRawGpsRequest) returns (stream SubscribeRawGpsResponse);
 }

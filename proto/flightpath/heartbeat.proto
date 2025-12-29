@@ -2,10 +2,8 @@ syntax = "proto3";
 
 package flightpath;
 
-option go_package = "github.com/flightpath-dev/flightpath/gen/go/flightpath;flightpath";
-
-// Handle drone connection
-service ConnectionService {
+// HeartbeatService handles HEARTBEAT messages from the drone
+service HeartbeatService {
   // Subscribe to HEARTBEAT messages from the drone
   rpc SubscribeHeartbeat(SubscribeHeartbeatRequest) returns (stream SubscribeHeartbeatResponse);
 }
@@ -223,3 +221,4 @@ enum SubMode {
   SUB_MODE_EXTERNAL7 = 19;
   SUB_MODE_EXTERNAL8 = 20;
 }
+

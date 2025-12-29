@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        (unknown)
-// source: flightpath/connection.proto
+// source: flightpath/heartbeat.proto
 
 package flightpath
 
@@ -196,11 +196,11 @@ func (x MavType) String() string {
 }
 
 func (MavType) Descriptor() protoreflect.EnumDescriptor {
-	return file_flightpath_connection_proto_enumTypes[0].Descriptor()
+	return file_flightpath_heartbeat_proto_enumTypes[0].Descriptor()
 }
 
 func (MavType) Type() protoreflect.EnumType {
-	return &file_flightpath_connection_proto_enumTypes[0]
+	return &file_flightpath_heartbeat_proto_enumTypes[0]
 }
 
 func (x MavType) Number() protoreflect.EnumNumber {
@@ -209,7 +209,7 @@ func (x MavType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MavType.Descriptor instead.
 func (MavType) EnumDescriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{0}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{0}
 }
 
 // MavAutopilot represents autopilot types from MAVLink MAV_AUTOPILOT enum
@@ -300,11 +300,11 @@ func (x MavAutopilot) String() string {
 }
 
 func (MavAutopilot) Descriptor() protoreflect.EnumDescriptor {
-	return file_flightpath_connection_proto_enumTypes[1].Descriptor()
+	return file_flightpath_heartbeat_proto_enumTypes[1].Descriptor()
 }
 
 func (MavAutopilot) Type() protoreflect.EnumType {
-	return &file_flightpath_connection_proto_enumTypes[1]
+	return &file_flightpath_heartbeat_proto_enumTypes[1]
 }
 
 func (x MavAutopilot) Number() protoreflect.EnumNumber {
@@ -313,7 +313,7 @@ func (x MavAutopilot) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MavAutopilot.Descriptor instead.
 func (MavAutopilot) EnumDescriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{1}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{1}
 }
 
 // MavState represents system states from MAVLink MAV_STATE enum
@@ -368,11 +368,11 @@ func (x MavState) String() string {
 }
 
 func (MavState) Descriptor() protoreflect.EnumDescriptor {
-	return file_flightpath_connection_proto_enumTypes[2].Descriptor()
+	return file_flightpath_heartbeat_proto_enumTypes[2].Descriptor()
 }
 
 func (MavState) Type() protoreflect.EnumType {
-	return &file_flightpath_connection_proto_enumTypes[2]
+	return &file_flightpath_heartbeat_proto_enumTypes[2]
 }
 
 func (x MavState) Number() protoreflect.EnumNumber {
@@ -381,7 +381,7 @@ func (x MavState) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MavState.Descriptor instead.
 func (MavState) EnumDescriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{2}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{2}
 }
 
 // MainMode represents main flight modes (platform-agnostic abstraction based on PX4)
@@ -445,11 +445,11 @@ func (x MainMode) String() string {
 }
 
 func (MainMode) Descriptor() protoreflect.EnumDescriptor {
-	return file_flightpath_connection_proto_enumTypes[3].Descriptor()
+	return file_flightpath_heartbeat_proto_enumTypes[3].Descriptor()
 }
 
 func (MainMode) Type() protoreflect.EnumType {
-	return &file_flightpath_connection_proto_enumTypes[3]
+	return &file_flightpath_heartbeat_proto_enumTypes[3]
 }
 
 func (x MainMode) Number() protoreflect.EnumNumber {
@@ -458,7 +458,7 @@ func (x MainMode) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MainMode.Descriptor instead.
 func (MainMode) EnumDescriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{3}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{3}
 }
 
 // SubMode represents sub flight modes (platform-agnostic abstraction based on PX4)
@@ -552,11 +552,11 @@ func (x SubMode) String() string {
 }
 
 func (SubMode) Descriptor() protoreflect.EnumDescriptor {
-	return file_flightpath_connection_proto_enumTypes[4].Descriptor()
+	return file_flightpath_heartbeat_proto_enumTypes[4].Descriptor()
 }
 
 func (SubMode) Type() protoreflect.EnumType {
-	return &file_flightpath_connection_proto_enumTypes[4]
+	return &file_flightpath_heartbeat_proto_enumTypes[4]
 }
 
 func (x SubMode) Number() protoreflect.EnumNumber {
@@ -565,7 +565,7 @@ func (x SubMode) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SubMode.Descriptor instead.
 func (SubMode) EnumDescriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{4}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{4}
 }
 
 type SubscribeHeartbeatRequest struct {
@@ -576,7 +576,7 @@ type SubscribeHeartbeatRequest struct {
 
 func (x *SubscribeHeartbeatRequest) Reset() {
 	*x = SubscribeHeartbeatRequest{}
-	mi := &file_flightpath_connection_proto_msgTypes[0]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -588,7 +588,7 @@ func (x *SubscribeHeartbeatRequest) String() string {
 func (*SubscribeHeartbeatRequest) ProtoMessage() {}
 
 func (x *SubscribeHeartbeatRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_flightpath_connection_proto_msgTypes[0]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -601,7 +601,7 @@ func (x *SubscribeHeartbeatRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscribeHeartbeatRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeHeartbeatRequest) Descriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{0}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{0}
 }
 
 type SubscribeHeartbeatResponse struct {
@@ -620,7 +620,7 @@ type SubscribeHeartbeatResponse struct {
 
 func (x *SubscribeHeartbeatResponse) Reset() {
 	*x = SubscribeHeartbeatResponse{}
-	mi := &file_flightpath_connection_proto_msgTypes[1]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -632,7 +632,7 @@ func (x *SubscribeHeartbeatResponse) String() string {
 func (*SubscribeHeartbeatResponse) ProtoMessage() {}
 
 func (x *SubscribeHeartbeatResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_flightpath_connection_proto_msgTypes[1]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -645,7 +645,7 @@ func (x *SubscribeHeartbeatResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscribeHeartbeatResponse.ProtoReflect.Descriptor instead.
 func (*SubscribeHeartbeatResponse) Descriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{1}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SubscribeHeartbeatResponse) GetTimestampMs() int64 {
@@ -696,7 +696,7 @@ type Heartbeat struct {
 
 func (x *Heartbeat) Reset() {
 	*x = Heartbeat{}
-	mi := &file_flightpath_connection_proto_msgTypes[2]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -708,7 +708,7 @@ func (x *Heartbeat) String() string {
 func (*Heartbeat) ProtoMessage() {}
 
 func (x *Heartbeat) ProtoReflect() protoreflect.Message {
-	mi := &file_flightpath_connection_proto_msgTypes[2]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -721,7 +721,7 @@ func (x *Heartbeat) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Heartbeat.ProtoReflect.Descriptor instead.
 func (*Heartbeat) Descriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{2}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Heartbeat) GetType() MavType {
@@ -793,7 +793,7 @@ type BaseMode struct {
 
 func (x *BaseMode) Reset() {
 	*x = BaseMode{}
-	mi := &file_flightpath_connection_proto_msgTypes[3]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -805,7 +805,7 @@ func (x *BaseMode) String() string {
 func (*BaseMode) ProtoMessage() {}
 
 func (x *BaseMode) ProtoReflect() protoreflect.Message {
-	mi := &file_flightpath_connection_proto_msgTypes[3]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -818,7 +818,7 @@ func (x *BaseMode) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseMode.ProtoReflect.Descriptor instead.
 func (*BaseMode) Descriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{3}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *BaseMode) GetCustomModeEnabled() bool {
@@ -890,7 +890,7 @@ type CustomMode struct {
 
 func (x *CustomMode) Reset() {
 	*x = CustomMode{}
-	mi := &file_flightpath_connection_proto_msgTypes[4]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -902,7 +902,7 @@ func (x *CustomMode) String() string {
 func (*CustomMode) ProtoMessage() {}
 
 func (x *CustomMode) ProtoReflect() protoreflect.Message {
-	mi := &file_flightpath_connection_proto_msgTypes[4]
+	mi := &file_flightpath_heartbeat_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -915,7 +915,7 @@ func (x *CustomMode) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CustomMode.ProtoReflect.Descriptor instead.
 func (*CustomMode) Descriptor() ([]byte, []int) {
-	return file_flightpath_connection_proto_rawDescGZIP(), []int{4}
+	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CustomMode) GetMainMode() MainMode {
@@ -932,11 +932,11 @@ func (x *CustomMode) GetSubMode() SubMode {
 	return SubMode_SUB_MODE_UNSPECIFIED
 }
 
-var File_flightpath_connection_proto protoreflect.FileDescriptor
+var File_flightpath_heartbeat_proto protoreflect.FileDescriptor
 
-const file_flightpath_connection_proto_rawDesc = "" +
+const file_flightpath_heartbeat_proto_rawDesc = "" +
 	"\n" +
-	"\x1bflightpath/connection.proto\x12\n" +
+	"\x1aflightpath/heartbeat.proto\x12\n" +
 	"flightpath\"\x1b\n" +
 	"\x19SubscribeHeartbeatRequest\"\xb4\x01\n" +
 	"\x1aSubscribeHeartbeatResponse\x12!\n" +
@@ -1087,29 +1087,29 @@ const file_flightpath_connection_proto_rawDesc = "" +
 	"\x12SUB_MODE_EXTERNAL5\x10\x11\x12\x16\n" +
 	"\x12SUB_MODE_EXTERNAL6\x10\x12\x12\x16\n" +
 	"\x12SUB_MODE_EXTERNAL7\x10\x13\x12\x16\n" +
-	"\x12SUB_MODE_EXTERNAL8\x10\x142z\n" +
-	"\x11ConnectionService\x12e\n" +
-	"\x12SubscribeHeartbeat\x12%.flightpath.SubscribeHeartbeatRequest\x1a&.flightpath.SubscribeHeartbeatResponse0\x01B\xa1\x01\n" +
-	"\x0ecom.flightpathB\x0fConnectionProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
+	"\x12SUB_MODE_EXTERNAL8\x10\x142y\n" +
+	"\x10HeartbeatService\x12e\n" +
+	"\x12SubscribeHeartbeat\x12%.flightpath.SubscribeHeartbeatRequest\x1a&.flightpath.SubscribeHeartbeatResponse0\x01B\xa0\x01\n" +
+	"\x0ecom.flightpathB\x0eHeartbeatProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
 	"Flightpathb\x06proto3"
 
 var (
-	file_flightpath_connection_proto_rawDescOnce sync.Once
-	file_flightpath_connection_proto_rawDescData []byte
+	file_flightpath_heartbeat_proto_rawDescOnce sync.Once
+	file_flightpath_heartbeat_proto_rawDescData []byte
 )
 
-func file_flightpath_connection_proto_rawDescGZIP() []byte {
-	file_flightpath_connection_proto_rawDescOnce.Do(func() {
-		file_flightpath_connection_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_flightpath_connection_proto_rawDesc), len(file_flightpath_connection_proto_rawDesc)))
+func file_flightpath_heartbeat_proto_rawDescGZIP() []byte {
+	file_flightpath_heartbeat_proto_rawDescOnce.Do(func() {
+		file_flightpath_heartbeat_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_flightpath_heartbeat_proto_rawDesc), len(file_flightpath_heartbeat_proto_rawDesc)))
 	})
-	return file_flightpath_connection_proto_rawDescData
+	return file_flightpath_heartbeat_proto_rawDescData
 }
 
-var file_flightpath_connection_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-var file_flightpath_connection_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
-var file_flightpath_connection_proto_goTypes = []any{
+var file_flightpath_heartbeat_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
+var file_flightpath_heartbeat_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_flightpath_heartbeat_proto_goTypes = []any{
 	(MavType)(0),                       // 0: flightpath.MavType
 	(MavAutopilot)(0),                  // 1: flightpath.MavAutopilot
 	(MavState)(0),                      // 2: flightpath.MavState
@@ -1121,7 +1121,7 @@ var file_flightpath_connection_proto_goTypes = []any{
 	(*BaseMode)(nil),                   // 8: flightpath.BaseMode
 	(*CustomMode)(nil),                 // 9: flightpath.CustomMode
 }
-var file_flightpath_connection_proto_depIdxs = []int32{
+var file_flightpath_heartbeat_proto_depIdxs = []int32{
 	7, // 0: flightpath.SubscribeHeartbeatResponse.heartbeat:type_name -> flightpath.Heartbeat
 	0, // 1: flightpath.Heartbeat.type:type_name -> flightpath.MavType
 	1, // 2: flightpath.Heartbeat.autopilot:type_name -> flightpath.MavAutopilot
@@ -1130,8 +1130,8 @@ var file_flightpath_connection_proto_depIdxs = []int32{
 	2, // 5: flightpath.Heartbeat.system_status:type_name -> flightpath.MavState
 	3, // 6: flightpath.CustomMode.main_mode:type_name -> flightpath.MainMode
 	4, // 7: flightpath.CustomMode.sub_mode:type_name -> flightpath.SubMode
-	5, // 8: flightpath.ConnectionService.SubscribeHeartbeat:input_type -> flightpath.SubscribeHeartbeatRequest
-	6, // 9: flightpath.ConnectionService.SubscribeHeartbeat:output_type -> flightpath.SubscribeHeartbeatResponse
+	5, // 8: flightpath.HeartbeatService.SubscribeHeartbeat:input_type -> flightpath.SubscribeHeartbeatRequest
+	6, // 9: flightpath.HeartbeatService.SubscribeHeartbeat:output_type -> flightpath.SubscribeHeartbeatResponse
 	9, // [9:10] is the sub-list for method output_type
 	8, // [8:9] is the sub-list for method input_type
 	8, // [8:8] is the sub-list for extension type_name
@@ -1139,27 +1139,27 @@ var file_flightpath_connection_proto_depIdxs = []int32{
 	0, // [0:8] is the sub-list for field type_name
 }
 
-func init() { file_flightpath_connection_proto_init() }
-func file_flightpath_connection_proto_init() {
-	if File_flightpath_connection_proto != nil {
+func init() { file_flightpath_heartbeat_proto_init() }
+func file_flightpath_heartbeat_proto_init() {
+	if File_flightpath_heartbeat_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_flightpath_connection_proto_rawDesc), len(file_flightpath_connection_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_flightpath_heartbeat_proto_rawDesc), len(file_flightpath_heartbeat_proto_rawDesc)),
 			NumEnums:      5,
 			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_flightpath_connection_proto_goTypes,
-		DependencyIndexes: file_flightpath_connection_proto_depIdxs,
-		EnumInfos:         file_flightpath_connection_proto_enumTypes,
-		MessageInfos:      file_flightpath_connection_proto_msgTypes,
+		GoTypes:           file_flightpath_heartbeat_proto_goTypes,
+		DependencyIndexes: file_flightpath_heartbeat_proto_depIdxs,
+		EnumInfos:         file_flightpath_heartbeat_proto_enumTypes,
+		MessageInfos:      file_flightpath_heartbeat_proto_msgTypes,
 	}.Build()
-	File_flightpath_connection_proto = out.File
-	file_flightpath_connection_proto_goTypes = nil
-	file_flightpath_connection_proto_depIdxs = nil
+	File_flightpath_heartbeat_proto = out.File
+	file_flightpath_heartbeat_proto_goTypes = nil
+	file_flightpath_heartbeat_proto_depIdxs = nil
 }

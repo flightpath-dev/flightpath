@@ -64,14 +64,13 @@ go mod tidy
 
 ### Run with a PX4 SITL
 
-```bash
-# 1. Start a PX4 SITL
-See [PX4 SITL Setup](docs/px4-sitl-setup.md)
+Start a PX4 SITL by following the instructions in [PX4 SITL Setup](docs/px4-sitl-setup.md).
 
-# 2. Run server
+```bash
+# 1. Run server
 go run cmd/server/main.go
 
-# 3. Monitor messages from the SITL
+# 2. Monitor messages from the SITL
 go run examples/monitor_heartbeat_flightpath/main.go
 ```
 

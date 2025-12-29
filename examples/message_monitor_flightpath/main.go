@@ -53,7 +53,7 @@ func main() {
 	serverURL := fmt.Sprintf("http://%s", cfg.ServerAddr())
 
 	// Create service clients
-	connectionService, telemetryService := createClients(serverURL)
+	heartbeatService, gpsRawIntService := createClients(serverURL)
 
 	// Setup graceful shutdown on Ctrl+C
 	ctx := handleShutdown()
@@ -70,12 +70,12 @@ func main() {
 
 	go func() {
 		defer wg.Done()
-		subscribeHeartbeat(ctx, connectionService, serverURL, &latestHeartbeat, &latestGpsRawInt, messageCounts, &mu)
+		subscribeHeartbeat(ctx, heartbeatService, serverURL, &latestHeartbeat, &latestGpsRawInt, messageCounts, &mu)
 	}()
 
 	go func() {
 		defer wg.Done()
-		subscribeRawGps(ctx, telemetryService, serverURL, &latestHeartbeat, &latestGpsRawInt, messageCounts, &mu)
+		subscribeRawGps(ctx, gpsRawIntService, serverURL, &latestHeartbeat, &latestGpsRawInt, messageCounts, &mu)
 	}()
 
 	fmt.Println("Press Ctrl+C to stop")
@@ -85,26 +85,26 @@ func main() {
 }
 
 // createClients creates the HTTP client and service clients
-func createClients(serverURL string) (flightpathconnect.ConnectionServiceClient, flightpathconnect.TelemetryServiceClient) {
+func createClients(serverURL string) (flightpathconnect.HeartbeatServiceClient, flightpathconnect.GpsRawIntServiceClient) {
 	// Create a single HTTP client to share across all service clients
 	// This client uses the default transport which provides connection pooling
 	httpClient := &http.Client{}
 
-	// Create connection service client to communicate with the gRPC server
-	connectionService := flightpathconnect.NewConnectionServiceClient(
+	// Create heartbeat service client to communicate with the gRPC server
+	heartbeatService := flightpathconnect.NewHeartbeatServiceClient(
 		httpClient,
 		serverURL,
 		connect.WithProtoJSON(), // Use JSON codec for readability
 	)
 
-	// Create telemetry service client
-	telemetryService := flightpathconnect.NewTelemetryServiceClient(
+	// Create GPS raw int service client
+	gpsRawIntService := flightpathconnect.NewGpsRawIntServiceClient(
 		httpClient,
 		serverURL,
 		connect.WithProtoJSON(), // Use JSON codec for readability
 	)
 
-	return connectionService, telemetryService
+	return heartbeatService, gpsRawIntService
 }
 
 // handleShutdown handles Ctrl+C gracefully by canceling the context
@@ -127,7 +127,7 @@ func handleShutdown() context.Context {
 // subscribeHeartbeat connects to the server and streams heartbeat messages
 func subscribeHeartbeat(
 	ctx context.Context,
-	connectionService flightpathconnect.ConnectionServiceClient,
+	heartbeatService flightpathconnect.HeartbeatServiceClient,
 	serverURL string,
 	latestHeartbeat **flightpath.SubscribeHeartbeatResponse,
 	latestGpsRawInt **flightpath.SubscribeRawGpsResponse,
@@ -140,7 +140,7 @@ func subscribeHeartbeat(
 	req := connect.NewRequest(&flightpath.SubscribeHeartbeatRequest{})
 
 	// Call SubscribeHeartbeat to start the stream, pass ctx for cancellation when user presses Ctrl+C
-	stream, err := connectionService.SubscribeHeartbeat(ctx, req)
+	stream, err := heartbeatService.SubscribeHeartbeat(ctx, req)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error calling SubscribeHeartbeat: %v\n", err)
 		os.Exit(1)
@@ -178,7 +178,7 @@ func subscribeHeartbeat(
 // subscribeRawGps connects to the server and streams GPS_RAW_INT messages
 func subscribeRawGps(
 	ctx context.Context,
-	telemetryService flightpathconnect.TelemetryServiceClient,
+	gpsRawIntService flightpathconnect.GpsRawIntServiceClient,
 	serverURL string,
 	latestHeartbeat **flightpath.SubscribeHeartbeatResponse,
 	latestGpsRawInt **flightpath.SubscribeRawGpsResponse,
@@ -191,7 +191,7 @@ func subscribeRawGps(
 	req := connect.NewRequest(&flightpath.SubscribeRawGpsRequest{})
 
 	// Call SubscribeRawGps to start the stream, pass ctx for cancellation when user presses Ctrl+C
-	stream, err := telemetryService.SubscribeRawGps(ctx, req)
+	stream, err := gpsRawIntService.SubscribeRawGps(ctx, req)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error calling SubscribeRawGps: %v\n", err)
 		os.Exit(1)

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        (unknown)
-// source: flightpath/telemetry.proto
+// source: flightpath/gps_raw_int.proto
 
 package flightpath
 
@@ -77,11 +77,11 @@ func (x GpsFixType) String() string {
 }
 
 func (GpsFixType) Descriptor() protoreflect.EnumDescriptor {
-	return file_flightpath_telemetry_proto_enumTypes[0].Descriptor()
+	return file_flightpath_gps_raw_int_proto_enumTypes[0].Descriptor()
 }
 
 func (GpsFixType) Type() protoreflect.EnumType {
-	return &file_flightpath_telemetry_proto_enumTypes[0]
+	return &file_flightpath_gps_raw_int_proto_enumTypes[0]
 }
 
 func (x GpsFixType) Number() protoreflect.EnumNumber {
@@ -90,7 +90,7 @@ func (x GpsFixType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use GpsFixType.Descriptor instead.
 func (GpsFixType) EnumDescriptor() ([]byte, []int) {
-	return file_flightpath_telemetry_proto_rawDescGZIP(), []int{0}
+	return file_flightpath_gps_raw_int_proto_rawDescGZIP(), []int{0}
 }
 
 // SubscribeRawGpsRequest is the request message for SubscribeRawGps
@@ -102,7 +102,7 @@ type SubscribeRawGpsRequest struct {
 
 func (x *SubscribeRawGpsRequest) Reset() {
 	*x = SubscribeRawGpsRequest{}
-	mi := &file_flightpath_telemetry_proto_msgTypes[0]
+	mi := &file_flightpath_gps_raw_int_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -114,7 +114,7 @@ func (x *SubscribeRawGpsRequest) String() string {
 func (*SubscribeRawGpsRequest) ProtoMessage() {}
 
 func (x *SubscribeRawGpsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_flightpath_telemetry_proto_msgTypes[0]
+	mi := &file_flightpath_gps_raw_int_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -127,7 +127,7 @@ func (x *SubscribeRawGpsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscribeRawGpsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeRawGpsRequest) Descriptor() ([]byte, []int) {
-	return file_flightpath_telemetry_proto_rawDescGZIP(), []int{0}
+	return file_flightpath_gps_raw_int_proto_rawDescGZIP(), []int{0}
 }
 
 // SubscribeRawGpsResponse contains GPS_RAW_INT message data
@@ -147,7 +147,7 @@ type SubscribeRawGpsResponse struct {
 
 func (x *SubscribeRawGpsResponse) Reset() {
 	*x = SubscribeRawGpsResponse{}
-	mi := &file_flightpath_telemetry_proto_msgTypes[1]
+	mi := &file_flightpath_gps_raw_int_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -159,7 +159,7 @@ func (x *SubscribeRawGpsResponse) String() string {
 func (*SubscribeRawGpsResponse) ProtoMessage() {}
 
 func (x *SubscribeRawGpsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_flightpath_telemetry_proto_msgTypes[1]
+	mi := &file_flightpath_gps_raw_int_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -172,7 +172,7 @@ func (x *SubscribeRawGpsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscribeRawGpsResponse.ProtoReflect.Descriptor instead.
 func (*SubscribeRawGpsResponse) Descriptor() ([]byte, []int) {
-	return file_flightpath_telemetry_proto_rawDescGZIP(), []int{1}
+	return file_flightpath_gps_raw_int_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SubscribeRawGpsResponse) GetTimestampMs() int64 {
@@ -246,7 +246,7 @@ type GpsRawInt struct {
 
 func (x *GpsRawInt) Reset() {
 	*x = GpsRawInt{}
-	mi := &file_flightpath_telemetry_proto_msgTypes[2]
+	mi := &file_flightpath_gps_raw_int_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -258,7 +258,7 @@ func (x *GpsRawInt) String() string {
 func (*GpsRawInt) ProtoMessage() {}
 
 func (x *GpsRawInt) ProtoReflect() protoreflect.Message {
-	mi := &file_flightpath_telemetry_proto_msgTypes[2]
+	mi := &file_flightpath_gps_raw_int_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -271,7 +271,7 @@ func (x *GpsRawInt) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GpsRawInt.ProtoReflect.Descriptor instead.
 func (*GpsRawInt) Descriptor() ([]byte, []int) {
-	return file_flightpath_telemetry_proto_rawDescGZIP(), []int{2}
+	return file_flightpath_gps_raw_int_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GpsRawInt) GetTimeUsec() uint64 {
@@ -386,11 +386,11 @@ func (x *GpsRawInt) GetYaw() uint32 {
 	return 0
 }
 
-var File_flightpath_telemetry_proto protoreflect.FileDescriptor
+var File_flightpath_gps_raw_int_proto protoreflect.FileDescriptor
 
-const file_flightpath_telemetry_proto_rawDesc = "" +
+const file_flightpath_gps_raw_int_proto_rawDesc = "" +
 	"\n" +
-	"\x1aflightpath/telemetry.proto\x12\n" +
+	"\x1cflightpath/gps_raw_int.proto\x12\n" +
 	"flightpath\"\x18\n" +
 	"\x16SubscribeRawGpsRequest\"\xb3\x01\n" +
 	"\x17SubscribeRawGpsResponse\x12!\n" +
@@ -428,38 +428,38 @@ const file_flightpath_telemetry_proto_rawDesc = "" +
 	"\x16GPS_FIX_TYPE_RTK_FIXED\x10\a\x12\x17\n" +
 	"\x13GPS_FIX_TYPE_STATIC\x10\b\x12\x14\n" +
 	"\x10GPS_FIX_TYPE_PPP\x10\t2p\n" +
-	"\x10TelemetryService\x12\\\n" +
+	"\x10GpsRawIntService\x12\\\n" +
 	"\x0fSubscribeRawGps\x12\".flightpath.SubscribeRawGpsRequest\x1a#.flightpath.SubscribeRawGpsResponse0\x01B\xa0\x01\n" +
-	"\x0ecom.flightpathB\x0eTelemetryProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
+	"\x0ecom.flightpathB\x0eGpsRawIntProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
 	"Flightpathb\x06proto3"
 
 var (
-	file_flightpath_telemetry_proto_rawDescOnce sync.Once
-	file_flightpath_telemetry_proto_rawDescData []byte
+	file_flightpath_gps_raw_int_proto_rawDescOnce sync.Once
+	file_flightpath_gps_raw_int_proto_rawDescData []byte
 )
 
-func file_flightpath_telemetry_proto_rawDescGZIP() []byte {
-	file_flightpath_telemetry_proto_rawDescOnce.Do(func() {
-		file_flightpath_telemetry_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_flightpath_telemetry_proto_rawDesc), len(file_flightpath_telemetry_proto_rawDesc)))
+func file_flightpath_gps_raw_int_proto_rawDescGZIP() []byte {
+	file_flightpath_gps_raw_int_proto_rawDescOnce.Do(func() {
+		file_flightpath_gps_raw_int_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_flightpath_gps_raw_int_proto_rawDesc), len(file_flightpath_gps_raw_int_proto_rawDesc)))
 	})
-	return file_flightpath_telemetry_proto_rawDescData
+	return file_flightpath_gps_raw_int_proto_rawDescData
 }
 
-var file_flightpath_telemetry_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_flightpath_telemetry_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_flightpath_telemetry_proto_goTypes = []any{
+var file_flightpath_gps_raw_int_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_flightpath_gps_raw_int_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_flightpath_gps_raw_int_proto_goTypes = []any{
 	(GpsFixType)(0),                 // 0: flightpath.GpsFixType
 	(*SubscribeRawGpsRequest)(nil),  // 1: flightpath.SubscribeRawGpsRequest
 	(*SubscribeRawGpsResponse)(nil), // 2: flightpath.SubscribeRawGpsResponse
 	(*GpsRawInt)(nil),               // 3: flightpath.GpsRawInt
 }
-var file_flightpath_telemetry_proto_depIdxs = []int32{
+var file_flightpath_gps_raw_int_proto_depIdxs = []int32{
 	3, // 0: flightpath.SubscribeRawGpsResponse.gps_raw_int:type_name -> flightpath.GpsRawInt
 	0, // 1: flightpath.GpsRawInt.fix_type:type_name -> flightpath.GpsFixType
-	1, // 2: flightpath.TelemetryService.SubscribeRawGps:input_type -> flightpath.SubscribeRawGpsRequest
-	2, // 3: flightpath.TelemetryService.SubscribeRawGps:output_type -> flightpath.SubscribeRawGpsResponse
+	1, // 2: flightpath.GpsRawIntService.SubscribeRawGps:input_type -> flightpath.SubscribeRawGpsRequest
+	2, // 3: flightpath.GpsRawIntService.SubscribeRawGps:output_type -> flightpath.SubscribeRawGpsResponse
 	3, // [3:4] is the sub-list for method output_type
 	2, // [2:3] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -467,27 +467,27 @@ var file_flightpath_telemetry_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_flightpath_telemetry_proto_init() }
-func file_flightpath_telemetry_proto_init() {
-	if File_flightpath_telemetry_proto != nil {
+func init() { file_flightpath_gps_raw_int_proto_init() }
+func file_flightpath_gps_raw_int_proto_init() {
+	if File_flightpath_gps_raw_int_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_flightpath_telemetry_proto_rawDesc), len(file_flightpath_telemetry_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_flightpath_gps_raw_int_proto_rawDesc), len(file_flightpath_gps_raw_int_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_flightpath_telemetry_proto_goTypes,
-		DependencyIndexes: file_flightpath_telemetry_proto_depIdxs,
-		EnumInfos:         file_flightpath_telemetry_proto_enumTypes,
-		MessageInfos:      file_flightpath_telemetry_proto_msgTypes,
+		GoTypes:           file_flightpath_gps_raw_int_proto_goTypes,
+		DependencyIndexes: file_flightpath_gps_raw_int_proto_depIdxs,
+		EnumInfos:         file_flightpath_gps_raw_int_proto_enumTypes,
+		MessageInfos:      file_flightpath_gps_raw_int_proto_msgTypes,
 	}.Build()
-	File_flightpath_telemetry_proto = out.File
-	file_flightpath_telemetry_proto_goTypes = nil
-	file_flightpath_telemetry_proto_depIdxs = nil
+	File_flightpath_gps_raw_int_proto = out.File
+	file_flightpath_gps_raw_int_proto_goTypes = nil
+	file_flightpath_gps_raw_int_proto_depIdxs = nil
 }
