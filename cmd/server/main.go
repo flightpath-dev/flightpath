@@ -134,6 +134,11 @@ func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *servi
 	statusTextService := services.NewStatusTextService(ctx)
 	statusTextPath, statusTextHandler := flightpathconnect.NewStatusTextServiceHandler(statusTextService)
 	srv.RegisterService(statusTextPath, statusTextHandler)
+
+	// RadioStatusService
+	radioStatusService := services.NewRadioStatusService(ctx)
+	radioStatusPath, radioStatusHandler := flightpathconnect.NewRadioStatusServiceHandler(radioStatusService)
+	srv.RegisterService(radioStatusPath, radioStatusHandler)
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals

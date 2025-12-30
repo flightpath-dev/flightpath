@@ -102,6 +102,8 @@ func (d *MessageDispatcher) run() {
 					d.dispatchExtendedSysState(systemID, componentID, msg)
 				case *common.MessageStatustext:
 					d.dispatchStatusText(systemID, componentID, msg)
+				case *common.MessageRadioStatus:
+					d.dispatchRadioStatus(systemID, componentID, msg)
 				}
 			}
 		}
@@ -175,5 +177,19 @@ func (d *MessageDispatcher) dispatchStatusText(systemID, componentID uint8, msg 
 
 	if handler != nil {
 		handler.OnMessage(systemID, componentID, pbStatusText)
+	}
+}
+
+// dispatchRadioStatus
+// Converts a RADIO_STATUS message to protobuf and dispatches it to the registered handler.
+func (d *MessageDispatcher) dispatchRadioStatus(systemID, componentID uint8, msg *common.MessageRadioStatus) {
+	pbRadioStatus := message_converters.RadioStatusToProtobuf(msg)
+
+	d.mu.RLock()
+	handler := d.handlers["common.MessageRadioStatus"]
+	d.mu.RUnlock()
+
+	if handler != nil {
+		handler.OnMessage(systemID, componentID, pbRadioStatus)
 	}
 }

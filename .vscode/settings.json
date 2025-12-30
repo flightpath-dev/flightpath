@@ -18,6 +18,8 @@
         "protoc",
         "protocolbuffers",
         "QUADROTOR",
+        "remrssi",
+        "rssi",
         "SITL",
         "statustext",
         "vite"
