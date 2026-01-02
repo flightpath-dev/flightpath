@@ -104,6 +104,8 @@ func (d *MessageDispatcher) run() {
 					d.dispatchStatusText(systemID, componentID, msg)
 				case *common.MessageRadioStatus:
 					d.dispatchRadioStatus(systemID, componentID, msg)
+				case *common.MessageGlobalPositionInt:
+					d.dispatchGlobalPositionInt(systemID, componentID, msg)
 				}
 			}
 		}
@@ -191,5 +193,19 @@ func (d *MessageDispatcher) dispatchRadioStatus(systemID, componentID uint8, msg
 
 	if handler != nil {
 		handler.OnMessage(systemID, componentID, pbRadioStatus)
+	}
+}
+
+// dispatchGlobalPositionInt
+// Converts a GLOBAL_POSITION_INT message to protobuf and dispatches it to the registered handler.
+func (d *MessageDispatcher) dispatchGlobalPositionInt(systemID, componentID uint8, msg *common.MessageGlobalPositionInt) {
+	pbGlobalPositionInt := message_converters.GlobalPositionIntToProtobuf(msg)
+
+	d.mu.RLock()
+	handler := d.handlers["common.MessageGlobalPositionInt"]
+	d.mu.RUnlock()
+
+	if handler != nil {
+		handler.OnMessage(systemID, componentID, pbGlobalPositionInt)
 	}
 }
