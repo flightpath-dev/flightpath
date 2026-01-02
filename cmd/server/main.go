@@ -144,6 +144,11 @@ func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *servi
 	globalPositionIntService := services.NewGlobalPositionIntService(ctx)
 	globalPositionIntPath, globalPositionIntHandler := flightpathconnect.NewGlobalPositionIntServiceHandler(globalPositionIntService)
 	srv.RegisterService(globalPositionIntPath, globalPositionIntHandler)
+
+	// VfrHudService
+	vfrHudService := services.NewVfrHudService(ctx)
+	vfrHudPath, vfrHudHandler := flightpathconnect.NewVfrHudServiceHandler(vfrHudService)
+	srv.RegisterService(vfrHudPath, vfrHudHandler)
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals

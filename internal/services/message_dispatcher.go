@@ -106,6 +106,8 @@ func (d *MessageDispatcher) run() {
 					d.dispatchRadioStatus(systemID, componentID, msg)
 				case *common.MessageGlobalPositionInt:
 					d.dispatchGlobalPositionInt(systemID, componentID, msg)
+				case *common.MessageVfrHud:
+					d.dispatchVfrHud(systemID, componentID, msg)
 				}
 			}
 		}
@@ -207,5 +209,19 @@ func (d *MessageDispatcher) dispatchGlobalPositionInt(systemID, componentID uint
 
 	if handler != nil {
 		handler.OnMessage(systemID, componentID, pbGlobalPositionInt)
+	}
+}
+
+// dispatchVfrHud
+// Converts a VFR_HUD message to protobuf and dispatches it to the registered handler.
+func (d *MessageDispatcher) dispatchVfrHud(systemID, componentID uint8, msg *common.MessageVfrHud) {
+	pbVfrHud := message_converters.VfrHudToProtobuf(msg)
+
+	d.mu.RLock()
+	handler := d.handlers["common.MessageVfrHud"]
+	d.mu.RUnlock()
+
+	if handler != nil {
+		handler.OnMessage(systemID, componentID, pbVfrHud)
 	}
 }

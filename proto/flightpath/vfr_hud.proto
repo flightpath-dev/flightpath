@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package flightpath;
+
+// VfrHudService handles VFR_HUD (74) messages from the drone
+service VfrHudService {
+  // Subscribe to VFR_HUD messages from the drone
+  rpc SubscribeVfrHud(SubscribeVfrHudRequest) returns (stream SubscribeVfrHudResponse);
+}
+
+// SubscribeVfrHudRequest is the request message for SubscribeVfrHud
+message SubscribeVfrHudRequest {}
+
+// SubscribeVfrHudResponse contains VFR_HUD message data
+message SubscribeVfrHudResponse {
+  // Timestamp when this VFR HUD data was captured (milliseconds since Unix epoch)
+  int64 timestamp_ms = 1;
+
+  // System ID of the component sending the VFR HUD data
+  uint32 system_id = 2;
+
+  // Component ID of the component sending the VFR HUD data
+  uint32 component_id = 3;
+
+  // VFR_HUD message data
+  VfrHud vfr_hud = 4;
+}
+
+// VfrHud represents the VFR_HUD (74) MAVLink message
+// Metrics typically displayed on a HUD for fixed wing aircraft.
+message VfrHud {
+  // Vehicle speed in m/s
+  float airspeed = 1;
+
+  // Current ground speed in m/s
+  float groundspeed = 2;
+
+  // Current heading in degrees, 0..360. 0 = north
+  int32 heading = 3;
+
+  // Current throttle setting in percent, 0 to 100
+  uint32 throttle = 4;
+
+  // Current altitude (MSL) in meters
+  float alt = 5;
+
+  // Current climb rate in m/s
+  float climb = 6;
+}
