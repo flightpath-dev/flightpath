@@ -2,116 +2,224 @@
 // @generated from file flightpath/mavlink_service.proto (package flightpath, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
-import type { SubscribeExtendedSysStateRequestSchema, SubscribeExtendedSysStateResponseSchema } from "./extended_sys_state_pb.js";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { ExtendedSysState } from "./extended_sys_state_pb.js";
 import { file_flightpath_extended_sys_state } from "./extended_sys_state_pb.js";
-import type { SubscribeGlobalPositionIntRequestSchema, SubscribeGlobalPositionIntResponseSchema } from "./global_position_int_pb.js";
+import type { GlobalPositionInt } from "./global_position_int_pb.js";
 import { file_flightpath_global_position_int } from "./global_position_int_pb.js";
-import type { SubscribeGpsRawIntRequestSchema, SubscribeGpsRawIntResponseSchema } from "./gps_raw_int_pb.js";
+import type { GpsRawInt } from "./gps_raw_int_pb.js";
 import { file_flightpath_gps_raw_int } from "./gps_raw_int_pb.js";
-import type { SubscribeHeartbeatRequestSchema, SubscribeHeartbeatResponseSchema } from "./heartbeat_pb.js";
+import type { Heartbeat } from "./heartbeat_pb.js";
 import { file_flightpath_heartbeat } from "./heartbeat_pb.js";
-import type { SubscribeRadioStatusRequestSchema, SubscribeRadioStatusResponseSchema } from "./radio_status_pb.js";
+import type { RadioStatus } from "./radio_status_pb.js";
 import { file_flightpath_radio_status } from "./radio_status_pb.js";
-import type { SubscribeStatusTextRequestSchema, SubscribeStatusTextResponseSchema } from "./statustext_pb.js";
+import type { StatusText } from "./statustext_pb.js";
 import { file_flightpath_statustext } from "./statustext_pb.js";
-import type { SubscribeSysStatusRequestSchema, SubscribeSysStatusResponseSchema } from "./sys_status_pb.js";
+import type { SysStatus } from "./sys_status_pb.js";
 import { file_flightpath_sys_status } from "./sys_status_pb.js";
-import type { SubscribeVfrHudRequestSchema, SubscribeVfrHudResponseSchema } from "./vfr_hud_pb.js";
+import type { VfrHud } from "./vfr_hud_pb.js";
 import { file_flightpath_vfr_hud } from "./vfr_hud_pb.js";
+import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file flightpath/mavlink_service.proto.
  */
 export const file_flightpath_mavlink_service: GenFile = /*@__PURE__*/
-  fileDesc("CiBmbGlnaHRwYXRoL21hdmxpbmtfc2VydmljZS5wcm90bxIKZmxpZ2h0cGF0aDL1BgoOTUFWTGlua1NlcnZpY2USZQoSU3Vic2NyaWJlSGVhcnRiZWF0EiUuZmxpZ2h0cGF0aC5TdWJzY3JpYmVIZWFydGJlYXRSZXF1ZXN0GiYuZmxpZ2h0cGF0aC5TdWJzY3JpYmVIZWFydGJlYXRSZXNwb25zZTABEmUKElN1YnNjcmliZVN5c1N0YXR1cxIlLmZsaWdodHBhdGguU3Vic2NyaWJlU3lzU3RhdHVzUmVxdWVzdBomLmZsaWdodHBhdGguU3Vic2NyaWJlU3lzU3RhdHVzUmVzcG9uc2UwARJlChJTdWJzY3JpYmVHcHNSYXdJbnQSJS5mbGlnaHRwYXRoLlN1YnNjcmliZUdwc1Jhd0ludFJlcXVlc3QaJi5mbGlnaHRwYXRoLlN1YnNjcmliZUdwc1Jhd0ludFJlc3BvbnNlMAESfQoaU3Vic2NyaWJlR2xvYmFsUG9zaXRpb25JbnQSLS5mbGlnaHRwYXRoLlN1YnNjcmliZUdsb2JhbFBvc2l0aW9uSW50UmVxdWVzdBouLmZsaWdodHBhdGguU3Vic2NyaWJlR2xvYmFsUG9zaXRpb25JbnRSZXNwb25zZTABElwKD1N1YnNjcmliZVZmckh1ZBIiLmZsaWdodHBhdGguU3Vic2NyaWJlVmZySHVkUmVxdWVzdBojLmZsaWdodHBhdGguU3Vic2NyaWJlVmZySHVkUmVzcG9uc2UwARJrChRTdWJzY3JpYmVSYWRpb1N0YXR1cxInLmZsaWdodHBhdGguU3Vic2NyaWJlUmFkaW9TdGF0dXNSZXF1ZXN0GiguZmxpZ2h0cGF0aC5TdWJzY3JpYmVSYWRpb1N0YXR1c1Jlc3BvbnNlMAESegoZU3Vic2NyaWJlRXh0ZW5kZWRTeXNTdGF0ZRIsLmZsaWdodHBhdGguU3Vic2NyaWJlRXh0ZW5kZWRTeXNTdGF0ZVJlcXVlc3QaLS5mbGlnaHRwYXRoLlN1YnNjcmliZUV4dGVuZGVkU3lzU3RhdGVSZXNwb25zZTABEmgKE1N1YnNjcmliZVN0YXR1c1RleHQSJi5mbGlnaHRwYXRoLlN1YnNjcmliZVN0YXR1c1RleHRSZXF1ZXN0GicuZmxpZ2h0cGF0aC5TdWJzY3JpYmVTdGF0dXNUZXh0UmVzcG9uc2UwAUJtCg5jb20uZmxpZ2h0cGF0aEITTWF2bGlua1NlcnZpY2VQcm90b1ABogIDRlhYqgIKRmxpZ2h0cGF0aMoCCkZsaWdodHBhdGjiAhZGbGlnaHRwYXRoXEdQQk1ldGFkYXRh6gIKRmxpZ2h0cGF0aGIGcHJvdG8z", [file_flightpath_extended_sys_state, file_flightpath_global_position_int, file_flightpath_gps_raw_int, file_flightpath_heartbeat, file_flightpath_radio_status, file_flightpath_statustext, file_flightpath_sys_status, file_flightpath_vfr_hud]);
+  fileDesc("CiBmbGlnaHRwYXRoL21hdmxpbmtfc2VydmljZS5wcm90bxIKZmxpZ2h0cGF0aCJRChhTdWJzY3JpYmVNZXNzYWdlc1JlcXVlc3QSNQoNbWVzc2FnZV90eXBlcxgBIAMoDjIeLmZsaWdodHBhdGguTWF2bGlua01lc3NhZ2VUeXBlIqMEChlTdWJzY3JpYmVNZXNzYWdlc1Jlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAxIRCglzeXN0ZW1faWQYAiABKA0SFAoMY29tcG9uZW50X2lkGAMgASgNEjQKDG1lc3NhZ2VfdHlwZRgEIAEoDjIeLmZsaWdodHBhdGguTWF2bGlua01lc3NhZ2VUeXBlEioKCWhlYXJ0YmVhdBgFIAEoCzIVLmZsaWdodHBhdGguSGVhcnRiZWF0SAASKwoKc3lzX3N0YXR1cxgGIAEoCzIVLmZsaWdodHBhdGguU3lzU3RhdHVzSAASLAoLZ3BzX3Jhd19pbnQYByABKAsyFS5mbGlnaHRwYXRoLkdwc1Jhd0ludEgAEjwKE2dsb2JhbF9wb3NpdGlvbl9pbnQYCCABKAsyHS5mbGlnaHRwYXRoLkdsb2JhbFBvc2l0aW9uSW50SAASJQoHdmZyX2h1ZBgJIAEoCzISLmZsaWdodHBhdGguVmZySHVkSAASLwoMcmFkaW9fc3RhdHVzGAogASgLMhcuZmxpZ2h0cGF0aC5SYWRpb1N0YXR1c0gAEjoKEmV4dGVuZGVkX3N5c19zdGF0ZRgLIAEoCzIcLmZsaWdodHBhdGguRXh0ZW5kZWRTeXNTdGF0ZUgAEi0KC3N0YXR1c190ZXh0GAwgASgLMhYuZmxpZ2h0cGF0aC5TdGF0dXNUZXh0SABCCQoHbWVzc2FnZSryAgoSTWF2bGlua01lc3NhZ2VUeXBlEiQKIE1BVkxJTktfTUVTU0FHRV9UWVBFX1VOU1BFQ0lGSUVEEAASIgoeTUFWTElOS19NRVNTQUdFX1RZUEVfSEVBUlRCRUFUEAESIwofTUFWTElOS19NRVNTQUdFX1RZUEVfU1lTX1NUQVRVUxACEiQKIE1BVkxJTktfTUVTU0FHRV9UWVBFX0dQU19SQVdfSU5UEAMSLAooTUFWTElOS19NRVNTQUdFX1RZUEVfR0xPQkFMX1BPU0lUSU9OX0lOVBAEEiAKHE1BVkxJTktfTUVTU0FHRV9UWVBFX1ZGUl9IVUQQBRIlCiFNQVZMSU5LX01FU1NBR0VfVFlQRV9SQURJT19TVEFUVVMQBhIrCidNQVZMSU5LX01FU1NBR0VfVFlQRV9FWFRFTkRFRF9TWVNfU1RBVEUQBxIjCh9NQVZMSU5LX01FU1NBR0VfVFlQRV9TVEFUVVNURVhUEAgydAoOTUFWTGlua1NlcnZpY2USYgoRU3Vic2NyaWJlTWVzc2FnZXMSJC5mbGlnaHRwYXRoLlN1YnNjcmliZU1lc3NhZ2VzUmVxdWVzdBolLmZsaWdodHBhdGguU3Vic2NyaWJlTWVzc2FnZXNSZXNwb25zZTABQm0KDmNvbS5mbGlnaHRwYXRoQhNNYXZsaW5rU2VydmljZVByb3RvUAGiAgNGWFiqAgpGbGlnaHRwYXRoygIKRmxpZ2h0cGF0aOICFkZsaWdodHBhdGhcR1BCTWV0YWRhdGHqAgpGbGlnaHRwYXRoYgZwcm90bzM", [file_flightpath_extended_sys_state, file_flightpath_global_position_int, file_flightpath_gps_raw_int, file_flightpath_heartbeat, file_flightpath_radio_status, file_flightpath_statustext, file_flightpath_sys_status, file_flightpath_vfr_hud]);
 
 /**
- * MAVLinkService handles all MAVLink.
+ * Subscribe to all messages or a filtered subset
+ *
+ * @generated from message flightpath.SubscribeMessagesRequest
+ */
+export type SubscribeMessagesRequest = Message<"flightpath.SubscribeMessagesRequest"> & {
+  /**
+   * Optional: if empty, subscribe to all message types
+   * If specified, only these message types will be sent
+   *
+   * @generated from field: repeated flightpath.MavlinkMessageType message_types = 1;
+   */
+  messageTypes: MavlinkMessageType[];
+};
+
+/**
+ * Describes the message flightpath.SubscribeMessagesRequest.
+ * Use `create(SubscribeMessagesRequestSchema)` to create a new message.
+ */
+export const SubscribeMessagesRequestSchema: GenMessage<SubscribeMessagesRequest> = /*@__PURE__*/
+  messageDesc(file_flightpath_mavlink_service, 0);
+
+/**
+ * Contains any MAVLink message type specified by message_type
+ *
+ * @generated from message flightpath.SubscribeMessagesResponse
+ */
+export type SubscribeMessagesResponse = Message<"flightpath.SubscribeMessagesResponse"> & {
+  /**
+   * Timestamp when this message was captured (milliseconds since Unix epoch)
+   *
+   * @generated from field: int64 timestamp_ms = 1;
+   */
+  timestampMs: bigint;
+
+  /**
+   * System ID of the component sending the message
+   *
+   * @generated from field: uint32 system_id = 2;
+   */
+  systemId: number;
+
+  /**
+   * Component ID of the component sending the message
+   *
+   * @generated from field: uint32 component_id = 3;
+   */
+  componentId: number;
+
+  /**
+   * Message type identifier
+   *
+   * @generated from field: flightpath.MavlinkMessageType message_type = 4;
+   */
+  messageType: MavlinkMessageType;
+
+  /**
+   * The actual message data - only one field will be set
+   *
+   * @generated from oneof flightpath.SubscribeMessagesResponse.message
+   */
+  message: {
+    /**
+     * @generated from field: flightpath.Heartbeat heartbeat = 5;
+     */
+    value: Heartbeat;
+    case: "heartbeat";
+  } | {
+    /**
+     * @generated from field: flightpath.SysStatus sys_status = 6;
+     */
+    value: SysStatus;
+    case: "sysStatus";
+  } | {
+    /**
+     * @generated from field: flightpath.GpsRawInt gps_raw_int = 7;
+     */
+    value: GpsRawInt;
+    case: "gpsRawInt";
+  } | {
+    /**
+     * @generated from field: flightpath.GlobalPositionInt global_position_int = 8;
+     */
+    value: GlobalPositionInt;
+    case: "globalPositionInt";
+  } | {
+    /**
+     * @generated from field: flightpath.VfrHud vfr_hud = 9;
+     */
+    value: VfrHud;
+    case: "vfrHud";
+  } | {
+    /**
+     * @generated from field: flightpath.RadioStatus radio_status = 10;
+     */
+    value: RadioStatus;
+    case: "radioStatus";
+  } | {
+    /**
+     * @generated from field: flightpath.ExtendedSysState extended_sys_state = 11;
+     */
+    value: ExtendedSysState;
+    case: "extendedSysState";
+  } | {
+    /**
+     * @generated from field: flightpath.StatusText status_text = 12;
+     */
+    value: StatusText;
+    case: "statusText";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message flightpath.SubscribeMessagesResponse.
+ * Use `create(SubscribeMessagesResponseSchema)` to create a new message.
+ */
+export const SubscribeMessagesResponseSchema: GenMessage<SubscribeMessagesResponse> = /*@__PURE__*/
+  messageDesc(file_flightpath_mavlink_service, 1);
+
+/**
+ * MavlinkMessageType identifies the type of MAVLink message
+ *
+ * @generated from enum flightpath.MavlinkMessageType
+ */
+export enum MavlinkMessageType {
+  /**
+   * @generated from enum value: MAVLINK_MESSAGE_TYPE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: MAVLINK_MESSAGE_TYPE_HEARTBEAT = 1;
+   */
+  HEARTBEAT = 1,
+
+  /**
+   * @generated from enum value: MAVLINK_MESSAGE_TYPE_SYS_STATUS = 2;
+   */
+  SYS_STATUS = 2,
+
+  /**
+   * @generated from enum value: MAVLINK_MESSAGE_TYPE_GPS_RAW_INT = 3;
+   */
+  GPS_RAW_INT = 3,
+
+  /**
+   * @generated from enum value: MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT = 4;
+   */
+  GLOBAL_POSITION_INT = 4,
+
+  /**
+   * @generated from enum value: MAVLINK_MESSAGE_TYPE_VFR_HUD = 5;
+   */
+  VFR_HUD = 5,
+
+  /**
+   * @generated from enum value: MAVLINK_MESSAGE_TYPE_RADIO_STATUS = 6;
+   */
+  RADIO_STATUS = 6,
+
+  /**
+   * @generated from enum value: MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE = 7;
+   */
+  EXTENDED_SYS_STATE = 7,
+
+  /**
+   * @generated from enum value: MAVLINK_MESSAGE_TYPE_STATUSTEXT = 8;
+   */
+  STATUSTEXT = 8,
+}
+
+/**
+ * Describes the enum flightpath.MavlinkMessageType.
+ */
+export const MavlinkMessageTypeSchema: GenEnum<MavlinkMessageType> = /*@__PURE__*/
+  enumDesc(file_flightpath_mavlink_service, 0);
+
+/**
+ * MAVLinkService handles all MAVLink messages
  *
  * @generated from service flightpath.MAVLinkService
  */
 export const MAVLinkService: GenService<{
   /**
-   * Subscribe to HEARTBEAT (0)
+   * Subscribe to all MAVLink messages (or a filtered subset)
    *
-   * @generated from rpc flightpath.MAVLinkService.SubscribeHeartbeat
+   * @generated from rpc flightpath.MAVLinkService.SubscribeMessages
    */
-  subscribeHeartbeat: {
+  subscribeMessages: {
     methodKind: "server_streaming";
-    input: typeof SubscribeHeartbeatRequestSchema;
-    output: typeof SubscribeHeartbeatResponseSchema;
-  },
-  /**
-   * Subscribe to SYS_STATUS (1)
-   *
-   * @generated from rpc flightpath.MAVLinkService.SubscribeSysStatus
-   */
-  subscribeSysStatus: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeSysStatusRequestSchema;
-    output: typeof SubscribeSysStatusResponseSchema;
-  },
-  /**
-   * Subscribe to GPS_RAW_INT (24)
-   *
-   * @generated from rpc flightpath.MAVLinkService.SubscribeGpsRawInt
-   */
-  subscribeGpsRawInt: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeGpsRawIntRequestSchema;
-    output: typeof SubscribeGpsRawIntResponseSchema;
-  },
-  /**
-   * Subscribe to GLOBAL_POSITION_INT (33)
-   *
-   * @generated from rpc flightpath.MAVLinkService.SubscribeGlobalPositionInt
-   */
-  subscribeGlobalPositionInt: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeGlobalPositionIntRequestSchema;
-    output: typeof SubscribeGlobalPositionIntResponseSchema;
-  },
-  /**
-   * Subscribe to VFR_HUD (74)
-   *
-   * @generated from rpc flightpath.MAVLinkService.SubscribeVfrHud
-   */
-  subscribeVfrHud: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeVfrHudRequestSchema;
-    output: typeof SubscribeVfrHudResponseSchema;
-  },
-  /**
-   * Subscribe to RADIO_STATUS (109)
-   *
-   * @generated from rpc flightpath.MAVLinkService.SubscribeRadioStatus
-   */
-  subscribeRadioStatus: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeRadioStatusRequestSchema;
-    output: typeof SubscribeRadioStatusResponseSchema;
-  },
-  /**
-   * Subscribe to EXTENDED_SYS_STATE (245)
-   *
-   * @generated from rpc flightpath.MAVLinkService.SubscribeExtendedSysState
-   */
-  subscribeExtendedSysState: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeExtendedSysStateRequestSchema;
-    output: typeof SubscribeExtendedSysStateResponseSchema;
-  },
-  /**
-   * Subscribe to STATUSTEXT (253)
-   *
-   * @generated from rpc flightpath.MAVLinkService.SubscribeStatusText
-   */
-  subscribeStatusText: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeStatusTextRequestSchema;
-    output: typeof SubscribeStatusTextResponseSchema;
+    input: typeof SubscribeMessagesRequestSchema;
+    output: typeof SubscribeMessagesResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_flightpath_mavlink_service, 0);

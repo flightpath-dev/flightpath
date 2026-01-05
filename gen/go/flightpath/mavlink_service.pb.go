@@ -10,6 +10,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
+	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -20,66 +21,425 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// MavlinkMessageType identifies the type of MAVLink message
+type MavlinkMessageType int32
+
+const (
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_UNSPECIFIED         MavlinkMessageType = 0
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_HEARTBEAT           MavlinkMessageType = 1
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_SYS_STATUS          MavlinkMessageType = 2
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_GPS_RAW_INT         MavlinkMessageType = 3
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT MavlinkMessageType = 4
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_VFR_HUD             MavlinkMessageType = 5
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_RADIO_STATUS        MavlinkMessageType = 6
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE  MavlinkMessageType = 7
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_STATUSTEXT          MavlinkMessageType = 8
+)
+
+// Enum value maps for MavlinkMessageType.
+var (
+	MavlinkMessageType_name = map[int32]string{
+		0: "MAVLINK_MESSAGE_TYPE_UNSPECIFIED",
+		1: "MAVLINK_MESSAGE_TYPE_HEARTBEAT",
+		2: "MAVLINK_MESSAGE_TYPE_SYS_STATUS",
+		3: "MAVLINK_MESSAGE_TYPE_GPS_RAW_INT",
+		4: "MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT",
+		5: "MAVLINK_MESSAGE_TYPE_VFR_HUD",
+		6: "MAVLINK_MESSAGE_TYPE_RADIO_STATUS",
+		7: "MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE",
+		8: "MAVLINK_MESSAGE_TYPE_STATUSTEXT",
+	}
+	MavlinkMessageType_value = map[string]int32{
+		"MAVLINK_MESSAGE_TYPE_UNSPECIFIED":         0,
+		"MAVLINK_MESSAGE_TYPE_HEARTBEAT":           1,
+		"MAVLINK_MESSAGE_TYPE_SYS_STATUS":          2,
+		"MAVLINK_MESSAGE_TYPE_GPS_RAW_INT":         3,
+		"MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT": 4,
+		"MAVLINK_MESSAGE_TYPE_VFR_HUD":             5,
+		"MAVLINK_MESSAGE_TYPE_RADIO_STATUS":        6,
+		"MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE":  7,
+		"MAVLINK_MESSAGE_TYPE_STATUSTEXT":          8,
+	}
+)
+
+func (x MavlinkMessageType) Enum() *MavlinkMessageType {
+	p := new(MavlinkMessageType)
+	*p = x
+	return p
+}
+
+func (x MavlinkMessageType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (MavlinkMessageType) Descriptor() protoreflect.EnumDescriptor {
+	return file_flightpath_mavlink_service_proto_enumTypes[0].Descriptor()
+}
+
+func (MavlinkMessageType) Type() protoreflect.EnumType {
+	return &file_flightpath_mavlink_service_proto_enumTypes[0]
+}
+
+func (x MavlinkMessageType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use MavlinkMessageType.Descriptor instead.
+func (MavlinkMessageType) EnumDescriptor() ([]byte, []int) {
+	return file_flightpath_mavlink_service_proto_rawDescGZIP(), []int{0}
+}
+
+// Subscribe to all messages or a filtered subset
+type SubscribeMessagesRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional: if empty, subscribe to all message types
+	// If specified, only these message types will be sent
+	MessageTypes  []MavlinkMessageType `protobuf:"varint,1,rep,packed,name=message_types,json=messageTypes,proto3,enum=flightpath.MavlinkMessageType" json:"message_types,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeMessagesRequest) Reset() {
+	*x = SubscribeMessagesRequest{}
+	mi := &file_flightpath_mavlink_service_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeMessagesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeMessagesRequest) ProtoMessage() {}
+
+func (x *SubscribeMessagesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_flightpath_mavlink_service_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeMessagesRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeMessagesRequest) Descriptor() ([]byte, []int) {
+	return file_flightpath_mavlink_service_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *SubscribeMessagesRequest) GetMessageTypes() []MavlinkMessageType {
+	if x != nil {
+		return x.MessageTypes
+	}
+	return nil
+}
+
+// Contains any MAVLink message type specified by message_type
+type SubscribeMessagesResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Timestamp when this message was captured (milliseconds since Unix epoch)
+	TimestampMs int64 `protobuf:"varint,1,opt,name=timestamp_ms,json=timestampMs,proto3" json:"timestamp_ms,omitempty"`
+	// System ID of the component sending the message
+	SystemId uint32 `protobuf:"varint,2,opt,name=system_id,json=systemId,proto3" json:"system_id,omitempty"`
+	// Component ID of the component sending the message
+	ComponentId uint32 `protobuf:"varint,3,opt,name=component_id,json=componentId,proto3" json:"component_id,omitempty"`
+	// Message type identifier
+	MessageType MavlinkMessageType `protobuf:"varint,4,opt,name=message_type,json=messageType,proto3,enum=flightpath.MavlinkMessageType" json:"message_type,omitempty"`
+	// The actual message data - only one field will be set
+	//
+	// Types that are valid to be assigned to Message:
+	//
+	//	*SubscribeMessagesResponse_Heartbeat
+	//	*SubscribeMessagesResponse_SysStatus
+	//	*SubscribeMessagesResponse_GpsRawInt
+	//	*SubscribeMessagesResponse_GlobalPositionInt
+	//	*SubscribeMessagesResponse_VfrHud
+	//	*SubscribeMessagesResponse_RadioStatus
+	//	*SubscribeMessagesResponse_ExtendedSysState
+	//	*SubscribeMessagesResponse_StatusText
+	Message       isSubscribeMessagesResponse_Message `protobuf_oneof:"message"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeMessagesResponse) Reset() {
+	*x = SubscribeMessagesResponse{}
+	mi := &file_flightpath_mavlink_service_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeMessagesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeMessagesResponse) ProtoMessage() {}
+
+func (x *SubscribeMessagesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_flightpath_mavlink_service_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeMessagesResponse.ProtoReflect.Descriptor instead.
+func (*SubscribeMessagesResponse) Descriptor() ([]byte, []int) {
+	return file_flightpath_mavlink_service_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *SubscribeMessagesResponse) GetTimestampMs() int64 {
+	if x != nil {
+		return x.TimestampMs
+	}
+	return 0
+}
+
+func (x *SubscribeMessagesResponse) GetSystemId() uint32 {
+	if x != nil {
+		return x.SystemId
+	}
+	return 0
+}
+
+func (x *SubscribeMessagesResponse) GetComponentId() uint32 {
+	if x != nil {
+		return x.ComponentId
+	}
+	return 0
+}
+
+func (x *SubscribeMessagesResponse) GetMessageType() MavlinkMessageType {
+	if x != nil {
+		return x.MessageType
+	}
+	return MavlinkMessageType_MAVLINK_MESSAGE_TYPE_UNSPECIFIED
+}
+
+func (x *SubscribeMessagesResponse) GetMessage() isSubscribeMessagesResponse_Message {
+	if x != nil {
+		return x.Message
+	}
+	return nil
+}
+
+func (x *SubscribeMessagesResponse) GetHeartbeat() *Heartbeat {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_Heartbeat); ok {
+			return x.Heartbeat
+		}
+	}
+	return nil
+}
+
+func (x *SubscribeMessagesResponse) GetSysStatus() *SysStatus {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_SysStatus); ok {
+			return x.SysStatus
+		}
+	}
+	return nil
+}
+
+func (x *SubscribeMessagesResponse) GetGpsRawInt() *GpsRawInt {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_GpsRawInt); ok {
+			return x.GpsRawInt
+		}
+	}
+	return nil
+}
+
+func (x *SubscribeMessagesResponse) GetGlobalPositionInt() *GlobalPositionInt {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_GlobalPositionInt); ok {
+			return x.GlobalPositionInt
+		}
+	}
+	return nil
+}
+
+func (x *SubscribeMessagesResponse) GetVfrHud() *VfrHud {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_VfrHud); ok {
+			return x.VfrHud
+		}
+	}
+	return nil
+}
+
+func (x *SubscribeMessagesResponse) GetRadioStatus() *RadioStatus {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_RadioStatus); ok {
+			return x.RadioStatus
+		}
+	}
+	return nil
+}
+
+func (x *SubscribeMessagesResponse) GetExtendedSysState() *ExtendedSysState {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_ExtendedSysState); ok {
+			return x.ExtendedSysState
+		}
+	}
+	return nil
+}
+
+func (x *SubscribeMessagesResponse) GetStatusText() *StatusText {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_StatusText); ok {
+			return x.StatusText
+		}
+	}
+	return nil
+}
+
+type isSubscribeMessagesResponse_Message interface {
+	isSubscribeMessagesResponse_Message()
+}
+
+type SubscribeMessagesResponse_Heartbeat struct {
+	Heartbeat *Heartbeat `protobuf:"bytes,5,opt,name=heartbeat,proto3,oneof"`
+}
+
+type SubscribeMessagesResponse_SysStatus struct {
+	SysStatus *SysStatus `protobuf:"bytes,6,opt,name=sys_status,json=sysStatus,proto3,oneof"`
+}
+
+type SubscribeMessagesResponse_GpsRawInt struct {
+	GpsRawInt *GpsRawInt `protobuf:"bytes,7,opt,name=gps_raw_int,json=gpsRawInt,proto3,oneof"`
+}
+
+type SubscribeMessagesResponse_GlobalPositionInt struct {
+	GlobalPositionInt *GlobalPositionInt `protobuf:"bytes,8,opt,name=global_position_int,json=globalPositionInt,proto3,oneof"`
+}
+
+type SubscribeMessagesResponse_VfrHud struct {
+	VfrHud *VfrHud `protobuf:"bytes,9,opt,name=vfr_hud,json=vfrHud,proto3,oneof"`
+}
+
+type SubscribeMessagesResponse_RadioStatus struct {
+	RadioStatus *RadioStatus `protobuf:"bytes,10,opt,name=radio_status,json=radioStatus,proto3,oneof"`
+}
+
+type SubscribeMessagesResponse_ExtendedSysState struct {
+	ExtendedSysState *ExtendedSysState `protobuf:"bytes,11,opt,name=extended_sys_state,json=extendedSysState,proto3,oneof"`
+}
+
+type SubscribeMessagesResponse_StatusText struct {
+	StatusText *StatusText `protobuf:"bytes,12,opt,name=status_text,json=statusText,proto3,oneof"`
+}
+
+func (*SubscribeMessagesResponse_Heartbeat) isSubscribeMessagesResponse_Message() {}
+
+func (*SubscribeMessagesResponse_SysStatus) isSubscribeMessagesResponse_Message() {}
+
+func (*SubscribeMessagesResponse_GpsRawInt) isSubscribeMessagesResponse_Message() {}
+
+func (*SubscribeMessagesResponse_GlobalPositionInt) isSubscribeMessagesResponse_Message() {}
+
+func (*SubscribeMessagesResponse_VfrHud) isSubscribeMessagesResponse_Message() {}
+
+func (*SubscribeMessagesResponse_RadioStatus) isSubscribeMessagesResponse_Message() {}
+
+func (*SubscribeMessagesResponse_ExtendedSysState) isSubscribeMessagesResponse_Message() {}
+
+func (*SubscribeMessagesResponse_StatusText) isSubscribeMessagesResponse_Message() {}
+
 var File_flightpath_mavlink_service_proto protoreflect.FileDescriptor
 
 const file_flightpath_mavlink_service_proto_rawDesc = "" +
 	"\n" +
 	" flightpath/mavlink_service.proto\x12\n" +
-	"flightpath\x1a#flightpath/extended_sys_state.proto\x1a$flightpath/global_position_int.proto\x1a\x1cflightpath/gps_raw_int.proto\x1a\x1aflightpath/heartbeat.proto\x1a\x1dflightpath/radio_status.proto\x1a\x1bflightpath/statustext.proto\x1a\x1bflightpath/sys_status.proto\x1a\x18flightpath/vfr_hud.proto2\xf5\x06\n" +
-	"\x0eMAVLinkService\x12e\n" +
-	"\x12SubscribeHeartbeat\x12%.flightpath.SubscribeHeartbeatRequest\x1a&.flightpath.SubscribeHeartbeatResponse0\x01\x12e\n" +
-	"\x12SubscribeSysStatus\x12%.flightpath.SubscribeSysStatusRequest\x1a&.flightpath.SubscribeSysStatusResponse0\x01\x12e\n" +
-	"\x12SubscribeGpsRawInt\x12%.flightpath.SubscribeGpsRawIntRequest\x1a&.flightpath.SubscribeGpsRawIntResponse0\x01\x12}\n" +
-	"\x1aSubscribeGlobalPositionInt\x12-.flightpath.SubscribeGlobalPositionIntRequest\x1a..flightpath.SubscribeGlobalPositionIntResponse0\x01\x12\\\n" +
-	"\x0fSubscribeVfrHud\x12\".flightpath.SubscribeVfrHudRequest\x1a#.flightpath.SubscribeVfrHudResponse0\x01\x12k\n" +
-	"\x14SubscribeRadioStatus\x12'.flightpath.SubscribeRadioStatusRequest\x1a(.flightpath.SubscribeRadioStatusResponse0\x01\x12z\n" +
-	"\x19SubscribeExtendedSysState\x12,.flightpath.SubscribeExtendedSysStateRequest\x1a-.flightpath.SubscribeExtendedSysStateResponse0\x01\x12h\n" +
-	"\x13SubscribeStatusText\x12&.flightpath.SubscribeStatusTextRequest\x1a'.flightpath.SubscribeStatusTextResponse0\x01B\xa5\x01\n" +
+	"flightpath\x1a#flightpath/extended_sys_state.proto\x1a$flightpath/global_position_int.proto\x1a\x1cflightpath/gps_raw_int.proto\x1a\x1aflightpath/heartbeat.proto\x1a\x1dflightpath/radio_status.proto\x1a\x1bflightpath/statustext.proto\x1a\x1bflightpath/sys_status.proto\x1a\x18flightpath/vfr_hud.proto\"_\n" +
+	"\x18SubscribeMessagesRequest\x12C\n" +
+	"\rmessage_types\x18\x01 \x03(\x0e2\x1e.flightpath.MavlinkMessageTypeR\fmessageTypes\"\xbb\x05\n" +
+	"\x19SubscribeMessagesResponse\x12!\n" +
+	"\ftimestamp_ms\x18\x01 \x01(\x03R\vtimestampMs\x12\x1b\n" +
+	"\tsystem_id\x18\x02 \x01(\rR\bsystemId\x12!\n" +
+	"\fcomponent_id\x18\x03 \x01(\rR\vcomponentId\x12A\n" +
+	"\fmessage_type\x18\x04 \x01(\x0e2\x1e.flightpath.MavlinkMessageTypeR\vmessageType\x125\n" +
+	"\theartbeat\x18\x05 \x01(\v2\x15.flightpath.HeartbeatH\x00R\theartbeat\x126\n" +
+	"\n" +
+	"sys_status\x18\x06 \x01(\v2\x15.flightpath.SysStatusH\x00R\tsysStatus\x127\n" +
+	"\vgps_raw_int\x18\a \x01(\v2\x15.flightpath.GpsRawIntH\x00R\tgpsRawInt\x12O\n" +
+	"\x13global_position_int\x18\b \x01(\v2\x1d.flightpath.GlobalPositionIntH\x00R\x11globalPositionInt\x12-\n" +
+	"\avfr_hud\x18\t \x01(\v2\x12.flightpath.VfrHudH\x00R\x06vfrHud\x12<\n" +
+	"\fradio_status\x18\n" +
+	" \x01(\v2\x17.flightpath.RadioStatusH\x00R\vradioStatus\x12L\n" +
+	"\x12extended_sys_state\x18\v \x01(\v2\x1c.flightpath.ExtendedSysStateH\x00R\x10extendedSysState\x129\n" +
+	"\vstatus_text\x18\f \x01(\v2\x16.flightpath.StatusTextH\x00R\n" +
+	"statusTextB\t\n" +
+	"\amessage*\xf2\x02\n" +
+	"\x12MavlinkMessageType\x12$\n" +
+	" MAVLINK_MESSAGE_TYPE_UNSPECIFIED\x10\x00\x12\"\n" +
+	"\x1eMAVLINK_MESSAGE_TYPE_HEARTBEAT\x10\x01\x12#\n" +
+	"\x1fMAVLINK_MESSAGE_TYPE_SYS_STATUS\x10\x02\x12$\n" +
+	" MAVLINK_MESSAGE_TYPE_GPS_RAW_INT\x10\x03\x12,\n" +
+	"(MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT\x10\x04\x12 \n" +
+	"\x1cMAVLINK_MESSAGE_TYPE_VFR_HUD\x10\x05\x12%\n" +
+	"!MAVLINK_MESSAGE_TYPE_RADIO_STATUS\x10\x06\x12+\n" +
+	"'MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE\x10\a\x12#\n" +
+	"\x1fMAVLINK_MESSAGE_TYPE_STATUSTEXT\x10\b2t\n" +
+	"\x0eMAVLinkService\x12b\n" +
+	"\x11SubscribeMessages\x12$.flightpath.SubscribeMessagesRequest\x1a%.flightpath.SubscribeMessagesResponse0\x01B\xa5\x01\n" +
 	"\x0ecom.flightpathB\x13MavlinkServiceProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
 	"Flightpathb\x06proto3"
 
+var (
+	file_flightpath_mavlink_service_proto_rawDescOnce sync.Once
+	file_flightpath_mavlink_service_proto_rawDescData []byte
+)
+
+func file_flightpath_mavlink_service_proto_rawDescGZIP() []byte {
+	file_flightpath_mavlink_service_proto_rawDescOnce.Do(func() {
+		file_flightpath_mavlink_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_flightpath_mavlink_service_proto_rawDesc), len(file_flightpath_mavlink_service_proto_rawDesc)))
+	})
+	return file_flightpath_mavlink_service_proto_rawDescData
+}
+
+var file_flightpath_mavlink_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_flightpath_mavlink_service_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_flightpath_mavlink_service_proto_goTypes = []any{
-	(*SubscribeHeartbeatRequest)(nil),          // 0: flightpath.SubscribeHeartbeatRequest
-	(*SubscribeSysStatusRequest)(nil),          // 1: flightpath.SubscribeSysStatusRequest
-	(*SubscribeGpsRawIntRequest)(nil),          // 2: flightpath.SubscribeGpsRawIntRequest
-	(*SubscribeGlobalPositionIntRequest)(nil),  // 3: flightpath.SubscribeGlobalPositionIntRequest
-	(*SubscribeVfrHudRequest)(nil),             // 4: flightpath.SubscribeVfrHudRequest
-	(*SubscribeRadioStatusRequest)(nil),        // 5: flightpath.SubscribeRadioStatusRequest
-	(*SubscribeExtendedSysStateRequest)(nil),   // 6: flightpath.SubscribeExtendedSysStateRequest
-	(*SubscribeStatusTextRequest)(nil),         // 7: flightpath.SubscribeStatusTextRequest
-	(*SubscribeHeartbeatResponse)(nil),         // 8: flightpath.SubscribeHeartbeatResponse
-	(*SubscribeSysStatusResponse)(nil),         // 9: flightpath.SubscribeSysStatusResponse
-	(*SubscribeGpsRawIntResponse)(nil),         // 10: flightpath.SubscribeGpsRawIntResponse
-	(*SubscribeGlobalPositionIntResponse)(nil), // 11: flightpath.SubscribeGlobalPositionIntResponse
-	(*SubscribeVfrHudResponse)(nil),            // 12: flightpath.SubscribeVfrHudResponse
-	(*SubscribeRadioStatusResponse)(nil),       // 13: flightpath.SubscribeRadioStatusResponse
-	(*SubscribeExtendedSysStateResponse)(nil),  // 14: flightpath.SubscribeExtendedSysStateResponse
-	(*SubscribeStatusTextResponse)(nil),        // 15: flightpath.SubscribeStatusTextResponse
+	(MavlinkMessageType)(0),           // 0: flightpath.MavlinkMessageType
+	(*SubscribeMessagesRequest)(nil),  // 1: flightpath.SubscribeMessagesRequest
+	(*SubscribeMessagesResponse)(nil), // 2: flightpath.SubscribeMessagesResponse
+	(*Heartbeat)(nil),                 // 3: flightpath.Heartbeat
+	(*SysStatus)(nil),                 // 4: flightpath.SysStatus
+	(*GpsRawInt)(nil),                 // 5: flightpath.GpsRawInt
+	(*GlobalPositionInt)(nil),         // 6: flightpath.GlobalPositionInt
+	(*VfrHud)(nil),                    // 7: flightpath.VfrHud
+	(*RadioStatus)(nil),               // 8: flightpath.RadioStatus
+	(*ExtendedSysState)(nil),          // 9: flightpath.ExtendedSysState
+	(*StatusText)(nil),                // 10: flightpath.StatusText
 }
 var file_flightpath_mavlink_service_proto_depIdxs = []int32{
-	0,  // 0: flightpath.MAVLinkService.SubscribeHeartbeat:input_type -> flightpath.SubscribeHeartbeatRequest
-	1,  // 1: flightpath.MAVLinkService.SubscribeSysStatus:input_type -> flightpath.SubscribeSysStatusRequest
-	2,  // 2: flightpath.MAVLinkService.SubscribeGpsRawInt:input_type -> flightpath.SubscribeGpsRawIntRequest
-	3,  // 3: flightpath.MAVLinkService.SubscribeGlobalPositionInt:input_type -> flightpath.SubscribeGlobalPositionIntRequest
-	4,  // 4: flightpath.MAVLinkService.SubscribeVfrHud:input_type -> flightpath.SubscribeVfrHudRequest
-	5,  // 5: flightpath.MAVLinkService.SubscribeRadioStatus:input_type -> flightpath.SubscribeRadioStatusRequest
-	6,  // 6: flightpath.MAVLinkService.SubscribeExtendedSysState:input_type -> flightpath.SubscribeExtendedSysStateRequest
-	7,  // 7: flightpath.MAVLinkService.SubscribeStatusText:input_type -> flightpath.SubscribeStatusTextRequest
-	8,  // 8: flightpath.MAVLinkService.SubscribeHeartbeat:output_type -> flightpath.SubscribeHeartbeatResponse
-	9,  // 9: flightpath.MAVLinkService.SubscribeSysStatus:output_type -> flightpath.SubscribeSysStatusResponse
-	10, // 10: flightpath.MAVLinkService.SubscribeGpsRawInt:output_type -> flightpath.SubscribeGpsRawIntResponse
-	11, // 11: flightpath.MAVLinkService.SubscribeGlobalPositionInt:output_type -> flightpath.SubscribeGlobalPositionIntResponse
-	12, // 12: flightpath.MAVLinkService.SubscribeVfrHud:output_type -> flightpath.SubscribeVfrHudResponse
-	13, // 13: flightpath.MAVLinkService.SubscribeRadioStatus:output_type -> flightpath.SubscribeRadioStatusResponse
-	14, // 14: flightpath.MAVLinkService.SubscribeExtendedSysState:output_type -> flightpath.SubscribeExtendedSysStateResponse
-	15, // 15: flightpath.MAVLinkService.SubscribeStatusText:output_type -> flightpath.SubscribeStatusTextResponse
-	8,  // [8:16] is the sub-list for method output_type
-	0,  // [0:8] is the sub-list for method input_type
-	0,  // [0:0] is the sub-list for extension type_name
-	0,  // [0:0] is the sub-list for extension extendee
-	0,  // [0:0] is the sub-list for field type_name
+	0,  // 0: flightpath.SubscribeMessagesRequest.message_types:type_name -> flightpath.MavlinkMessageType
+	0,  // 1: flightpath.SubscribeMessagesResponse.message_type:type_name -> flightpath.MavlinkMessageType
+	3,  // 2: flightpath.SubscribeMessagesResponse.heartbeat:type_name -> flightpath.Heartbeat
+	4,  // 3: flightpath.SubscribeMessagesResponse.sys_status:type_name -> flightpath.SysStatus
+	5,  // 4: flightpath.SubscribeMessagesResponse.gps_raw_int:type_name -> flightpath.GpsRawInt
+	6,  // 5: flightpath.SubscribeMessagesResponse.global_position_int:type_name -> flightpath.GlobalPositionInt
+	7,  // 6: flightpath.SubscribeMessagesResponse.vfr_hud:type_name -> flightpath.VfrHud
+	8,  // 7: flightpath.SubscribeMessagesResponse.radio_status:type_name -> flightpath.RadioStatus
+	9,  // 8: flightpath.SubscribeMessagesResponse.extended_sys_state:type_name -> flightpath.ExtendedSysState
+	10, // 9: flightpath.SubscribeMessagesResponse.status_text:type_name -> flightpath.StatusText
+	1,  // 10: flightpath.MAVLinkService.SubscribeMessages:input_type -> flightpath.SubscribeMessagesRequest
+	2,  // 11: flightpath.MAVLinkService.SubscribeMessages:output_type -> flightpath.SubscribeMessagesResponse
+	11, // [11:12] is the sub-list for method output_type
+	10, // [10:11] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_flightpath_mavlink_service_proto_init() }
@@ -95,18 +455,30 @@ func file_flightpath_mavlink_service_proto_init() {
 	file_flightpath_statustext_proto_init()
 	file_flightpath_sys_status_proto_init()
 	file_flightpath_vfr_hud_proto_init()
+	file_flightpath_mavlink_service_proto_msgTypes[1].OneofWrappers = []any{
+		(*SubscribeMessagesResponse_Heartbeat)(nil),
+		(*SubscribeMessagesResponse_SysStatus)(nil),
+		(*SubscribeMessagesResponse_GpsRawInt)(nil),
+		(*SubscribeMessagesResponse_GlobalPositionInt)(nil),
+		(*SubscribeMessagesResponse_VfrHud)(nil),
+		(*SubscribeMessagesResponse_RadioStatus)(nil),
+		(*SubscribeMessagesResponse_ExtendedSysState)(nil),
+		(*SubscribeMessagesResponse_StatusText)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_flightpath_mavlink_service_proto_rawDesc), len(file_flightpath_mavlink_service_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   0,
+			NumEnums:      1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_flightpath_mavlink_service_proto_goTypes,
 		DependencyIndexes: file_flightpath_mavlink_service_proto_depIdxs,
+		EnumInfos:         file_flightpath_mavlink_service_proto_enumTypes,
+		MessageInfos:      file_flightpath_mavlink_service_proto_msgTypes,
 	}.Build()
 	File_flightpath_mavlink_service_proto = out.File
 	file_flightpath_mavlink_service_proto_goTypes = nil

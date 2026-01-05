@@ -60,7 +60,6 @@ func Default() *Config {
 			Host: "0.0.0.0",
 			Port: 8080,
 			CORSOrigins: []string{
-				"http://localhost:5173", // Vite dev server
 				"http://localhost:3000",
 			},
 		},

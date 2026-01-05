@@ -7,8 +7,6 @@ import (
 
 	"github.com/flightpath-dev/flightpath/internal/config"
 	"github.com/flightpath-dev/flightpath/internal/middleware"
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
 )
 
 // Server represents the Flightpath server. It holds the server state & provides methods to
@@ -80,7 +78,5 @@ func (s *Server) buildHandler() http.Handler {
 	handler = middleware.Logging(s.logger)(handler)
 	handler = middleware.Recovery(s.logger)(handler)
 
-	// Wrap with h2c (HTTP/2 Cleartext) for Connect protocol
-	// This provides HTTP/2 support for the server
-	return h2c.NewHandler(handler, &http2.Server{})
+	return handler
 }

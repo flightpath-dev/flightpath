@@ -33,50 +33,15 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// MAVLinkServiceSubscribeHeartbeatProcedure is the fully-qualified name of the MAVLinkService's
-	// SubscribeHeartbeat RPC.
-	MAVLinkServiceSubscribeHeartbeatProcedure = "/flightpath.MAVLinkService/SubscribeHeartbeat"
-	// MAVLinkServiceSubscribeSysStatusProcedure is the fully-qualified name of the MAVLinkService's
-	// SubscribeSysStatus RPC.
-	MAVLinkServiceSubscribeSysStatusProcedure = "/flightpath.MAVLinkService/SubscribeSysStatus"
-	// MAVLinkServiceSubscribeGpsRawIntProcedure is the fully-qualified name of the MAVLinkService's
-	// SubscribeGpsRawInt RPC.
-	MAVLinkServiceSubscribeGpsRawIntProcedure = "/flightpath.MAVLinkService/SubscribeGpsRawInt"
-	// MAVLinkServiceSubscribeGlobalPositionIntProcedure is the fully-qualified name of the
-	// MAVLinkService's SubscribeGlobalPositionInt RPC.
-	MAVLinkServiceSubscribeGlobalPositionIntProcedure = "/flightpath.MAVLinkService/SubscribeGlobalPositionInt"
-	// MAVLinkServiceSubscribeVfrHudProcedure is the fully-qualified name of the MAVLinkService's
-	// SubscribeVfrHud RPC.
-	MAVLinkServiceSubscribeVfrHudProcedure = "/flightpath.MAVLinkService/SubscribeVfrHud"
-	// MAVLinkServiceSubscribeRadioStatusProcedure is the fully-qualified name of the MAVLinkService's
-	// SubscribeRadioStatus RPC.
-	MAVLinkServiceSubscribeRadioStatusProcedure = "/flightpath.MAVLinkService/SubscribeRadioStatus"
-	// MAVLinkServiceSubscribeExtendedSysStateProcedure is the fully-qualified name of the
-	// MAVLinkService's SubscribeExtendedSysState RPC.
-	MAVLinkServiceSubscribeExtendedSysStateProcedure = "/flightpath.MAVLinkService/SubscribeExtendedSysState"
-	// MAVLinkServiceSubscribeStatusTextProcedure is the fully-qualified name of the MAVLinkService's
-	// SubscribeStatusText RPC.
-	MAVLinkServiceSubscribeStatusTextProcedure = "/flightpath.MAVLinkService/SubscribeStatusText"
+	// MAVLinkServiceSubscribeMessagesProcedure is the fully-qualified name of the MAVLinkService's
+	// SubscribeMessages RPC.
+	MAVLinkServiceSubscribeMessagesProcedure = "/flightpath.MAVLinkService/SubscribeMessages"
 )
 
 // MAVLinkServiceClient is a client for the flightpath.MAVLinkService service.
 type MAVLinkServiceClient interface {
-	// Subscribe to HEARTBEAT (0)
-	SubscribeHeartbeat(context.Context, *connect.Request[flightpath.SubscribeHeartbeatRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeHeartbeatResponse], error)
-	// Subscribe to SYS_STATUS (1)
-	SubscribeSysStatus(context.Context, *connect.Request[flightpath.SubscribeSysStatusRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeSysStatusResponse], error)
-	// Subscribe to GPS_RAW_INT (24)
-	SubscribeGpsRawInt(context.Context, *connect.Request[flightpath.SubscribeGpsRawIntRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeGpsRawIntResponse], error)
-	// Subscribe to GLOBAL_POSITION_INT (33)
-	SubscribeGlobalPositionInt(context.Context, *connect.Request[flightpath.SubscribeGlobalPositionIntRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeGlobalPositionIntResponse], error)
-	// Subscribe to VFR_HUD (74)
-	SubscribeVfrHud(context.Context, *connect.Request[flightpath.SubscribeVfrHudRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeVfrHudResponse], error)
-	// Subscribe to RADIO_STATUS (109)
-	SubscribeRadioStatus(context.Context, *connect.Request[flightpath.SubscribeRadioStatusRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeRadioStatusResponse], error)
-	// Subscribe to EXTENDED_SYS_STATE (245)
-	SubscribeExtendedSysState(context.Context, *connect.Request[flightpath.SubscribeExtendedSysStateRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeExtendedSysStateResponse], error)
-	// Subscribe to STATUSTEXT (253)
-	SubscribeStatusText(context.Context, *connect.Request[flightpath.SubscribeStatusTextRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeStatusTextResponse], error)
+	// Subscribe to all MAVLink messages (or a filtered subset)
+	SubscribeMessages(context.Context, *connect.Request[flightpath.SubscribeMessagesRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeMessagesResponse], error)
 }
 
 // NewMAVLinkServiceClient constructs a client for the flightpath.MAVLinkService service. By
@@ -90,52 +55,10 @@ func NewMAVLinkServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 	baseURL = strings.TrimRight(baseURL, "/")
 	mAVLinkServiceMethods := flightpath.File_flightpath_mavlink_service_proto.Services().ByName("MAVLinkService").Methods()
 	return &mAVLinkServiceClient{
-		subscribeHeartbeat: connect.NewClient[flightpath.SubscribeHeartbeatRequest, flightpath.SubscribeHeartbeatResponse](
+		subscribeMessages: connect.NewClient[flightpath.SubscribeMessagesRequest, flightpath.SubscribeMessagesResponse](
 			httpClient,
-			baseURL+MAVLinkServiceSubscribeHeartbeatProcedure,
-			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeHeartbeat")),
-			connect.WithClientOptions(opts...),
-		),
-		subscribeSysStatus: connect.NewClient[flightpath.SubscribeSysStatusRequest, flightpath.SubscribeSysStatusResponse](
-			httpClient,
-			baseURL+MAVLinkServiceSubscribeSysStatusProcedure,
-			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeSysStatus")),
-			connect.WithClientOptions(opts...),
-		),
-		subscribeGpsRawInt: connect.NewClient[flightpath.SubscribeGpsRawIntRequest, flightpath.SubscribeGpsRawIntResponse](
-			httpClient,
-			baseURL+MAVLinkServiceSubscribeGpsRawIntProcedure,
-			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeGpsRawInt")),
-			connect.WithClientOptions(opts...),
-		),
-		subscribeGlobalPositionInt: connect.NewClient[flightpath.SubscribeGlobalPositionIntRequest, flightpath.SubscribeGlobalPositionIntResponse](
-			httpClient,
-			baseURL+MAVLinkServiceSubscribeGlobalPositionIntProcedure,
-			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeGlobalPositionInt")),
-			connect.WithClientOptions(opts...),
-		),
-		subscribeVfrHud: connect.NewClient[flightpath.SubscribeVfrHudRequest, flightpath.SubscribeVfrHudResponse](
-			httpClient,
-			baseURL+MAVLinkServiceSubscribeVfrHudProcedure,
-			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeVfrHud")),
-			connect.WithClientOptions(opts...),
-		),
-		subscribeRadioStatus: connect.NewClient[flightpath.SubscribeRadioStatusRequest, flightpath.SubscribeRadioStatusResponse](
-			httpClient,
-			baseURL+MAVLinkServiceSubscribeRadioStatusProcedure,
-			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeRadioStatus")),
-			connect.WithClientOptions(opts...),
-		),
-		subscribeExtendedSysState: connect.NewClient[flightpath.SubscribeExtendedSysStateRequest, flightpath.SubscribeExtendedSysStateResponse](
-			httpClient,
-			baseURL+MAVLinkServiceSubscribeExtendedSysStateProcedure,
-			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeExtendedSysState")),
-			connect.WithClientOptions(opts...),
-		),
-		subscribeStatusText: connect.NewClient[flightpath.SubscribeStatusTextRequest, flightpath.SubscribeStatusTextResponse](
-			httpClient,
-			baseURL+MAVLinkServiceSubscribeStatusTextProcedure,
-			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeStatusText")),
+			baseURL+MAVLinkServiceSubscribeMessagesProcedure,
+			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeMessages")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -143,74 +66,18 @@ func NewMAVLinkServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 
 // mAVLinkServiceClient implements MAVLinkServiceClient.
 type mAVLinkServiceClient struct {
-	subscribeHeartbeat         *connect.Client[flightpath.SubscribeHeartbeatRequest, flightpath.SubscribeHeartbeatResponse]
-	subscribeSysStatus         *connect.Client[flightpath.SubscribeSysStatusRequest, flightpath.SubscribeSysStatusResponse]
-	subscribeGpsRawInt         *connect.Client[flightpath.SubscribeGpsRawIntRequest, flightpath.SubscribeGpsRawIntResponse]
-	subscribeGlobalPositionInt *connect.Client[flightpath.SubscribeGlobalPositionIntRequest, flightpath.SubscribeGlobalPositionIntResponse]
-	subscribeVfrHud            *connect.Client[flightpath.SubscribeVfrHudRequest, flightpath.SubscribeVfrHudResponse]
-	subscribeRadioStatus       *connect.Client[flightpath.SubscribeRadioStatusRequest, flightpath.SubscribeRadioStatusResponse]
-	subscribeExtendedSysState  *connect.Client[flightpath.SubscribeExtendedSysStateRequest, flightpath.SubscribeExtendedSysStateResponse]
-	subscribeStatusText        *connect.Client[flightpath.SubscribeStatusTextRequest, flightpath.SubscribeStatusTextResponse]
+	subscribeMessages *connect.Client[flightpath.SubscribeMessagesRequest, flightpath.SubscribeMessagesResponse]
 }
 
-// SubscribeHeartbeat calls flightpath.MAVLinkService.SubscribeHeartbeat.
-func (c *mAVLinkServiceClient) SubscribeHeartbeat(ctx context.Context, req *connect.Request[flightpath.SubscribeHeartbeatRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeHeartbeatResponse], error) {
-	return c.subscribeHeartbeat.CallServerStream(ctx, req)
-}
-
-// SubscribeSysStatus calls flightpath.MAVLinkService.SubscribeSysStatus.
-func (c *mAVLinkServiceClient) SubscribeSysStatus(ctx context.Context, req *connect.Request[flightpath.SubscribeSysStatusRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeSysStatusResponse], error) {
-	return c.subscribeSysStatus.CallServerStream(ctx, req)
-}
-
-// SubscribeGpsRawInt calls flightpath.MAVLinkService.SubscribeGpsRawInt.
-func (c *mAVLinkServiceClient) SubscribeGpsRawInt(ctx context.Context, req *connect.Request[flightpath.SubscribeGpsRawIntRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeGpsRawIntResponse], error) {
-	return c.subscribeGpsRawInt.CallServerStream(ctx, req)
-}
-
-// SubscribeGlobalPositionInt calls flightpath.MAVLinkService.SubscribeGlobalPositionInt.
-func (c *mAVLinkServiceClient) SubscribeGlobalPositionInt(ctx context.Context, req *connect.Request[flightpath.SubscribeGlobalPositionIntRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeGlobalPositionIntResponse], error) {
-	return c.subscribeGlobalPositionInt.CallServerStream(ctx, req)
-}
-
-// SubscribeVfrHud calls flightpath.MAVLinkService.SubscribeVfrHud.
-func (c *mAVLinkServiceClient) SubscribeVfrHud(ctx context.Context, req *connect.Request[flightpath.SubscribeVfrHudRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeVfrHudResponse], error) {
-	return c.subscribeVfrHud.CallServerStream(ctx, req)
-}
-
-// SubscribeRadioStatus calls flightpath.MAVLinkService.SubscribeRadioStatus.
-func (c *mAVLinkServiceClient) SubscribeRadioStatus(ctx context.Context, req *connect.Request[flightpath.SubscribeRadioStatusRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeRadioStatusResponse], error) {
-	return c.subscribeRadioStatus.CallServerStream(ctx, req)
-}
-
-// SubscribeExtendedSysState calls flightpath.MAVLinkService.SubscribeExtendedSysState.
-func (c *mAVLinkServiceClient) SubscribeExtendedSysState(ctx context.Context, req *connect.Request[flightpath.SubscribeExtendedSysStateRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeExtendedSysStateResponse], error) {
-	return c.subscribeExtendedSysState.CallServerStream(ctx, req)
-}
-
-// SubscribeStatusText calls flightpath.MAVLinkService.SubscribeStatusText.
-func (c *mAVLinkServiceClient) SubscribeStatusText(ctx context.Context, req *connect.Request[flightpath.SubscribeStatusTextRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeStatusTextResponse], error) {
-	return c.subscribeStatusText.CallServerStream(ctx, req)
+// SubscribeMessages calls flightpath.MAVLinkService.SubscribeMessages.
+func (c *mAVLinkServiceClient) SubscribeMessages(ctx context.Context, req *connect.Request[flightpath.SubscribeMessagesRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeMessagesResponse], error) {
+	return c.subscribeMessages.CallServerStream(ctx, req)
 }
 
 // MAVLinkServiceHandler is an implementation of the flightpath.MAVLinkService service.
 type MAVLinkServiceHandler interface {
-	// Subscribe to HEARTBEAT (0)
-	SubscribeHeartbeat(context.Context, *connect.Request[flightpath.SubscribeHeartbeatRequest], *connect.ServerStream[flightpath.SubscribeHeartbeatResponse]) error
-	// Subscribe to SYS_STATUS (1)
-	SubscribeSysStatus(context.Context, *connect.Request[flightpath.SubscribeSysStatusRequest], *connect.ServerStream[flightpath.SubscribeSysStatusResponse]) error
-	// Subscribe to GPS_RAW_INT (24)
-	SubscribeGpsRawInt(context.Context, *connect.Request[flightpath.SubscribeGpsRawIntRequest], *connect.ServerStream[flightpath.SubscribeGpsRawIntResponse]) error
-	// Subscribe to GLOBAL_POSITION_INT (33)
-	SubscribeGlobalPositionInt(context.Context, *connect.Request[flightpath.SubscribeGlobalPositionIntRequest], *connect.ServerStream[flightpath.SubscribeGlobalPositionIntResponse]) error
-	// Subscribe to VFR_HUD (74)
-	SubscribeVfrHud(context.Context, *connect.Request[flightpath.SubscribeVfrHudRequest], *connect.ServerStream[flightpath.SubscribeVfrHudResponse]) error
-	// Subscribe to RADIO_STATUS (109)
-	SubscribeRadioStatus(context.Context, *connect.Request[flightpath.SubscribeRadioStatusRequest], *connect.ServerStream[flightpath.SubscribeRadioStatusResponse]) error
-	// Subscribe to EXTENDED_SYS_STATE (245)
-	SubscribeExtendedSysState(context.Context, *connect.Request[flightpath.SubscribeExtendedSysStateRequest], *connect.ServerStream[flightpath.SubscribeExtendedSysStateResponse]) error
-	// Subscribe to STATUSTEXT (253)
-	SubscribeStatusText(context.Context, *connect.Request[flightpath.SubscribeStatusTextRequest], *connect.ServerStream[flightpath.SubscribeStatusTextResponse]) error
+	// Subscribe to all MAVLink messages (or a filtered subset)
+	SubscribeMessages(context.Context, *connect.Request[flightpath.SubscribeMessagesRequest], *connect.ServerStream[flightpath.SubscribeMessagesResponse]) error
 }
 
 // NewMAVLinkServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -220,72 +87,16 @@ type MAVLinkServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewMAVLinkServiceHandler(svc MAVLinkServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	mAVLinkServiceMethods := flightpath.File_flightpath_mavlink_service_proto.Services().ByName("MAVLinkService").Methods()
-	mAVLinkServiceSubscribeHeartbeatHandler := connect.NewServerStreamHandler(
-		MAVLinkServiceSubscribeHeartbeatProcedure,
-		svc.SubscribeHeartbeat,
-		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeHeartbeat")),
-		connect.WithHandlerOptions(opts...),
-	)
-	mAVLinkServiceSubscribeSysStatusHandler := connect.NewServerStreamHandler(
-		MAVLinkServiceSubscribeSysStatusProcedure,
-		svc.SubscribeSysStatus,
-		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeSysStatus")),
-		connect.WithHandlerOptions(opts...),
-	)
-	mAVLinkServiceSubscribeGpsRawIntHandler := connect.NewServerStreamHandler(
-		MAVLinkServiceSubscribeGpsRawIntProcedure,
-		svc.SubscribeGpsRawInt,
-		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeGpsRawInt")),
-		connect.WithHandlerOptions(opts...),
-	)
-	mAVLinkServiceSubscribeGlobalPositionIntHandler := connect.NewServerStreamHandler(
-		MAVLinkServiceSubscribeGlobalPositionIntProcedure,
-		svc.SubscribeGlobalPositionInt,
-		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeGlobalPositionInt")),
-		connect.WithHandlerOptions(opts...),
-	)
-	mAVLinkServiceSubscribeVfrHudHandler := connect.NewServerStreamHandler(
-		MAVLinkServiceSubscribeVfrHudProcedure,
-		svc.SubscribeVfrHud,
-		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeVfrHud")),
-		connect.WithHandlerOptions(opts...),
-	)
-	mAVLinkServiceSubscribeRadioStatusHandler := connect.NewServerStreamHandler(
-		MAVLinkServiceSubscribeRadioStatusProcedure,
-		svc.SubscribeRadioStatus,
-		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeRadioStatus")),
-		connect.WithHandlerOptions(opts...),
-	)
-	mAVLinkServiceSubscribeExtendedSysStateHandler := connect.NewServerStreamHandler(
-		MAVLinkServiceSubscribeExtendedSysStateProcedure,
-		svc.SubscribeExtendedSysState,
-		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeExtendedSysState")),
-		connect.WithHandlerOptions(opts...),
-	)
-	mAVLinkServiceSubscribeStatusTextHandler := connect.NewServerStreamHandler(
-		MAVLinkServiceSubscribeStatusTextProcedure,
-		svc.SubscribeStatusText,
-		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeStatusText")),
+	mAVLinkServiceSubscribeMessagesHandler := connect.NewServerStreamHandler(
+		MAVLinkServiceSubscribeMessagesProcedure,
+		svc.SubscribeMessages,
+		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeMessages")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/flightpath.MAVLinkService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case MAVLinkServiceSubscribeHeartbeatProcedure:
-			mAVLinkServiceSubscribeHeartbeatHandler.ServeHTTP(w, r)
-		case MAVLinkServiceSubscribeSysStatusProcedure:
-			mAVLinkServiceSubscribeSysStatusHandler.ServeHTTP(w, r)
-		case MAVLinkServiceSubscribeGpsRawIntProcedure:
-			mAVLinkServiceSubscribeGpsRawIntHandler.ServeHTTP(w, r)
-		case MAVLinkServiceSubscribeGlobalPositionIntProcedure:
-			mAVLinkServiceSubscribeGlobalPositionIntHandler.ServeHTTP(w, r)
-		case MAVLinkServiceSubscribeVfrHudProcedure:
-			mAVLinkServiceSubscribeVfrHudHandler.ServeHTTP(w, r)
-		case MAVLinkServiceSubscribeRadioStatusProcedure:
-			mAVLinkServiceSubscribeRadioStatusHandler.ServeHTTP(w, r)
-		case MAVLinkServiceSubscribeExtendedSysStateProcedure:
-			mAVLinkServiceSubscribeExtendedSysStateHandler.ServeHTTP(w, r)
-		case MAVLinkServiceSubscribeStatusTextProcedure:
-			mAVLinkServiceSubscribeStatusTextHandler.ServeHTTP(w, r)
+		case MAVLinkServiceSubscribeMessagesProcedure:
+			mAVLinkServiceSubscribeMessagesHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -295,34 +106,6 @@ func NewMAVLinkServiceHandler(svc MAVLinkServiceHandler, opts ...connect.Handler
 // UnimplementedMAVLinkServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedMAVLinkServiceHandler struct{}
 
-func (UnimplementedMAVLinkServiceHandler) SubscribeHeartbeat(context.Context, *connect.Request[flightpath.SubscribeHeartbeatRequest], *connect.ServerStream[flightpath.SubscribeHeartbeatResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeHeartbeat is not implemented"))
-}
-
-func (UnimplementedMAVLinkServiceHandler) SubscribeSysStatus(context.Context, *connect.Request[flightpath.SubscribeSysStatusRequest], *connect.ServerStream[flightpath.SubscribeSysStatusResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeSysStatus is not implemented"))
-}
-
-func (UnimplementedMAVLinkServiceHandler) SubscribeGpsRawInt(context.Context, *connect.Request[flightpath.SubscribeGpsRawIntRequest], *connect.ServerStream[flightpath.SubscribeGpsRawIntResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeGpsRawInt is not implemented"))
-}
-
-func (UnimplementedMAVLinkServiceHandler) SubscribeGlobalPositionInt(context.Context, *connect.Request[flightpath.SubscribeGlobalPositionIntRequest], *connect.ServerStream[flightpath.SubscribeGlobalPositionIntResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeGlobalPositionInt is not implemented"))
-}
-
-func (UnimplementedMAVLinkServiceHandler) SubscribeVfrHud(context.Context, *connect.Request[flightpath.SubscribeVfrHudRequest], *connect.ServerStream[flightpath.SubscribeVfrHudResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeVfrHud is not implemented"))
-}
-
-func (UnimplementedMAVLinkServiceHandler) SubscribeRadioStatus(context.Context, *connect.Request[flightpath.SubscribeRadioStatusRequest], *connect.ServerStream[flightpath.SubscribeRadioStatusResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeRadioStatus is not implemented"))
-}
-
-func (UnimplementedMAVLinkServiceHandler) SubscribeExtendedSysState(context.Context, *connect.Request[flightpath.SubscribeExtendedSysStateRequest], *connect.ServerStream[flightpath.SubscribeExtendedSysStateResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeExtendedSysState is not implemented"))
-}
-
-func (UnimplementedMAVLinkServiceHandler) SubscribeStatusText(context.Context, *connect.Request[flightpath.SubscribeStatusTextRequest], *connect.ServerStream[flightpath.SubscribeStatusTextResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeStatusText is not implemented"))
+func (UnimplementedMAVLinkServiceHandler) SubscribeMessages(context.Context, *connect.Request[flightpath.SubscribeMessagesRequest], *connect.ServerStream[flightpath.SubscribeMessagesResponse]) error {
+	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeMessages is not implemented"))
 }

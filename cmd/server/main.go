@@ -110,7 +110,7 @@ func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *servi
 		Dispatcher: dispatcher,
 	}
 
-	// MAVLinkService - unified service for all MAVLink messages
+	// MAVLinkService - service to distribute all MAVLink messages
 	mavlinkService := services.NewMAVLinkService(ctx)
 	mavlinkPath, mavlinkHandler := flightpathconnect.NewMAVLinkServiceHandler(mavlinkService)
 	srv.RegisterService(mavlinkPath, mavlinkHandler)
