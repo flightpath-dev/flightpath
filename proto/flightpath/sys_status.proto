@@ -2,16 +2,9 @@ syntax = "proto3";
 
 package flightpath;
 
-// SysStatusService handles SYS_STATUS messages from the drone
-service SysStatusService {
-  // Subscribe to SYS_STATUS messages from the drone
-  rpc SubscribeSysStatus(SubscribeSysStatusRequest) returns (stream SubscribeSysStatusResponse);
-}
-
-// SubscribeSysStatusRequest is the request message for SubscribeSysStatus
+// Request and response messages for SubscribeSysStatus
 message SubscribeSysStatusRequest {}
 
-// SubscribeSysStatusResponse contains SYS_STATUS message data
 message SubscribeSysStatusResponse {
   // Timestamp when this system status data was captured (milliseconds since Unix epoch)
   int64 timestamp_ms = 1;

@@ -2,18 +2,18 @@
 // @generated from file flightpath/extended_sys_state.proto (package flightpath, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file flightpath/extended_sys_state.proto.
  */
 export const file_flightpath_extended_sys_state: GenFile = /*@__PURE__*/
-  fileDesc("CiNmbGlnaHRwYXRoL2V4dGVuZGVkX3N5c19zdGF0ZS5wcm90bxIKZmxpZ2h0cGF0aCIiCiBTdWJzY3JpYmVFeHRlbmRlZFN5c1N0YXRlUmVxdWVzdCKcAQohU3Vic2NyaWJlRXh0ZW5kZWRTeXNTdGF0ZVJlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAxIRCglzeXN0ZW1faWQYAiABKA0SFAoMY29tcG9uZW50X2lkGAMgASgNEjgKEmV4dGVuZGVkX3N5c19zdGF0ZRgEIAEoCzIcLmZsaWdodHBhdGguRXh0ZW5kZWRTeXNTdGF0ZSJyChBFeHRlbmRlZFN5c1N0YXRlEiwKCnZ0b2xfc3RhdGUYASABKA4yGC5mbGlnaHRwYXRoLk1hdlZ0b2xTdGF0ZRIwCgxsYW5kZWRfc3RhdGUYAiABKA4yGi5mbGlnaHRwYXRoLk1hdkxhbmRlZFN0YXRlKqYBCgxNYXZWdG9sU3RhdGUSHgoaTUFWX1ZUT0xfU1RBVEVfVU5TUEVDSUZJRUQQABIjCh9NQVZfVlRPTF9TVEFURV9UUkFOU0lUSU9OX1RPX0ZXEAESIwofTUFWX1ZUT0xfU1RBVEVfVFJBTlNJVElPTl9UT19NQxACEhUKEU1BVl9WVE9MX1NUQVRFX01DEAMSFQoRTUFWX1ZUT0xfU1RBVEVfRlcQBCqrAQoOTWF2TGFuZGVkU3RhdGUSIAocTUFWX0xBTkRFRF9TVEFURV9VTlNQRUNJRklFRBAAEh4KGk1BVl9MQU5ERURfU1RBVEVfT05fR1JPVU5EEAESGwoXTUFWX0xBTkRFRF9TVEFURV9JTl9BSVIQAhIcChhNQVZfTEFOREVEX1NUQVRFX1RBS0VPRkYQAxIcChhNQVZfTEFOREVEX1NUQVRFX0xBTkRJTkcQBDKVAQoXRXh0ZW5kZWRTeXNTdGF0ZVNlcnZpY2USegoZU3Vic2NyaWJlRXh0ZW5kZWRTeXNTdGF0ZRIsLmZsaWdodHBhdGguU3Vic2NyaWJlRXh0ZW5kZWRTeXNTdGF0ZVJlcXVlc3QaLS5mbGlnaHRwYXRoLlN1YnNjcmliZUV4dGVuZGVkU3lzU3RhdGVSZXNwb25zZTABQm8KDmNvbS5mbGlnaHRwYXRoQhVFeHRlbmRlZFN5c1N0YXRlUHJvdG9QAaICA0ZYWKoCCkZsaWdodHBhdGjKAgpGbGlnaHRwYXRo4gIWRmxpZ2h0cGF0aFxHUEJNZXRhZGF0YeoCCkZsaWdodHBhdGhiBnByb3RvMw");
+  fileDesc("CiNmbGlnaHRwYXRoL2V4dGVuZGVkX3N5c19zdGF0ZS5wcm90bxIKZmxpZ2h0cGF0aCIiCiBTdWJzY3JpYmVFeHRlbmRlZFN5c1N0YXRlUmVxdWVzdCKcAQohU3Vic2NyaWJlRXh0ZW5kZWRTeXNTdGF0ZVJlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAxIRCglzeXN0ZW1faWQYAiABKA0SFAoMY29tcG9uZW50X2lkGAMgASgNEjgKEmV4dGVuZGVkX3N5c19zdGF0ZRgEIAEoCzIcLmZsaWdodHBhdGguRXh0ZW5kZWRTeXNTdGF0ZSJyChBFeHRlbmRlZFN5c1N0YXRlEiwKCnZ0b2xfc3RhdGUYASABKA4yGC5mbGlnaHRwYXRoLk1hdlZ0b2xTdGF0ZRIwCgxsYW5kZWRfc3RhdGUYAiABKA4yGi5mbGlnaHRwYXRoLk1hdkxhbmRlZFN0YXRlKqYBCgxNYXZWdG9sU3RhdGUSHgoaTUFWX1ZUT0xfU1RBVEVfVU5TUEVDSUZJRUQQABIjCh9NQVZfVlRPTF9TVEFURV9UUkFOU0lUSU9OX1RPX0ZXEAESIwofTUFWX1ZUT0xfU1RBVEVfVFJBTlNJVElPTl9UT19NQxACEhUKEU1BVl9WVE9MX1NUQVRFX01DEAMSFQoRTUFWX1ZUT0xfU1RBVEVfRlcQBCqrAQoOTWF2TGFuZGVkU3RhdGUSIAocTUFWX0xBTkRFRF9TVEFURV9VTlNQRUNJRklFRBAAEh4KGk1BVl9MQU5ERURfU1RBVEVfT05fR1JPVU5EEAESGwoXTUFWX0xBTkRFRF9TVEFURV9JTl9BSVIQAhIcChhNQVZfTEFOREVEX1NUQVRFX1RBS0VPRkYQAxIcChhNQVZfTEFOREVEX1NUQVRFX0xBTkRJTkcQBEJvCg5jb20uZmxpZ2h0cGF0aEIVRXh0ZW5kZWRTeXNTdGF0ZVByb3RvUAGiAgNGWFiqAgpGbGlnaHRwYXRoygIKRmxpZ2h0cGF0aOICFkZsaWdodHBhdGhcR1BCTWV0YWRhdGHqAgpGbGlnaHRwYXRoYgZwcm90bzM");
 
 /**
- * SubscribeExtendedSysStateRequest is the request message for SubscribeExtendedSysState
+ * Request and response messages for SubscribeExtendedSysState
  *
  * @generated from message flightpath.SubscribeExtendedSysStateRequest
  */
@@ -28,8 +28,6 @@ export const SubscribeExtendedSysStateRequestSchema: GenMessage<SubscribeExtende
   messageDesc(file_flightpath_extended_sys_state, 0);
 
 /**
- * SubscribeExtendedSysStateResponse contains EXTENDED_SYS_STATE message data
- *
  * @generated from message flightpath.SubscribeExtendedSysStateResponse
  */
 export type SubscribeExtendedSysStateResponse = Message<"flightpath.SubscribeExtendedSysStateResponse"> & {
@@ -195,23 +193,4 @@ export enum MavLandedState {
  */
 export const MavLandedStateSchema: GenEnum<MavLandedState> = /*@__PURE__*/
   enumDesc(file_flightpath_extended_sys_state, 1);
-
-/**
- * ExtendedSysStateService handles EXTENDED_SYS_STATE (245) messages from the drone
- *
- * @generated from service flightpath.ExtendedSysStateService
- */
-export const ExtendedSysStateService: GenService<{
-  /**
-   * Subscribe to EXTENDED_SYS_STATE messages from the drone
-   *
-   * @generated from rpc flightpath.ExtendedSysStateService.SubscribeExtendedSysState
-   */
-  subscribeExtendedSysState: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeExtendedSysStateRequestSchema;
-    output: typeof SubscribeExtendedSysStateResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_flightpath_extended_sys_state, 0);
 

@@ -2,16 +2,9 @@ syntax = "proto3";
 
 package flightpath;
 
-// RadioStatusService handles RADIO_STATUS (109) messages from the drone
-service RadioStatusService {
-  // Subscribe to RADIO_STATUS messages from the drone
-  rpc SubscribeRadioStatus(SubscribeRadioStatusRequest) returns (stream SubscribeRadioStatusResponse);
-}
-
-// SubscribeRadioStatusRequest is the request message for SubscribeRadioStatus
+// Request and response messages for SubscribeRadioStatus
 message SubscribeRadioStatusRequest {}
 
-// SubscribeRadioStatusResponse contains RADIO_STATUS message data
 message SubscribeRadioStatusResponse {
   // Timestamp when this radio status data was captured (milliseconds since Unix epoch)
   int64 timestamp_ms = 1;

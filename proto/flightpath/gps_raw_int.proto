@@ -2,17 +2,10 @@ syntax = "proto3";
 
 package flightpath;
 
-// GpsRawIntService handles GPS_RAW_INT messages from the drone
-service GpsRawIntService {
-  // Subscribe to GPS_RAW_INT messages from the drone
-  rpc SubscribeRawGps(SubscribeRawGpsRequest) returns (stream SubscribeRawGpsResponse);
-}
+// Request and response messages for SubscribeGpsRawInt
+message SubscribeGpsRawIntRequest {}
 
-// SubscribeRawGpsRequest is the request message for SubscribeRawGps
-message SubscribeRawGpsRequest {}
-
-// SubscribeRawGpsResponse contains GPS_RAW_INT message data
-message SubscribeRawGpsResponse {
+message SubscribeGpsRawIntResponse {
   // Timestamp when this GPS data was captured (milliseconds since Unix epoch)
   int64 timestamp_ms = 1;
 

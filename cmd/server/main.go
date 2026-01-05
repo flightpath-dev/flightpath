@@ -110,45 +110,10 @@ func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *servi
 		Dispatcher: dispatcher,
 	}
 
-	// HeartbeatService
-	heartbeatService := services.NewHeartbeatService(ctx)
-	heartbeatPath, heartbeatHandler := flightpathconnect.NewHeartbeatServiceHandler(heartbeatService)
-	srv.RegisterService(heartbeatPath, heartbeatHandler)
-
-	// GpsRawIntService
-	gpsRawIntService := services.NewGpsRawIntService(ctx)
-	gpsRawIntPath, gpsRawIntHandler := flightpathconnect.NewGpsRawIntServiceHandler(gpsRawIntService)
-	srv.RegisterService(gpsRawIntPath, gpsRawIntHandler)
-
-	// SysStatusService
-	sysStatusService := services.NewSysStatusService(ctx)
-	sysStatusPath, sysStatusHandler := flightpathconnect.NewSysStatusServiceHandler(sysStatusService)
-	srv.RegisterService(sysStatusPath, sysStatusHandler)
-
-	// ExtendedSysStateService
-	extendedSysStateService := services.NewExtendedSysStateService(ctx)
-	extendedSysStatePath, extendedSysStateHandler := flightpathconnect.NewExtendedSysStateServiceHandler(extendedSysStateService)
-	srv.RegisterService(extendedSysStatePath, extendedSysStateHandler)
-
-	// StatusTextService
-	statusTextService := services.NewStatusTextService(ctx)
-	statusTextPath, statusTextHandler := flightpathconnect.NewStatusTextServiceHandler(statusTextService)
-	srv.RegisterService(statusTextPath, statusTextHandler)
-
-	// RadioStatusService
-	radioStatusService := services.NewRadioStatusService(ctx)
-	radioStatusPath, radioStatusHandler := flightpathconnect.NewRadioStatusServiceHandler(radioStatusService)
-	srv.RegisterService(radioStatusPath, radioStatusHandler)
-
-	// GlobalPositionIntService
-	globalPositionIntService := services.NewGlobalPositionIntService(ctx)
-	globalPositionIntPath, globalPositionIntHandler := flightpathconnect.NewGlobalPositionIntServiceHandler(globalPositionIntService)
-	srv.RegisterService(globalPositionIntPath, globalPositionIntHandler)
-
-	// VfrHudService
-	vfrHudService := services.NewVfrHudService(ctx)
-	vfrHudPath, vfrHudHandler := flightpathconnect.NewVfrHudServiceHandler(vfrHudService)
-	srv.RegisterService(vfrHudPath, vfrHudHandler)
+	// MAVLinkService - unified service for all MAVLink messages
+	mavlinkService := services.NewMAVLinkService(ctx)
+	mavlinkPath, mavlinkHandler := flightpathconnect.NewMAVLinkServiceHandler(mavlinkService)
+	srv.RegisterService(mavlinkPath, mavlinkHandler)
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals

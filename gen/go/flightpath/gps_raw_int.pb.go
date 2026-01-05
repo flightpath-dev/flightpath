@@ -93,27 +93,27 @@ func (GpsFixType) EnumDescriptor() ([]byte, []int) {
 	return file_flightpath_gps_raw_int_proto_rawDescGZIP(), []int{0}
 }
 
-// SubscribeRawGpsRequest is the request message for SubscribeRawGps
-type SubscribeRawGpsRequest struct {
+// Request and response messages for SubscribeGpsRawInt
+type SubscribeGpsRawIntRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SubscribeRawGpsRequest) Reset() {
-	*x = SubscribeRawGpsRequest{}
+func (x *SubscribeGpsRawIntRequest) Reset() {
+	*x = SubscribeGpsRawIntRequest{}
 	mi := &file_flightpath_gps_raw_int_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SubscribeRawGpsRequest) String() string {
+func (x *SubscribeGpsRawIntRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SubscribeRawGpsRequest) ProtoMessage() {}
+func (*SubscribeGpsRawIntRequest) ProtoMessage() {}
 
-func (x *SubscribeRawGpsRequest) ProtoReflect() protoreflect.Message {
+func (x *SubscribeGpsRawIntRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_flightpath_gps_raw_int_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -125,13 +125,12 @@ func (x *SubscribeRawGpsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SubscribeRawGpsRequest.ProtoReflect.Descriptor instead.
-func (*SubscribeRawGpsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use SubscribeGpsRawIntRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeGpsRawIntRequest) Descriptor() ([]byte, []int) {
 	return file_flightpath_gps_raw_int_proto_rawDescGZIP(), []int{0}
 }
 
-// SubscribeRawGpsResponse contains GPS_RAW_INT message data
-type SubscribeRawGpsResponse struct {
+type SubscribeGpsRawIntResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Timestamp when this GPS data was captured (milliseconds since Unix epoch)
 	TimestampMs int64 `protobuf:"varint,1,opt,name=timestamp_ms,json=timestampMs,proto3" json:"timestamp_ms,omitempty"`
@@ -145,20 +144,20 @@ type SubscribeRawGpsResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SubscribeRawGpsResponse) Reset() {
-	*x = SubscribeRawGpsResponse{}
+func (x *SubscribeGpsRawIntResponse) Reset() {
+	*x = SubscribeGpsRawIntResponse{}
 	mi := &file_flightpath_gps_raw_int_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SubscribeRawGpsResponse) String() string {
+func (x *SubscribeGpsRawIntResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SubscribeRawGpsResponse) ProtoMessage() {}
+func (*SubscribeGpsRawIntResponse) ProtoMessage() {}
 
-func (x *SubscribeRawGpsResponse) ProtoReflect() protoreflect.Message {
+func (x *SubscribeGpsRawIntResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_flightpath_gps_raw_int_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -170,33 +169,33 @@ func (x *SubscribeRawGpsResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SubscribeRawGpsResponse.ProtoReflect.Descriptor instead.
-func (*SubscribeRawGpsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use SubscribeGpsRawIntResponse.ProtoReflect.Descriptor instead.
+func (*SubscribeGpsRawIntResponse) Descriptor() ([]byte, []int) {
 	return file_flightpath_gps_raw_int_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SubscribeRawGpsResponse) GetTimestampMs() int64 {
+func (x *SubscribeGpsRawIntResponse) GetTimestampMs() int64 {
 	if x != nil {
 		return x.TimestampMs
 	}
 	return 0
 }
 
-func (x *SubscribeRawGpsResponse) GetSystemId() uint32 {
+func (x *SubscribeGpsRawIntResponse) GetSystemId() uint32 {
 	if x != nil {
 		return x.SystemId
 	}
 	return 0
 }
 
-func (x *SubscribeRawGpsResponse) GetComponentId() uint32 {
+func (x *SubscribeGpsRawIntResponse) GetComponentId() uint32 {
 	if x != nil {
 		return x.ComponentId
 	}
 	return 0
 }
 
-func (x *SubscribeRawGpsResponse) GetGpsRawInt() *GpsRawInt {
+func (x *SubscribeGpsRawIntResponse) GetGpsRawInt() *GpsRawInt {
 	if x != nil {
 		return x.GpsRawInt
 	}
@@ -391,9 +390,9 @@ var File_flightpath_gps_raw_int_proto protoreflect.FileDescriptor
 const file_flightpath_gps_raw_int_proto_rawDesc = "" +
 	"\n" +
 	"\x1cflightpath/gps_raw_int.proto\x12\n" +
-	"flightpath\"\x18\n" +
-	"\x16SubscribeRawGpsRequest\"\xb3\x01\n" +
-	"\x17SubscribeRawGpsResponse\x12!\n" +
+	"flightpath\"\x1b\n" +
+	"\x19SubscribeGpsRawIntRequest\"\xb6\x01\n" +
+	"\x1aSubscribeGpsRawIntResponse\x12!\n" +
 	"\ftimestamp_ms\x18\x01 \x01(\x03R\vtimestampMs\x12\x1b\n" +
 	"\tsystem_id\x18\x02 \x01(\rR\bsystemId\x12!\n" +
 	"\fcomponent_id\x18\x03 \x01(\rR\vcomponentId\x125\n" +
@@ -427,9 +426,7 @@ const file_flightpath_gps_raw_int_proto_rawDesc = "" +
 	"\x16GPS_FIX_TYPE_RTK_FLOAT\x10\x06\x12\x1a\n" +
 	"\x16GPS_FIX_TYPE_RTK_FIXED\x10\a\x12\x17\n" +
 	"\x13GPS_FIX_TYPE_STATIC\x10\b\x12\x14\n" +
-	"\x10GPS_FIX_TYPE_PPP\x10\t2p\n" +
-	"\x10GpsRawIntService\x12\\\n" +
-	"\x0fSubscribeRawGps\x12\".flightpath.SubscribeRawGpsRequest\x1a#.flightpath.SubscribeRawGpsResponse0\x01B\xa0\x01\n" +
+	"\x10GPS_FIX_TYPE_PPP\x10\tB\xa0\x01\n" +
 	"\x0ecom.flightpathB\x0eGpsRawIntProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -450,18 +447,16 @@ func file_flightpath_gps_raw_int_proto_rawDescGZIP() []byte {
 var file_flightpath_gps_raw_int_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_flightpath_gps_raw_int_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_flightpath_gps_raw_int_proto_goTypes = []any{
-	(GpsFixType)(0),                 // 0: flightpath.GpsFixType
-	(*SubscribeRawGpsRequest)(nil),  // 1: flightpath.SubscribeRawGpsRequest
-	(*SubscribeRawGpsResponse)(nil), // 2: flightpath.SubscribeRawGpsResponse
-	(*GpsRawInt)(nil),               // 3: flightpath.GpsRawInt
+	(GpsFixType)(0),                    // 0: flightpath.GpsFixType
+	(*SubscribeGpsRawIntRequest)(nil),  // 1: flightpath.SubscribeGpsRawIntRequest
+	(*SubscribeGpsRawIntResponse)(nil), // 2: flightpath.SubscribeGpsRawIntResponse
+	(*GpsRawInt)(nil),                  // 3: flightpath.GpsRawInt
 }
 var file_flightpath_gps_raw_int_proto_depIdxs = []int32{
-	3, // 0: flightpath.SubscribeRawGpsResponse.gps_raw_int:type_name -> flightpath.GpsRawInt
+	3, // 0: flightpath.SubscribeGpsRawIntResponse.gps_raw_int:type_name -> flightpath.GpsRawInt
 	0, // 1: flightpath.GpsRawInt.fix_type:type_name -> flightpath.GpsFixType
-	1, // 2: flightpath.GpsRawIntService.SubscribeRawGps:input_type -> flightpath.SubscribeRawGpsRequest
-	2, // 3: flightpath.GpsRawIntService.SubscribeRawGps:output_type -> flightpath.SubscribeRawGpsResponse
-	3, // [3:4] is the sub-list for method output_type
-	2, // [2:3] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -480,7 +475,7 @@ func file_flightpath_gps_raw_int_proto_init() {
 			NumEnums:      1,
 			NumMessages:   3,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_flightpath_gps_raw_int_proto_goTypes,
 		DependencyIndexes: file_flightpath_gps_raw_int_proto_depIdxs,

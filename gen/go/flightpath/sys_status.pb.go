@@ -21,7 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// SubscribeSysStatusRequest is the request message for SubscribeSysStatus
+// Request and response messages for SubscribeSysStatus
 type SubscribeSysStatusRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -58,7 +58,6 @@ func (*SubscribeSysStatusRequest) Descriptor() ([]byte, []int) {
 	return file_flightpath_sys_status_proto_rawDescGZIP(), []int{0}
 }
 
-// SubscribeSysStatusResponse contains SYS_STATUS message data
 type SubscribeSysStatusResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Timestamp when this system status data was captured (milliseconds since Unix epoch)
@@ -687,9 +686,7 @@ const file_flightpath_sys_status_proto_rawDesc = "" +
 	"\x13sensor_prearm_check\x18\x1d \x01(\bR\x11sensorPrearmCheck\x12:\n" +
 	"\x19sensor_obstacle_avoidance\x18\x1e \x01(\bR\x17sensorObstacleAvoidance\x12+\n" +
 	"\x11sensor_propulsion\x18\x1f \x01(\bR\x10sensorPropulsion\x12%\n" +
-	"\x0eextension_used\x18  \x01(\bR\rextensionUsed2y\n" +
-	"\x10SysStatusService\x12e\n" +
-	"\x12SubscribeSysStatus\x12%.flightpath.SubscribeSysStatusRequest\x1a&.flightpath.SubscribeSysStatusResponse0\x01B\xa0\x01\n" +
+	"\x0eextension_used\x18  \x01(\bR\rextensionUsedB\xa0\x01\n" +
 	"\x0ecom.flightpathB\x0eSysStatusProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -719,10 +716,8 @@ var file_flightpath_sys_status_proto_depIdxs = []int32{
 	3, // 1: flightpath.SysStatus.onboard_control_sensors_present:type_name -> flightpath.MavSysStatusSensor
 	3, // 2: flightpath.SysStatus.onboard_control_sensors_enabled:type_name -> flightpath.MavSysStatusSensor
 	3, // 3: flightpath.SysStatus.onboard_control_sensors_health:type_name -> flightpath.MavSysStatusSensor
-	0, // 4: flightpath.SysStatusService.SubscribeSysStatus:input_type -> flightpath.SubscribeSysStatusRequest
-	1, // 5: flightpath.SysStatusService.SubscribeSysStatus:output_type -> flightpath.SubscribeSysStatusResponse
-	5, // [5:6] is the sub-list for method output_type
-	4, // [4:5] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
 	4, // [4:4] is the sub-list for extension extendee
 	0, // [0:4] is the sub-list for field type_name
@@ -741,7 +736,7 @@ func file_flightpath_sys_status_proto_init() {
 			NumEnums:      0,
 			NumMessages:   4,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_flightpath_sys_status_proto_goTypes,
 		DependencyIndexes: file_flightpath_sys_status_proto_depIdxs,

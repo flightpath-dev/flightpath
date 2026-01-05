@@ -2,18 +2,18 @@
 // @generated from file flightpath/radio_status.proto (package flightpath, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file flightpath/radio_status.proto.
  */
 export const file_flightpath_radio_status: GenFile = /*@__PURE__*/
-  fileDesc("Ch1mbGlnaHRwYXRoL3JhZGlvX3N0YXR1cy5wcm90bxIKZmxpZ2h0cGF0aCIdChtTdWJzY3JpYmVSYWRpb1N0YXR1c1JlcXVlc3QijAEKHFN1YnNjcmliZVJhZGlvU3RhdHVzUmVzcG9uc2USFAoMdGltZXN0YW1wX21zGAEgASgDEhEKCXN5c3RlbV9pZBgCIAEoDRIUCgxjb21wb25lbnRfaWQYAyABKA0SLQoMcmFkaW9fc3RhdHVzGAQgASgLMhcuZmxpZ2h0cGF0aC5SYWRpb1N0YXR1cyJ9CgtSYWRpb1N0YXR1cxIMCgRyc3NpGAEgASgNEg8KB3JlbXJzc2kYAiABKA0SDQoFdHhidWYYAyABKA0SDQoFbm9pc2UYBCABKA0SEAoIcmVtbm9pc2UYBSABKA0SEAoIcnhlcnJvcnMYBiABKA0SDQoFZml4ZWQYByABKA0ygQEKElJhZGlvU3RhdHVzU2VydmljZRJrChRTdWJzY3JpYmVSYWRpb1N0YXR1cxInLmZsaWdodHBhdGguU3Vic2NyaWJlUmFkaW9TdGF0dXNSZXF1ZXN0GiguZmxpZ2h0cGF0aC5TdWJzY3JpYmVSYWRpb1N0YXR1c1Jlc3BvbnNlMAFCagoOY29tLmZsaWdodHBhdGhCEFJhZGlvU3RhdHVzUHJvdG9QAaICA0ZYWKoCCkZsaWdodHBhdGjKAgpGbGlnaHRwYXRo4gIWRmxpZ2h0cGF0aFxHUEJNZXRhZGF0YeoCCkZsaWdodHBhdGhiBnByb3RvMw");
+  fileDesc("Ch1mbGlnaHRwYXRoL3JhZGlvX3N0YXR1cy5wcm90bxIKZmxpZ2h0cGF0aCIdChtTdWJzY3JpYmVSYWRpb1N0YXR1c1JlcXVlc3QijAEKHFN1YnNjcmliZVJhZGlvU3RhdHVzUmVzcG9uc2USFAoMdGltZXN0YW1wX21zGAEgASgDEhEKCXN5c3RlbV9pZBgCIAEoDRIUCgxjb21wb25lbnRfaWQYAyABKA0SLQoMcmFkaW9fc3RhdHVzGAQgASgLMhcuZmxpZ2h0cGF0aC5SYWRpb1N0YXR1cyJ9CgtSYWRpb1N0YXR1cxIMCgRyc3NpGAEgASgNEg8KB3JlbXJzc2kYAiABKA0SDQoFdHhidWYYAyABKA0SDQoFbm9pc2UYBCABKA0SEAoIcmVtbm9pc2UYBSABKA0SEAoIcnhlcnJvcnMYBiABKA0SDQoFZml4ZWQYByABKA1CagoOY29tLmZsaWdodHBhdGhCEFJhZGlvU3RhdHVzUHJvdG9QAaICA0ZYWKoCCkZsaWdodHBhdGjKAgpGbGlnaHRwYXRo4gIWRmxpZ2h0cGF0aFxHUEJNZXRhZGF0YeoCCkZsaWdodHBhdGhiBnByb3RvMw");
 
 /**
- * SubscribeRadioStatusRequest is the request message for SubscribeRadioStatus
+ * Request and response messages for SubscribeRadioStatus
  *
  * @generated from message flightpath.SubscribeRadioStatusRequest
  */
@@ -28,8 +28,6 @@ export const SubscribeRadioStatusRequestSchema: GenMessage<SubscribeRadioStatusR
   messageDesc(file_flightpath_radio_status, 0);
 
 /**
- * SubscribeRadioStatusResponse contains RADIO_STATUS message data
- *
  * @generated from message flightpath.SubscribeRadioStatusResponse
  */
 export type SubscribeRadioStatusResponse = Message<"flightpath.SubscribeRadioStatusResponse"> & {
@@ -132,23 +130,4 @@ export type RadioStatus = Message<"flightpath.RadioStatus"> & {
  */
 export const RadioStatusSchema: GenMessage<RadioStatus> = /*@__PURE__*/
   messageDesc(file_flightpath_radio_status, 2);
-
-/**
- * RadioStatusService handles RADIO_STATUS (109) messages from the drone
- *
- * @generated from service flightpath.RadioStatusService
- */
-export const RadioStatusService: GenService<{
-  /**
-   * Subscribe to RADIO_STATUS messages from the drone
-   *
-   * @generated from rpc flightpath.RadioStatusService.SubscribeRadioStatus
-   */
-  subscribeRadioStatus: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeRadioStatusRequestSchema;
-    output: typeof SubscribeRadioStatusResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_flightpath_radio_status, 0);
 

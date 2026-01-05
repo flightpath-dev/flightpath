@@ -2,18 +2,18 @@
 // @generated from file flightpath/global_position_int.proto (package flightpath, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file flightpath/global_position_int.proto.
  */
 export const file_flightpath_global_position_int: GenFile = /*@__PURE__*/
-  fileDesc("CiRmbGlnaHRwYXRoL2dsb2JhbF9wb3NpdGlvbl9pbnQucHJvdG8SCmZsaWdodHBhdGgiIwohU3Vic2NyaWJlR2xvYmFsUG9zaXRpb25JbnRSZXF1ZXN0Ip8BCiJTdWJzY3JpYmVHbG9iYWxQb3NpdGlvbkludFJlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAxIRCglzeXN0ZW1faWQYAiABKA0SFAoMY29tcG9uZW50X2lkGAMgASgNEjoKE2dsb2JhbF9wb3NpdGlvbl9pbnQYBCABKAsyHS5mbGlnaHRwYXRoLkdsb2JhbFBvc2l0aW9uSW50IpcBChFHbG9iYWxQb3NpdGlvbkludBIUCgx0aW1lX2Jvb3RfbXMYASABKA0SCwoDbGF0GAIgASgFEgsKA2xvbhgDIAEoBRILCgNhbHQYBCABKAUSFAoMcmVsYXRpdmVfYWx0GAUgASgFEgoKAnZ4GAYgASgFEgoKAnZ5GAcgASgFEgoKAnZ6GAggASgFEgsKA2hkZxgJIAEoDTKZAQoYR2xvYmFsUG9zaXRpb25JbnRTZXJ2aWNlEn0KGlN1YnNjcmliZUdsb2JhbFBvc2l0aW9uSW50Ei0uZmxpZ2h0cGF0aC5TdWJzY3JpYmVHbG9iYWxQb3NpdGlvbkludFJlcXVlc3QaLi5mbGlnaHRwYXRoLlN1YnNjcmliZUdsb2JhbFBvc2l0aW9uSW50UmVzcG9uc2UwAUJwCg5jb20uZmxpZ2h0cGF0aEIWR2xvYmFsUG9zaXRpb25JbnRQcm90b1ABogIDRlhYqgIKRmxpZ2h0cGF0aMoCCkZsaWdodHBhdGjiAhZGbGlnaHRwYXRoXEdQQk1ldGFkYXRh6gIKRmxpZ2h0cGF0aGIGcHJvdG8z");
+  fileDesc("CiRmbGlnaHRwYXRoL2dsb2JhbF9wb3NpdGlvbl9pbnQucHJvdG8SCmZsaWdodHBhdGgiIwohU3Vic2NyaWJlR2xvYmFsUG9zaXRpb25JbnRSZXF1ZXN0Ip8BCiJTdWJzY3JpYmVHbG9iYWxQb3NpdGlvbkludFJlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAxIRCglzeXN0ZW1faWQYAiABKA0SFAoMY29tcG9uZW50X2lkGAMgASgNEjoKE2dsb2JhbF9wb3NpdGlvbl9pbnQYBCABKAsyHS5mbGlnaHRwYXRoLkdsb2JhbFBvc2l0aW9uSW50IpcBChFHbG9iYWxQb3NpdGlvbkludBIUCgx0aW1lX2Jvb3RfbXMYASABKA0SCwoDbGF0GAIgASgFEgsKA2xvbhgDIAEoBRILCgNhbHQYBCABKAUSFAoMcmVsYXRpdmVfYWx0GAUgASgFEgoKAnZ4GAYgASgFEgoKAnZ5GAcgASgFEgoKAnZ6GAggASgFEgsKA2hkZxgJIAEoDUJwCg5jb20uZmxpZ2h0cGF0aEIWR2xvYmFsUG9zaXRpb25JbnRQcm90b1ABogIDRlhYqgIKRmxpZ2h0cGF0aMoCCkZsaWdodHBhdGjiAhZGbGlnaHRwYXRoXEdQQk1ldGFkYXRh6gIKRmxpZ2h0cGF0aGIGcHJvdG8z");
 
 /**
- * SubscribeGlobalPositionIntRequest is the request message for SubscribeGlobalPositionInt
+ * Request and response messages for SubscribeGlobalPositionInt
  *
  * @generated from message flightpath.SubscribeGlobalPositionIntRequest
  */
@@ -28,8 +28,6 @@ export const SubscribeGlobalPositionIntRequestSchema: GenMessage<SubscribeGlobal
   messageDesc(file_flightpath_global_position_int, 0);
 
 /**
- * SubscribeGlobalPositionIntResponse contains GLOBAL_POSITION_INT message data
- *
  * @generated from message flightpath.SubscribeGlobalPositionIntResponse
  */
 export type SubscribeGlobalPositionIntResponse = Message<"flightpath.SubscribeGlobalPositionIntResponse"> & {
@@ -149,23 +147,4 @@ export type GlobalPositionInt = Message<"flightpath.GlobalPositionInt"> & {
  */
 export const GlobalPositionIntSchema: GenMessage<GlobalPositionInt> = /*@__PURE__*/
   messageDesc(file_flightpath_global_position_int, 2);
-
-/**
- * GlobalPositionIntService handles GLOBAL_POSITION_INT (33) messages from the drone
- *
- * @generated from service flightpath.GlobalPositionIntService
- */
-export const GlobalPositionIntService: GenService<{
-  /**
-   * Subscribe to GLOBAL_POSITION_INT messages from the drone
-   *
-   * @generated from rpc flightpath.GlobalPositionIntService.SubscribeGlobalPositionInt
-   */
-  subscribeGlobalPositionInt: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeGlobalPositionIntRequestSchema;
-    output: typeof SubscribeGlobalPositionIntResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_flightpath_global_position_int, 0);
 

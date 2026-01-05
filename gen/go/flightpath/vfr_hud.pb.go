@@ -21,7 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// SubscribeVfrHudRequest is the request message for SubscribeVfrHud
+// Request and response messages for SubscribeVfrHud
 type SubscribeVfrHudRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -58,7 +58,6 @@ func (*SubscribeVfrHudRequest) Descriptor() ([]byte, []int) {
 	return file_flightpath_vfr_hud_proto_rawDescGZIP(), []int{0}
 }
 
-// SubscribeVfrHudResponse contains VFR_HUD message data
 type SubscribeVfrHudResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Timestamp when this VFR HUD data was captured (milliseconds since Unix epoch)
@@ -241,9 +240,7 @@ const file_flightpath_vfr_hud_proto_rawDesc = "" +
 	"\aheading\x18\x03 \x01(\x05R\aheading\x12\x1a\n" +
 	"\bthrottle\x18\x04 \x01(\rR\bthrottle\x12\x10\n" +
 	"\x03alt\x18\x05 \x01(\x02R\x03alt\x12\x14\n" +
-	"\x05climb\x18\x06 \x01(\x02R\x05climb2m\n" +
-	"\rVfrHudService\x12\\\n" +
-	"\x0fSubscribeVfrHud\x12\".flightpath.SubscribeVfrHudRequest\x1a#.flightpath.SubscribeVfrHudResponse0\x01B\x9d\x01\n" +
+	"\x05climb\x18\x06 \x01(\x02R\x05climbB\x9d\x01\n" +
 	"\x0ecom.flightpathB\vVfrHudProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -269,10 +266,8 @@ var file_flightpath_vfr_hud_proto_goTypes = []any{
 }
 var file_flightpath_vfr_hud_proto_depIdxs = []int32{
 	2, // 0: flightpath.SubscribeVfrHudResponse.vfr_hud:type_name -> flightpath.VfrHud
-	0, // 1: flightpath.VfrHudService.SubscribeVfrHud:input_type -> flightpath.SubscribeVfrHudRequest
-	1, // 2: flightpath.VfrHudService.SubscribeVfrHud:output_type -> flightpath.SubscribeVfrHudResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -291,7 +286,7 @@ func file_flightpath_vfr_hud_proto_init() {
 			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_flightpath_vfr_hud_proto_goTypes,
 		DependencyIndexes: file_flightpath_vfr_hud_proto_depIdxs,

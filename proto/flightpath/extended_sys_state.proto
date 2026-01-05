@@ -2,16 +2,9 @@ syntax = "proto3";
 
 package flightpath;
 
-// ExtendedSysStateService handles EXTENDED_SYS_STATE (245) messages from the drone
-service ExtendedSysStateService {
-  // Subscribe to EXTENDED_SYS_STATE messages from the drone
-  rpc SubscribeExtendedSysState(SubscribeExtendedSysStateRequest) returns (stream SubscribeExtendedSysStateResponse);
-}
-
-// SubscribeExtendedSysStateRequest is the request message for SubscribeExtendedSysState
+// Request and response messages for SubscribeExtendedSysState
 message SubscribeExtendedSysStateRequest {}
 
-// SubscribeExtendedSysStateResponse contains EXTENDED_SYS_STATE message data
 message SubscribeExtendedSysStateResponse {
   // Timestamp when this extended system state data was captured (milliseconds since Unix epoch)
   int64 timestamp_ms = 1;

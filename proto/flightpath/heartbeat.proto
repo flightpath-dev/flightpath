@@ -2,12 +2,7 @@ syntax = "proto3";
 
 package flightpath;
 
-// HeartbeatService handles HEARTBEAT messages from the drone
-service HeartbeatService {
-  // Subscribe to HEARTBEAT messages from the drone
-  rpc SubscribeHeartbeat(SubscribeHeartbeatRequest) returns (stream SubscribeHeartbeatResponse);
-}
-
+// Request and response messages for SubscribeHeartbeat
 message SubscribeHeartbeatRequest {}
 
 message SubscribeHeartbeatResponse {

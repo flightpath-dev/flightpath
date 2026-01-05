@@ -21,7 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// SubscribeRadioStatusRequest is the request message for SubscribeRadioStatus
+// Request and response messages for SubscribeRadioStatus
 type SubscribeRadioStatusRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -58,7 +58,6 @@ func (*SubscribeRadioStatusRequest) Descriptor() ([]byte, []int) {
 	return file_flightpath_radio_status_proto_rawDescGZIP(), []int{0}
 }
 
-// SubscribeRadioStatusResponse contains RADIO_STATUS message data
 type SubscribeRadioStatusResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Timestamp when this radio status data was captured (milliseconds since Unix epoch)
@@ -251,9 +250,7 @@ const file_flightpath_radio_status_proto_rawDesc = "" +
 	"\x05noise\x18\x04 \x01(\rR\x05noise\x12\x1a\n" +
 	"\bremnoise\x18\x05 \x01(\rR\bremnoise\x12\x1a\n" +
 	"\brxerrors\x18\x06 \x01(\rR\brxerrors\x12\x14\n" +
-	"\x05fixed\x18\a \x01(\rR\x05fixed2\x81\x01\n" +
-	"\x12RadioStatusService\x12k\n" +
-	"\x14SubscribeRadioStatus\x12'.flightpath.SubscribeRadioStatusRequest\x1a(.flightpath.SubscribeRadioStatusResponse0\x01B\xa2\x01\n" +
+	"\x05fixed\x18\a \x01(\rR\x05fixedB\xa2\x01\n" +
 	"\x0ecom.flightpathB\x10RadioStatusProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -279,10 +276,8 @@ var file_flightpath_radio_status_proto_goTypes = []any{
 }
 var file_flightpath_radio_status_proto_depIdxs = []int32{
 	2, // 0: flightpath.SubscribeRadioStatusResponse.radio_status:type_name -> flightpath.RadioStatus
-	0, // 1: flightpath.RadioStatusService.SubscribeRadioStatus:input_type -> flightpath.SubscribeRadioStatusRequest
-	1, // 2: flightpath.RadioStatusService.SubscribeRadioStatus:output_type -> flightpath.SubscribeRadioStatusResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -301,7 +296,7 @@ func file_flightpath_radio_status_proto_init() {
 			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_flightpath_radio_status_proto_goTypes,
 		DependencyIndexes: file_flightpath_radio_status_proto_depIdxs,

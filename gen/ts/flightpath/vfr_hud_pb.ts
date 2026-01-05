@@ -2,18 +2,18 @@
 // @generated from file flightpath/vfr_hud.proto (package flightpath, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file flightpath/vfr_hud.proto.
  */
 export const file_flightpath_vfr_hud: GenFile = /*@__PURE__*/
-  fileDesc("ChhmbGlnaHRwYXRoL3Zmcl9odWQucHJvdG8SCmZsaWdodHBhdGgiGAoWU3Vic2NyaWJlVmZySHVkUmVxdWVzdCJ9ChdTdWJzY3JpYmVWZnJIdWRSZXNwb25zZRIUCgx0aW1lc3RhbXBfbXMYASABKAMSEQoJc3lzdGVtX2lkGAIgASgNEhQKDGNvbXBvbmVudF9pZBgDIAEoDRIjCgd2ZnJfaHVkGAQgASgLMhIuZmxpZ2h0cGF0aC5WZnJIdWQibgoGVmZySHVkEhAKCGFpcnNwZWVkGAEgASgCEhMKC2dyb3VuZHNwZWVkGAIgASgCEg8KB2hlYWRpbmcYAyABKAUSEAoIdGhyb3R0bGUYBCABKA0SCwoDYWx0GAUgASgCEg0KBWNsaW1iGAYgASgCMm0KDVZmckh1ZFNlcnZpY2USXAoPU3Vic2NyaWJlVmZySHVkEiIuZmxpZ2h0cGF0aC5TdWJzY3JpYmVWZnJIdWRSZXF1ZXN0GiMuZmxpZ2h0cGF0aC5TdWJzY3JpYmVWZnJIdWRSZXNwb25zZTABQmUKDmNvbS5mbGlnaHRwYXRoQgtWZnJIdWRQcm90b1ABogIDRlhYqgIKRmxpZ2h0cGF0aMoCCkZsaWdodHBhdGjiAhZGbGlnaHRwYXRoXEdQQk1ldGFkYXRh6gIKRmxpZ2h0cGF0aGIGcHJvdG8z");
+  fileDesc("ChhmbGlnaHRwYXRoL3Zmcl9odWQucHJvdG8SCmZsaWdodHBhdGgiGAoWU3Vic2NyaWJlVmZySHVkUmVxdWVzdCJ9ChdTdWJzY3JpYmVWZnJIdWRSZXNwb25zZRIUCgx0aW1lc3RhbXBfbXMYASABKAMSEQoJc3lzdGVtX2lkGAIgASgNEhQKDGNvbXBvbmVudF9pZBgDIAEoDRIjCgd2ZnJfaHVkGAQgASgLMhIuZmxpZ2h0cGF0aC5WZnJIdWQibgoGVmZySHVkEhAKCGFpcnNwZWVkGAEgASgCEhMKC2dyb3VuZHNwZWVkGAIgASgCEg8KB2hlYWRpbmcYAyABKAUSEAoIdGhyb3R0bGUYBCABKA0SCwoDYWx0GAUgASgCEg0KBWNsaW1iGAYgASgCQmUKDmNvbS5mbGlnaHRwYXRoQgtWZnJIdWRQcm90b1ABogIDRlhYqgIKRmxpZ2h0cGF0aMoCCkZsaWdodHBhdGjiAhZGbGlnaHRwYXRoXEdQQk1ldGFkYXRh6gIKRmxpZ2h0cGF0aGIGcHJvdG8z");
 
 /**
- * SubscribeVfrHudRequest is the request message for SubscribeVfrHud
+ * Request and response messages for SubscribeVfrHud
  *
  * @generated from message flightpath.SubscribeVfrHudRequest
  */
@@ -28,8 +28,6 @@ export const SubscribeVfrHudRequestSchema: GenMessage<SubscribeVfrHudRequest> = 
   messageDesc(file_flightpath_vfr_hud, 0);
 
 /**
- * SubscribeVfrHudResponse contains VFR_HUD message data
- *
  * @generated from message flightpath.SubscribeVfrHudResponse
  */
 export type SubscribeVfrHudResponse = Message<"flightpath.SubscribeVfrHudResponse"> & {
@@ -125,23 +123,4 @@ export type VfrHud = Message<"flightpath.VfrHud"> & {
  */
 export const VfrHudSchema: GenMessage<VfrHud> = /*@__PURE__*/
   messageDesc(file_flightpath_vfr_hud, 2);
-
-/**
- * VfrHudService handles VFR_HUD (74) messages from the drone
- *
- * @generated from service flightpath.VfrHudService
- */
-export const VfrHudService: GenService<{
-  /**
-   * Subscribe to VFR_HUD messages from the drone
-   *
-   * @generated from rpc flightpath.VfrHudService.SubscribeVfrHud
-   */
-  subscribeVfrHud: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeVfrHudRequestSchema;
-    output: typeof SubscribeVfrHudResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_flightpath_vfr_hud, 0);
 

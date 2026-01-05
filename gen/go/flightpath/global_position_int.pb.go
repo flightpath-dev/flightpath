@@ -21,7 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// SubscribeGlobalPositionIntRequest is the request message for SubscribeGlobalPositionInt
+// Request and response messages for SubscribeGlobalPositionInt
 type SubscribeGlobalPositionIntRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -58,7 +58,6 @@ func (*SubscribeGlobalPositionIntRequest) Descriptor() ([]byte, []int) {
 	return file_flightpath_global_position_int_proto_rawDescGZIP(), []int{0}
 }
 
-// SubscribeGlobalPositionIntResponse contains GLOBAL_POSITION_INT message data
 type SubscribeGlobalPositionIntResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Timestamp when this global position data was captured (milliseconds since Unix epoch)
@@ -275,9 +274,7 @@ const file_flightpath_global_position_int_proto_rawDesc = "" +
 	"\x02vx\x18\x06 \x01(\x05R\x02vx\x12\x0e\n" +
 	"\x02vy\x18\a \x01(\x05R\x02vy\x12\x0e\n" +
 	"\x02vz\x18\b \x01(\x05R\x02vz\x12\x10\n" +
-	"\x03hdg\x18\t \x01(\rR\x03hdg2\x99\x01\n" +
-	"\x18GlobalPositionIntService\x12}\n" +
-	"\x1aSubscribeGlobalPositionInt\x12-.flightpath.SubscribeGlobalPositionIntRequest\x1a..flightpath.SubscribeGlobalPositionIntResponse0\x01B\xa8\x01\n" +
+	"\x03hdg\x18\t \x01(\rR\x03hdgB\xa8\x01\n" +
 	"\x0ecom.flightpathB\x16GlobalPositionIntProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -303,10 +300,8 @@ var file_flightpath_global_position_int_proto_goTypes = []any{
 }
 var file_flightpath_global_position_int_proto_depIdxs = []int32{
 	2, // 0: flightpath.SubscribeGlobalPositionIntResponse.global_position_int:type_name -> flightpath.GlobalPositionInt
-	0, // 1: flightpath.GlobalPositionIntService.SubscribeGlobalPositionInt:input_type -> flightpath.SubscribeGlobalPositionIntRequest
-	1, // 2: flightpath.GlobalPositionIntService.SubscribeGlobalPositionInt:output_type -> flightpath.SubscribeGlobalPositionIntResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -325,7 +320,7 @@ func file_flightpath_global_position_int_proto_init() {
 			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_flightpath_global_position_int_proto_goTypes,
 		DependencyIndexes: file_flightpath_global_position_int_proto_depIdxs,

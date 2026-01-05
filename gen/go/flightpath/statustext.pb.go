@@ -91,7 +91,7 @@ func (MavSeverity) EnumDescriptor() ([]byte, []int) {
 	return file_flightpath_statustext_proto_rawDescGZIP(), []int{0}
 }
 
-// SubscribeStatusTextRequest is the request message for SubscribeStatusText
+// Request and response messages for SubscribeStatusText
 type SubscribeStatusTextRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -128,7 +128,6 @@ func (*SubscribeStatusTextRequest) Descriptor() ([]byte, []int) {
 	return file_flightpath_statustext_proto_rawDescGZIP(), []int{0}
 }
 
-// SubscribeStatusTextResponse contains STATUSTEXT message data
 type SubscribeStatusTextResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Timestamp when this status text data was captured (milliseconds since Unix epoch)
@@ -284,9 +283,7 @@ const file_flightpath_statustext_proto_rawDesc = "" +
 	"\x14MAV_SEVERITY_WARNING\x10\x05\x12\x17\n" +
 	"\x13MAV_SEVERITY_NOTICE\x10\x06\x12\x15\n" +
 	"\x11MAV_SEVERITY_INFO\x10\a\x12\x16\n" +
-	"\x12MAV_SEVERITY_DEBUG\x10\b2}\n" +
-	"\x11StatusTextService\x12h\n" +
-	"\x13SubscribeStatusText\x12&.flightpath.SubscribeStatusTextRequest\x1a'.flightpath.SubscribeStatusTextResponse0\x01B\xa1\x01\n" +
+	"\x12MAV_SEVERITY_DEBUG\x10\bB\xa1\x01\n" +
 	"\x0ecom.flightpathB\x0fStatustextProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -315,10 +312,8 @@ var file_flightpath_statustext_proto_goTypes = []any{
 var file_flightpath_statustext_proto_depIdxs = []int32{
 	3, // 0: flightpath.SubscribeStatusTextResponse.status_text:type_name -> flightpath.StatusText
 	0, // 1: flightpath.StatusText.severity:type_name -> flightpath.MavSeverity
-	1, // 2: flightpath.StatusTextService.SubscribeStatusText:input_type -> flightpath.SubscribeStatusTextRequest
-	2, // 3: flightpath.StatusTextService.SubscribeStatusText:output_type -> flightpath.SubscribeStatusTextResponse
-	3, // [3:4] is the sub-list for method output_type
-	2, // [2:3] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -337,7 +332,7 @@ func file_flightpath_statustext_proto_init() {
 			NumEnums:      1,
 			NumMessages:   3,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_flightpath_statustext_proto_goTypes,
 		DependencyIndexes: file_flightpath_statustext_proto_depIdxs,

@@ -2,18 +2,18 @@
 // @generated from file flightpath/statustext.proto (package flightpath, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file flightpath/statustext.proto.
  */
 export const file_flightpath_statustext: GenFile = /*@__PURE__*/
-  fileDesc("ChtmbGlnaHRwYXRoL3N0YXR1c3RleHQucHJvdG8SCmZsaWdodHBhdGgiHAoaU3Vic2NyaWJlU3RhdHVzVGV4dFJlcXVlc3QiiQEKG1N1YnNjcmliZVN0YXR1c1RleHRSZXNwb25zZRIUCgx0aW1lc3RhbXBfbXMYASABKAMSEQoJc3lzdGVtX2lkGAIgASgNEhQKDGNvbXBvbmVudF9pZBgDIAEoDRIrCgtzdGF0dXNfdGV4dBgEIAEoCzIWLmZsaWdodHBhdGguU3RhdHVzVGV4dCJFCgpTdGF0dXNUZXh0EikKCHNldmVyaXR5GAEgASgOMhcuZmxpZ2h0cGF0aC5NYXZTZXZlcml0eRIMCgR0ZXh0GAIgASgJKvQBCgtNYXZTZXZlcml0eRIcChhNQVZfU0VWRVJJVFlfVU5TUEVDSUZJRUQQABIaChZNQVZfU0VWRVJJVFlfRU1FUkdFTkNZEAESFgoSTUFWX1NFVkVSSVRZX0FMRVJUEAISGQoVTUFWX1NFVkVSSVRZX0NSSVRJQ0FMEAMSFgoSTUFWX1NFVkVSSVRZX0VSUk9SEAQSGAoUTUFWX1NFVkVSSVRZX1dBUk5JTkcQBRIXChNNQVZfU0VWRVJJVFlfTk9USUNFEAYSFQoRTUFWX1NFVkVSSVRZX0lORk8QBxIWChJNQVZfU0VWRVJJVFlfREVCVUcQCDJ9ChFTdGF0dXNUZXh0U2VydmljZRJoChNTdWJzY3JpYmVTdGF0dXNUZXh0EiYuZmxpZ2h0cGF0aC5TdWJzY3JpYmVTdGF0dXNUZXh0UmVxdWVzdBonLmZsaWdodHBhdGguU3Vic2NyaWJlU3RhdHVzVGV4dFJlc3BvbnNlMAFCaQoOY29tLmZsaWdodHBhdGhCD1N0YXR1c3RleHRQcm90b1ABogIDRlhYqgIKRmxpZ2h0cGF0aMoCCkZsaWdodHBhdGjiAhZGbGlnaHRwYXRoXEdQQk1ldGFkYXRh6gIKRmxpZ2h0cGF0aGIGcHJvdG8z");
+  fileDesc("ChtmbGlnaHRwYXRoL3N0YXR1c3RleHQucHJvdG8SCmZsaWdodHBhdGgiHAoaU3Vic2NyaWJlU3RhdHVzVGV4dFJlcXVlc3QiiQEKG1N1YnNjcmliZVN0YXR1c1RleHRSZXNwb25zZRIUCgx0aW1lc3RhbXBfbXMYASABKAMSEQoJc3lzdGVtX2lkGAIgASgNEhQKDGNvbXBvbmVudF9pZBgDIAEoDRIrCgtzdGF0dXNfdGV4dBgEIAEoCzIWLmZsaWdodHBhdGguU3RhdHVzVGV4dCJFCgpTdGF0dXNUZXh0EikKCHNldmVyaXR5GAEgASgOMhcuZmxpZ2h0cGF0aC5NYXZTZXZlcml0eRIMCgR0ZXh0GAIgASgJKvQBCgtNYXZTZXZlcml0eRIcChhNQVZfU0VWRVJJVFlfVU5TUEVDSUZJRUQQABIaChZNQVZfU0VWRVJJVFlfRU1FUkdFTkNZEAESFgoSTUFWX1NFVkVSSVRZX0FMRVJUEAISGQoVTUFWX1NFVkVSSVRZX0NSSVRJQ0FMEAMSFgoSTUFWX1NFVkVSSVRZX0VSUk9SEAQSGAoUTUFWX1NFVkVSSVRZX1dBUk5JTkcQBRIXChNNQVZfU0VWRVJJVFlfTk9USUNFEAYSFQoRTUFWX1NFVkVSSVRZX0lORk8QBxIWChJNQVZfU0VWRVJJVFlfREVCVUcQCEJpCg5jb20uZmxpZ2h0cGF0aEIPU3RhdHVzdGV4dFByb3RvUAGiAgNGWFiqAgpGbGlnaHRwYXRoygIKRmxpZ2h0cGF0aOICFkZsaWdodHBhdGhcR1BCTWV0YWRhdGHqAgpGbGlnaHRwYXRoYgZwcm90bzM");
 
 /**
- * SubscribeStatusTextRequest is the request message for SubscribeStatusText
+ * Request and response messages for SubscribeStatusText
  *
  * @generated from message flightpath.SubscribeStatusTextRequest
  */
@@ -28,8 +28,6 @@ export const SubscribeStatusTextRequestSchema: GenMessage<SubscribeStatusTextReq
   messageDesc(file_flightpath_statustext, 0);
 
 /**
- * SubscribeStatusTextResponse contains STATUSTEXT message data
- *
  * @generated from message flightpath.SubscribeStatusTextResponse
  */
 export type SubscribeStatusTextResponse = Message<"flightpath.SubscribeStatusTextResponse"> & {
@@ -174,23 +172,4 @@ export enum MavSeverity {
  */
 export const MavSeveritySchema: GenEnum<MavSeverity> = /*@__PURE__*/
   enumDesc(file_flightpath_statustext, 0);
-
-/**
- * StatusTextService handles STATUSTEXT (253) messages from the drone
- *
- * @generated from service flightpath.StatusTextService
- */
-export const StatusTextService: GenService<{
-  /**
-   * Subscribe to STATUSTEXT messages from the drone
-   *
-   * @generated from rpc flightpath.StatusTextService.SubscribeStatusText
-   */
-  subscribeStatusText: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeStatusTextRequestSchema;
-    output: typeof SubscribeStatusTextResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_flightpath_statustext, 0);
 

@@ -568,6 +568,7 @@ func (SubMode) EnumDescriptor() ([]byte, []int) {
 	return file_flightpath_heartbeat_proto_rawDescGZIP(), []int{4}
 }
 
+// Request and response messages for SubscribeHeartbeat
 type SubscribeHeartbeatRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1088,9 +1089,7 @@ const file_flightpath_heartbeat_proto_rawDesc = "" +
 	"\x12SUB_MODE_EXTERNAL5\x10\x11\x12\x16\n" +
 	"\x12SUB_MODE_EXTERNAL6\x10\x12\x12\x16\n" +
 	"\x12SUB_MODE_EXTERNAL7\x10\x13\x12\x16\n" +
-	"\x12SUB_MODE_EXTERNAL8\x10\x142y\n" +
-	"\x10HeartbeatService\x12e\n" +
-	"\x12SubscribeHeartbeat\x12%.flightpath.SubscribeHeartbeatRequest\x1a&.flightpath.SubscribeHeartbeatResponse0\x01B\xa0\x01\n" +
+	"\x12SUB_MODE_EXTERNAL8\x10\x14B\xa0\x01\n" +
 	"\x0ecom.flightpathB\x0eHeartbeatProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -1131,10 +1130,8 @@ var file_flightpath_heartbeat_proto_depIdxs = []int32{
 	2, // 5: flightpath.Heartbeat.system_status:type_name -> flightpath.MavState
 	3, // 6: flightpath.CustomMode.main_mode:type_name -> flightpath.MainMode
 	4, // 7: flightpath.CustomMode.sub_mode:type_name -> flightpath.SubMode
-	5, // 8: flightpath.HeartbeatService.SubscribeHeartbeat:input_type -> flightpath.SubscribeHeartbeatRequest
-	6, // 9: flightpath.HeartbeatService.SubscribeHeartbeat:output_type -> flightpath.SubscribeHeartbeatResponse
-	9, // [9:10] is the sub-list for method output_type
-	8, // [8:9] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
 	8, // [8:8] is the sub-list for extension type_name
 	8, // [8:8] is the sub-list for extension extendee
 	0, // [0:8] is the sub-list for field type_name
@@ -1153,7 +1150,7 @@ func file_flightpath_heartbeat_proto_init() {
 			NumEnums:      5,
 			NumMessages:   5,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_flightpath_heartbeat_proto_goTypes,
 		DependencyIndexes: file_flightpath_heartbeat_proto_depIdxs,

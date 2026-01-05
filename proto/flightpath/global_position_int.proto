@@ -2,16 +2,9 @@ syntax = "proto3";
 
 package flightpath;
 
-// GlobalPositionIntService handles GLOBAL_POSITION_INT (33) messages from the drone
-service GlobalPositionIntService {
-  // Subscribe to GLOBAL_POSITION_INT messages from the drone
-  rpc SubscribeGlobalPositionInt(SubscribeGlobalPositionIntRequest) returns (stream SubscribeGlobalPositionIntResponse);
-}
-
-// SubscribeGlobalPositionIntRequest is the request message for SubscribeGlobalPositionInt
+// Request and response messages for SubscribeGlobalPositionInt
 message SubscribeGlobalPositionIntRequest {}
 
-// SubscribeGlobalPositionIntResponse contains GLOBAL_POSITION_INT message data
 message SubscribeGlobalPositionIntResponse {
   // Timestamp when this global position data was captured (milliseconds since Unix epoch)
   int64 timestamp_ms = 1;

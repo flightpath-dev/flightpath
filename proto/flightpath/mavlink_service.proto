@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package flightpath;
+
+import "flightpath/extended_sys_state.proto";
+import "flightpath/global_position_int.proto";
+import "flightpath/gps_raw_int.proto";
+import "flightpath/heartbeat.proto";
+import "flightpath/radio_status.proto";
+import "flightpath/statustext.proto";
+import "flightpath/sys_status.proto";
+import "flightpath/vfr_hud.proto";
+
+// MAVLinkService handles all MAVLink.
+service MAVLinkService {
+  // Subscribe to HEARTBEAT (0)
+  rpc SubscribeHeartbeat(SubscribeHeartbeatRequest) returns (stream SubscribeHeartbeatResponse);
+
+  // Subscribe to SYS_STATUS (1)
+  rpc SubscribeSysStatus(SubscribeSysStatusRequest) returns (stream SubscribeSysStatusResponse);
+
+  // Subscribe to GPS_RAW_INT (24)
+  rpc SubscribeGpsRawInt(SubscribeGpsRawIntRequest) returns (stream SubscribeGpsRawIntResponse);
+
+  // Subscribe to GLOBAL_POSITION_INT (33)
+  rpc SubscribeGlobalPositionInt(SubscribeGlobalPositionIntRequest) returns (stream SubscribeGlobalPositionIntResponse);
+
+  // Subscribe to VFR_HUD (74)
+  rpc SubscribeVfrHud(SubscribeVfrHudRequest) returns (stream SubscribeVfrHudResponse);
+
+  // Subscribe to RADIO_STATUS (109)
+  rpc SubscribeRadioStatus(SubscribeRadioStatusRequest) returns (stream SubscribeRadioStatusResponse);
+
+  // Subscribe to EXTENDED_SYS_STATE (245)
+  rpc SubscribeExtendedSysState(SubscribeExtendedSysStateRequest) returns (stream SubscribeExtendedSysStateResponse);
+
+  // Subscribe to STATUSTEXT (253)
+  rpc SubscribeStatusText(SubscribeStatusTextRequest) returns (stream SubscribeStatusTextResponse);
+}

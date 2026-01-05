@@ -135,7 +135,7 @@ func (MavLandedState) EnumDescriptor() ([]byte, []int) {
 	return file_flightpath_extended_sys_state_proto_rawDescGZIP(), []int{1}
 }
 
-// SubscribeExtendedSysStateRequest is the request message for SubscribeExtendedSysState
+// Request and response messages for SubscribeExtendedSysState
 type SubscribeExtendedSysStateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -172,7 +172,6 @@ func (*SubscribeExtendedSysStateRequest) Descriptor() ([]byte, []int) {
 	return file_flightpath_extended_sys_state_proto_rawDescGZIP(), []int{0}
 }
 
-// SubscribeExtendedSysStateResponse contains EXTENDED_SYS_STATE message data
 type SubscribeExtendedSysStateResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Timestamp when this extended system state data was captured (milliseconds since Unix epoch)
@@ -328,9 +327,7 @@ const file_flightpath_extended_sys_state_proto_rawDesc = "" +
 	"\x1aMAV_LANDED_STATE_ON_GROUND\x10\x01\x12\x1b\n" +
 	"\x17MAV_LANDED_STATE_IN_AIR\x10\x02\x12\x1c\n" +
 	"\x18MAV_LANDED_STATE_TAKEOFF\x10\x03\x12\x1c\n" +
-	"\x18MAV_LANDED_STATE_LANDING\x10\x042\x95\x01\n" +
-	"\x17ExtendedSysStateService\x12z\n" +
-	"\x19SubscribeExtendedSysState\x12,.flightpath.SubscribeExtendedSysStateRequest\x1a-.flightpath.SubscribeExtendedSysStateResponse0\x01B\xa7\x01\n" +
+	"\x18MAV_LANDED_STATE_LANDING\x10\x04B\xa7\x01\n" +
 	"\x0ecom.flightpathB\x15ExtendedSysStateProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -361,10 +358,8 @@ var file_flightpath_extended_sys_state_proto_depIdxs = []int32{
 	4, // 0: flightpath.SubscribeExtendedSysStateResponse.extended_sys_state:type_name -> flightpath.ExtendedSysState
 	0, // 1: flightpath.ExtendedSysState.vtol_state:type_name -> flightpath.MavVtolState
 	1, // 2: flightpath.ExtendedSysState.landed_state:type_name -> flightpath.MavLandedState
-	2, // 3: flightpath.ExtendedSysStateService.SubscribeExtendedSysState:input_type -> flightpath.SubscribeExtendedSysStateRequest
-	3, // 4: flightpath.ExtendedSysStateService.SubscribeExtendedSysState:output_type -> flightpath.SubscribeExtendedSysStateResponse
-	4, // [4:5] is the sub-list for method output_type
-	3, // [3:4] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name
@@ -383,7 +378,7 @@ func file_flightpath_extended_sys_state_proto_init() {
 			NumEnums:      2,
 			NumMessages:   3,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_flightpath_extended_sys_state_proto_goTypes,
 		DependencyIndexes: file_flightpath_extended_sys_state_proto_depIdxs,

@@ -2,37 +2,35 @@
 // @generated from file flightpath/gps_raw_int.proto (package flightpath, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file flightpath/gps_raw_int.proto.
  */
 export const file_flightpath_gps_raw_int: GenFile = /*@__PURE__*/
-  fileDesc("ChxmbGlnaHRwYXRoL2dwc19yYXdfaW50LnByb3RvEgpmbGlnaHRwYXRoIhgKFlN1YnNjcmliZVJhd0dwc1JlcXVlc3QihAEKF1N1YnNjcmliZVJhd0dwc1Jlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAxIRCglzeXN0ZW1faWQYAiABKA0SFAoMY29tcG9uZW50X2lkGAMgASgNEioKC2dwc19yYXdfaW50GAQgASgLMhUuZmxpZ2h0cGF0aC5HcHNSYXdJbnQiowIKCUdwc1Jhd0ludBIRCgl0aW1lX3VzZWMYASABKAQSKAoIZml4X3R5cGUYAiABKA4yFi5mbGlnaHRwYXRoLkdwc0ZpeFR5cGUSCwoDbGF0GAMgASgFEgsKA2xvbhgEIAEoBRILCgNhbHQYBSABKAUSCwoDZXBoGAYgASgNEgsKA2VwdhgHIAEoDRILCgN2ZWwYCCABKA0SCwoDY29nGAkgASgNEhoKEnNhdGVsbGl0ZXNfdmlzaWJsZRgKIAEoDRIVCg1hbHRfZWxsaXBzb2lkGAsgASgFEg0KBWhfYWNjGAwgASgNEg0KBXZfYWNjGA0gASgNEg8KB3ZlbF9hY2MYDiABKA0SDwoHaGRnX2FjYxgPIAEoDRILCgN5YXcYECABKA0qjAIKCkdwc0ZpeFR5cGUSHAoYR1BTX0ZJWF9UWVBFX1VOU1BFQ0lGSUVEEAASFwoTR1BTX0ZJWF9UWVBFX05PX0dQUxABEhcKE0dQU19GSVhfVFlQRV9OT19GSVgQAhIXChNHUFNfRklYX1RZUEVfMkRfRklYEAMSFwoTR1BTX0ZJWF9UWVBFXzNEX0ZJWBAEEhUKEUdQU19GSVhfVFlQRV9ER1BTEAUSGgoWR1BTX0ZJWF9UWVBFX1JUS19GTE9BVBAGEhoKFkdQU19GSVhfVFlQRV9SVEtfRklYRUQQBxIXChNHUFNfRklYX1RZUEVfU1RBVElDEAgSFAoQR1BTX0ZJWF9UWVBFX1BQUBAJMnAKEEdwc1Jhd0ludFNlcnZpY2USXAoPU3Vic2NyaWJlUmF3R3BzEiIuZmxpZ2h0cGF0aC5TdWJzY3JpYmVSYXdHcHNSZXF1ZXN0GiMuZmxpZ2h0cGF0aC5TdWJzY3JpYmVSYXdHcHNSZXNwb25zZTABQmgKDmNvbS5mbGlnaHRwYXRoQg5HcHNSYXdJbnRQcm90b1ABogIDRlhYqgIKRmxpZ2h0cGF0aMoCCkZsaWdodHBhdGjiAhZGbGlnaHRwYXRoXEdQQk1ldGFkYXRh6gIKRmxpZ2h0cGF0aGIGcHJvdG8z");
+  fileDesc("ChxmbGlnaHRwYXRoL2dwc19yYXdfaW50LnByb3RvEgpmbGlnaHRwYXRoIhsKGVN1YnNjcmliZUdwc1Jhd0ludFJlcXVlc3QihwEKGlN1YnNjcmliZUdwc1Jhd0ludFJlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAxIRCglzeXN0ZW1faWQYAiABKA0SFAoMY29tcG9uZW50X2lkGAMgASgNEioKC2dwc19yYXdfaW50GAQgASgLMhUuZmxpZ2h0cGF0aC5HcHNSYXdJbnQiowIKCUdwc1Jhd0ludBIRCgl0aW1lX3VzZWMYASABKAQSKAoIZml4X3R5cGUYAiABKA4yFi5mbGlnaHRwYXRoLkdwc0ZpeFR5cGUSCwoDbGF0GAMgASgFEgsKA2xvbhgEIAEoBRILCgNhbHQYBSABKAUSCwoDZXBoGAYgASgNEgsKA2VwdhgHIAEoDRILCgN2ZWwYCCABKA0SCwoDY29nGAkgASgNEhoKEnNhdGVsbGl0ZXNfdmlzaWJsZRgKIAEoDRIVCg1hbHRfZWxsaXBzb2lkGAsgASgFEg0KBWhfYWNjGAwgASgNEg0KBXZfYWNjGA0gASgNEg8KB3ZlbF9hY2MYDiABKA0SDwoHaGRnX2FjYxgPIAEoDRILCgN5YXcYECABKA0qjAIKCkdwc0ZpeFR5cGUSHAoYR1BTX0ZJWF9UWVBFX1VOU1BFQ0lGSUVEEAASFwoTR1BTX0ZJWF9UWVBFX05PX0dQUxABEhcKE0dQU19GSVhfVFlQRV9OT19GSVgQAhIXChNHUFNfRklYX1RZUEVfMkRfRklYEAMSFwoTR1BTX0ZJWF9UWVBFXzNEX0ZJWBAEEhUKEUdQU19GSVhfVFlQRV9ER1BTEAUSGgoWR1BTX0ZJWF9UWVBFX1JUS19GTE9BVBAGEhoKFkdQU19GSVhfVFlQRV9SVEtfRklYRUQQBxIXChNHUFNfRklYX1RZUEVfU1RBVElDEAgSFAoQR1BTX0ZJWF9UWVBFX1BQUBAJQmgKDmNvbS5mbGlnaHRwYXRoQg5HcHNSYXdJbnRQcm90b1ABogIDRlhYqgIKRmxpZ2h0cGF0aMoCCkZsaWdodHBhdGjiAhZGbGlnaHRwYXRoXEdQQk1ldGFkYXRh6gIKRmxpZ2h0cGF0aGIGcHJvdG8z");
 
 /**
- * SubscribeRawGpsRequest is the request message for SubscribeRawGps
+ * Request and response messages for SubscribeGpsRawInt
  *
- * @generated from message flightpath.SubscribeRawGpsRequest
+ * @generated from message flightpath.SubscribeGpsRawIntRequest
  */
-export type SubscribeRawGpsRequest = Message<"flightpath.SubscribeRawGpsRequest"> & {
+export type SubscribeGpsRawIntRequest = Message<"flightpath.SubscribeGpsRawIntRequest"> & {
 };
 
 /**
- * Describes the message flightpath.SubscribeRawGpsRequest.
- * Use `create(SubscribeRawGpsRequestSchema)` to create a new message.
+ * Describes the message flightpath.SubscribeGpsRawIntRequest.
+ * Use `create(SubscribeGpsRawIntRequestSchema)` to create a new message.
  */
-export const SubscribeRawGpsRequestSchema: GenMessage<SubscribeRawGpsRequest> = /*@__PURE__*/
+export const SubscribeGpsRawIntRequestSchema: GenMessage<SubscribeGpsRawIntRequest> = /*@__PURE__*/
   messageDesc(file_flightpath_gps_raw_int, 0);
 
 /**
- * SubscribeRawGpsResponse contains GPS_RAW_INT message data
- *
- * @generated from message flightpath.SubscribeRawGpsResponse
+ * @generated from message flightpath.SubscribeGpsRawIntResponse
  */
-export type SubscribeRawGpsResponse = Message<"flightpath.SubscribeRawGpsResponse"> & {
+export type SubscribeGpsRawIntResponse = Message<"flightpath.SubscribeGpsRawIntResponse"> & {
   /**
    * Timestamp when this GPS data was captured (milliseconds since Unix epoch)
    *
@@ -63,10 +61,10 @@ export type SubscribeRawGpsResponse = Message<"flightpath.SubscribeRawGpsRespons
 };
 
 /**
- * Describes the message flightpath.SubscribeRawGpsResponse.
- * Use `create(SubscribeRawGpsResponseSchema)` to create a new message.
+ * Describes the message flightpath.SubscribeGpsRawIntResponse.
+ * Use `create(SubscribeGpsRawIntResponseSchema)` to create a new message.
  */
-export const SubscribeRawGpsResponseSchema: GenMessage<SubscribeRawGpsResponse> = /*@__PURE__*/
+export const SubscribeGpsRawIntResponseSchema: GenMessage<SubscribeGpsRawIntResponse> = /*@__PURE__*/
   messageDesc(file_flightpath_gps_raw_int, 1);
 
 /**
@@ -260,23 +258,4 @@ export enum GpsFixType {
  */
 export const GpsFixTypeSchema: GenEnum<GpsFixType> = /*@__PURE__*/
   enumDesc(file_flightpath_gps_raw_int, 0);
-
-/**
- * GpsRawIntService handles GPS_RAW_INT messages from the drone
- *
- * @generated from service flightpath.GpsRawIntService
- */
-export const GpsRawIntService: GenService<{
-  /**
-   * Subscribe to GPS_RAW_INT messages from the drone
-   *
-   * @generated from rpc flightpath.GpsRawIntService.SubscribeRawGps
-   */
-  subscribeRawGps: {
-    methodKind: "server_streaming";
-    input: typeof SubscribeRawGpsRequestSchema;
-    output: typeof SubscribeRawGpsResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_flightpath_gps_raw_int, 0);
 
