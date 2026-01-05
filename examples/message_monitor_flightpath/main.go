@@ -53,14 +53,14 @@ func main() {
 	serverURL := fmt.Sprintf("http://%s", cfg.ServerAddr())
 
 	// Create service clients
-	heartbeatService, gpsRawIntService := createClients(serverURL)
+	mavlinkService := createMAVLinkServiceClient(serverURL)
 
 	// Setup graceful shutdown on Ctrl+C
 	ctx := handleShutdown()
 
 	// Data structures for tracking message counts and details
 	var latestHeartbeat *flightpath.SubscribeHeartbeatResponse
-	var latestGpsRawInt *flightpath.SubscribeRawGpsResponse
+	var latestGpsRawInt *flightpath.SubscribeGpsRawIntResponse
 	messageCounts := make(map[string]int)
 	var mu sync.Mutex
 
@@ -70,12 +70,12 @@ func main() {
 
 	go func() {
 		defer wg.Done()
-		subscribeHeartbeat(ctx, heartbeatService, serverURL, &latestHeartbeat, &latestGpsRawInt, messageCounts, &mu)
+		subscribeHeartbeat(ctx, mavlinkService, serverURL, &latestHeartbeat, &latestGpsRawInt, messageCounts, &mu)
 	}()
 
 	go func() {
 		defer wg.Done()
-		subscribeRawGps(ctx, gpsRawIntService, serverURL, &latestHeartbeat, &latestGpsRawInt, messageCounts, &mu)
+		subscribeRawGps(ctx, mavlinkService, serverURL, &latestHeartbeat, &latestGpsRawInt, messageCounts, &mu)
 	}()
 
 	fmt.Println("Press Ctrl+C to stop")
@@ -84,27 +84,13 @@ func main() {
 	wg.Wait()
 }
 
-// createClients creates the HTTP client and service clients
-func createClients(serverURL string) (flightpathconnect.HeartbeatServiceClient, flightpathconnect.GpsRawIntServiceClient) {
-	// Create a single HTTP client to share across all service clients
-	// This client uses the default transport which provides connection pooling
-	httpClient := &http.Client{}
-
-	// Create heartbeat service client to communicate with the gRPC server
-	heartbeatService := flightpathconnect.NewHeartbeatServiceClient(
-		httpClient,
+// createMAVLinkServiceClient creates the MAVLink service client
+func createMAVLinkServiceClient(serverURL string) flightpathconnect.MAVLinkServiceClient {
+	return flightpathconnect.NewMAVLinkServiceClient(
+		&http.Client{},
 		serverURL,
-		connect.WithProtoJSON(), // Use JSON codec for readability
+		connect.WithProtoJSON(),
 	)
-
-	// Create GPS raw int service client
-	gpsRawIntService := flightpathconnect.NewGpsRawIntServiceClient(
-		httpClient,
-		serverURL,
-		connect.WithProtoJSON(), // Use JSON codec for readability
-	)
-
-	return heartbeatService, gpsRawIntService
 }
 
 // handleShutdown handles Ctrl+C gracefully by canceling the context
@@ -127,10 +113,10 @@ func handleShutdown() context.Context {
 // subscribeHeartbeat connects to the server and streams heartbeat messages
 func subscribeHeartbeat(
 	ctx context.Context,
-	heartbeatService flightpathconnect.HeartbeatServiceClient,
+	mavlinkService flightpathconnect.MAVLinkServiceClient,
 	serverURL string,
 	latestHeartbeat **flightpath.SubscribeHeartbeatResponse,
-	latestGpsRawInt **flightpath.SubscribeRawGpsResponse,
+	latestGpsRawInt **flightpath.SubscribeGpsRawIntResponse,
 	messageCounts map[string]int,
 	mu *sync.Mutex,
 ) {
@@ -140,7 +126,7 @@ func subscribeHeartbeat(
 	req := connect.NewRequest(&flightpath.SubscribeHeartbeatRequest{})
 
 	// Call SubscribeHeartbeat to start the stream, pass ctx for cancellation when user presses Ctrl+C
-	stream, err := heartbeatService.SubscribeHeartbeat(ctx, req)
+	stream, err := mavlinkService.SubscribeHeartbeat(ctx, req)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error calling SubscribeHeartbeat: %v\n", err)
 		os.Exit(1)
@@ -178,22 +164,22 @@ func subscribeHeartbeat(
 // subscribeRawGps connects to the server and streams GPS_RAW_INT messages
 func subscribeRawGps(
 	ctx context.Context,
-	gpsRawIntService flightpathconnect.GpsRawIntServiceClient,
+	mavlinkService flightpathconnect.MAVLinkServiceClient,
 	serverURL string,
 	latestHeartbeat **flightpath.SubscribeHeartbeatResponse,
-	latestGpsRawInt **flightpath.SubscribeRawGpsResponse,
+	latestGpsRawInt **flightpath.SubscribeGpsRawIntResponse,
 	messageCounts map[string]int,
 	mu *sync.Mutex,
 ) {
-	fmt.Printf("Connecting to SubscribeRawGps endpoint: %s\n", serverURL)
+	fmt.Printf("Connecting to SubscribeGpsRawInt endpoint: %s\n", serverURL)
 
-	// Create SubscribeRawGps request
-	req := connect.NewRequest(&flightpath.SubscribeRawGpsRequest{})
+	// Create SubscribeGpsRawInt request
+	req := connect.NewRequest(&flightpath.SubscribeGpsRawIntRequest{})
 
-	// Call SubscribeRawGps to start the stream, pass ctx for cancellation when user presses Ctrl+C
-	stream, err := gpsRawIntService.SubscribeRawGps(ctx, req)
+	// Call SubscribeGpsRawInt to start the stream, pass ctx for cancellation when user presses Ctrl+C
+	stream, err := mavlinkService.SubscribeGpsRawInt(ctx, req)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error calling SubscribeRawGps: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error calling SubscribeGpsRawInt: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -229,7 +215,7 @@ func subscribeRawGps(
 // renderDashboard
 // Renders a dashboard showing message counts and latest message information.
 // Clears the screen and displays all information in a single update to minimize flicker.
-func renderDashboard(latestHeartbeat *flightpath.SubscribeHeartbeatResponse, latestGpsRawInt *flightpath.SubscribeRawGpsResponse, messageCounts map[string]int) {
+func renderDashboard(latestHeartbeat *flightpath.SubscribeHeartbeatResponse, latestGpsRawInt *flightpath.SubscribeGpsRawIntResponse, messageCounts map[string]int) {
 	var buf strings.Builder
 
 	// Clear screen and move cursor to top

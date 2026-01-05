@@ -95,10 +95,10 @@ func (s *MAVLinkService) SubscribeHeartbeat(
 	return ctx.Err()
 }
 
-// SubscribeRawGps
+// SubscribeGpsRawInt
 // Streams GPS_RAW_INT messages from the MAVLink connection.
 // Each message includes the raw GPS data with system/component IDs.
-func (s *MAVLinkService) SubscribeRawGps(
+func (s *MAVLinkService) SubscribeGpsRawInt(
 	ctx context.Context,
 	req *connect.Request[flightpath.SubscribeGpsRawIntRequest],
 	stream *connect.ServerStream[flightpath.SubscribeGpsRawIntResponse],
