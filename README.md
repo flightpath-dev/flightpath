@@ -80,10 +80,7 @@ go run examples/monitor_heartbeat_flightpath/main.go
 # 1. Turn on the drone
 
 # 2. Run the server with a serial port configuration 
-export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=serial
-export FLIGHTPATH_MAVLINK_SERIAL_DEVICE=/dev/cu.usbserial-D30JAXGS
-export FLIGHTPATH_MAVLINK_SERIAL_BAUD=57600
-go run cmd/server/main.go
+./scripts/run-serial.sh
 
 # 3. Monitor messages from the drone
 go run examples/monitor_heartbeat_flightpath/main.go
@@ -95,9 +92,7 @@ go run examples/monitor_heartbeat_flightpath/main.go
 # 1. Turn on the drone
 
 # 2. Run the server with a UDP configuration
-export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=udp-server
-export FLIGHTPATH_MAVLINK_UDP_ADDRESS=0.0.0.0:14550
-go run cmd/server/main.go
+./scripts/run-udp.sh
 
 # 3. Monitor messages from the drone
 go run examples/monitor_heartbeat_flightpath/main.go
