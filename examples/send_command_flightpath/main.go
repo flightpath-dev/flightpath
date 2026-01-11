@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	"github.com/bluenviron/gomavlib/v3/pkg/dialects/common"
 	"github.com/flightpath-dev/flightpath/gen/go/flightpath"
 	"github.com/flightpath-dev/flightpath/gen/go/flightpath/flightpathconnect"
 	"github.com/flightpath-dev/flightpath/internal/config"
@@ -329,7 +328,7 @@ func sendArmCommand(ctx context.Context, mavlinkService flightpathconnect.MAVLin
 	req := connect.NewRequest(&flightpath.SendCommandRequest{
 		TargetSystemId:    targetSystemID,
 		TargetComponentId: targetComponentID,
-		Command:           uint32(common.MAV_CMD_COMPONENT_ARM_DISARM),
+		Command:           uint32(flightpath.MavCmd_MAV_CMD_COMPONENT_ARM_DISARM),
 		Param1:            1.0, // 1 to arm, 0 to disarm
 		Param2:            0.0, // 0 = normal arming (not force)
 		Param3:            0.0, // Unused
@@ -357,8 +356,8 @@ func sendTakeoffCommand(ctx context.Context, mavlinkService flightpathconnect.MA
 	req := connect.NewRequest(&flightpath.SendCommandRequest{
 		TargetSystemId:    targetSystemID,
 		TargetComponentId: targetComponentID,
-		Command:           uint32(common.MAV_CMD_DO_SET_MODE),
-		Param1:            129.0, // MAV_MODE_FLAG_SAFETY_ARMED (128) | MAV_MODE_FLAG_CUSTOM_MODE_ENABLED (1)
+		Command:           uint32(flightpath.MavCmd_MAV_CMD_DO_SET_MODE),
+		Param1:            float32(uint32(flightpath.MavModeFlag_MAV_MODE_FLAG_SAFETY_ARMED) | uint32(flightpath.MavModeFlag_MAV_MODE_FLAG_CUSTOM_MODE_ENABLED)),
 		Param2:            float32(flightpath.MainMode_MAIN_MODE_AUTO),
 		Param3:            float32(flightpath.SubMode_SUB_MODE_AUTO_TAKEOFF),
 		Param4:            0.0,
@@ -385,8 +384,8 @@ func sendRTLCommand(ctx context.Context, mavlinkService flightpathconnect.MAVLin
 	req := connect.NewRequest(&flightpath.SendCommandRequest{
 		TargetSystemId:    targetSystemID,
 		TargetComponentId: targetComponentID,
-		Command:           uint32(common.MAV_CMD_DO_SET_MODE),
-		Param1:            129.0, // MAV_MODE_FLAG_SAFETY_ARMED (128) | MAV_MODE_FLAG_CUSTOM_MODE_ENABLED (1)
+		Command:           uint32(flightpath.MavCmd_MAV_CMD_DO_SET_MODE),
+		Param1:            float32(uint32(flightpath.MavModeFlag_MAV_MODE_FLAG_SAFETY_ARMED) | uint32(flightpath.MavModeFlag_MAV_MODE_FLAG_CUSTOM_MODE_ENABLED)),
 		Param2:            float32(flightpath.MainMode_MAIN_MODE_AUTO),
 		Param3:            float32(flightpath.SubMode_SUB_MODE_AUTO_RTL),
 		Param4:            0.0,
