@@ -14,6 +14,7 @@ import (
 	"github.com/bluenviron/gomavlib/v3/pkg/dialects/common"
 	"github.com/flightpath-dev/flightpath/gen/go/flightpath/flightpathconnect"
 	"github.com/flightpath-dev/flightpath/internal/config"
+	"github.com/flightpath-dev/flightpath/internal/mavlink"
 	"github.com/flightpath-dev/flightpath/internal/server"
 	"github.com/flightpath-dev/flightpath/internal/services"
 )
@@ -70,7 +71,7 @@ func main() {
 	defer closeNode()
 
 	// Create message receiver, passing it the node, and start it
-	messageReceiver := services.NewMAVLinkMessageReceiver(node)
+	messageReceiver := mavlink.NewMAVLinkMessageReceiver(node)
 	messageReceiver.Start()
 	defer messageReceiver.Stop()
 
@@ -90,7 +91,7 @@ func main() {
 }
 
 // Register all services
-func registerServices(srv *server.Server, node *gomavlib.Node, receiver *services.MAVLinkMessageReceiver) {
+func registerServices(srv *server.Server, node *gomavlib.Node, receiver *mavlink.MAVLinkMessageReceiver) {
 	// Create shared service context
 	ctx := &services.ServiceContext{
 		Config:          srv.Config(),
@@ -106,7 +107,7 @@ func registerServices(srv *server.Server, node *gomavlib.Node, receiver *service
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals
-func handleShutdown(srv *server.Server, receiver *services.MAVLinkMessageReceiver, closeNode func()) {
+func handleShutdown(srv *server.Server, receiver *mavlink.MAVLinkMessageReceiver, closeNode func()) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 

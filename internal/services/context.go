@@ -5,6 +5,7 @@ import (
 
 	"github.com/bluenviron/gomavlib/v3"
 	"github.com/flightpath-dev/flightpath/internal/config"
+	"github.com/flightpath-dev/flightpath/internal/mavlink"
 )
 
 // Holds shared context for all services.
@@ -14,5 +15,5 @@ type ServiceContext struct {
 	Config          *config.Config
 	Logger          *log.Logger
 	Node            *gomavlib.Node
-	MessageReceiver *MAVLinkMessageReceiver
+	MessageReceiver *mavlink.MAVLinkMessageReceiver
 }

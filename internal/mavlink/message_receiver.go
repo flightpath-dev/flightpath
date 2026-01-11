@@ -1,4 +1,4 @@
-package services
+package mavlink
 
 import (
 	"context"
