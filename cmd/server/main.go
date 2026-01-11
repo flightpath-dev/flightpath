@@ -75,11 +75,14 @@ func main() {
 	messageReceiver.Start()
 	defer messageReceiver.Stop()
 
+	// Create command dispatcher
+	commandDispatcher := mavlink.NewMAVLinkCommandDispatcher(node)
+
 	// Create server
 	srv := server.NewServer(cfg)
 
 	// Register services
-	registerServices(srv, node, messageReceiver)
+	registerServices(srv, node, messageReceiver, commandDispatcher)
 
 	// Setup graceful shutdown
 	go handleShutdown(srv, messageReceiver, closeNode)
@@ -91,13 +94,14 @@ func main() {
 }
 
 // Register all services
-func registerServices(srv *server.Server, node *gomavlib.Node, receiver *mavlink.MAVLinkMessageReceiver) {
+func registerServices(srv *server.Server, node *gomavlib.Node, receiver *mavlink.MAVLinkMessageReceiver, commandDispatcher *mavlink.MAVLinkCommandDispatcher) {
 	// Create shared service context
 	ctx := &services.ServiceContext{
-		Config:          srv.Config(),
-		Logger:          srv.Logger(),
-		Node:            node,
-		MessageReceiver: receiver,
+		Config:            srv.Config(),
+		Logger:            srv.Logger(),
+		Node:              node,
+		MessageReceiver:   receiver,
+		CommandDispatcher: commandDispatcher,
 	}
 
 	// MAVLinkService - service to distribute all MAVLink messages

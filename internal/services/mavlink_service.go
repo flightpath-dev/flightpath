@@ -101,6 +101,29 @@ func (s *MAVLinkService) SubscribeMessages(
 	return ctx.Err()
 }
 
+// SendCommand
+// Sends a MAVLink command to the drone.
+func (s *MAVLinkService) SendCommand(
+	ctx context.Context,
+	req *connect.Request[flightpath.SendCommandRequest],
+) (*connect.Response[flightpath.SendCommandResponse], error) {
+	if s.ctx.CommandDispatcher == nil {
+		return nil, connect.NewError(connect.CodeFailedPrecondition, nil)
+	}
+
+	err := s.ctx.CommandDispatcher.SendCommand(req.Msg)
+	if err != nil {
+		return connect.NewResponse(&flightpath.SendCommandResponse{
+			Success:      false,
+			ErrorMessage: err.Error(),
+		}), nil
+	}
+
+	return connect.NewResponse(&flightpath.SendCommandResponse{
+		Success: true,
+	}), nil
+}
+
 // OnMessage
 // Called by the message receiver to distribute messages to all registered streams.
 func (s *MAVLinkService) OnMessage(systemID, componentID uint8, msg interface{}) {

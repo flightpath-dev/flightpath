@@ -15,6 +15,9 @@ import "flightpath/vfr_hud.proto";
 service MAVLinkService {
   // Subscribe to all MAVLink messages (or a filtered subset)
   rpc SubscribeMessages(SubscribeMessagesRequest) returns (stream SubscribeMessagesResponse);
+
+  // Send a MAVLink command to the drone
+  rpc SendCommand(SendCommandRequest) returns (SendCommandResponse);
 }
 
 // MavlinkMessageType identifies the type of MAVLink message
@@ -62,4 +65,34 @@ message SubscribeMessagesResponse {
     ExtendedSysState extended_sys_state = 11;
     StatusText status_text = 12;
   }
+}
+
+// Send a MAVLink command to the drone
+message SendCommandRequest {
+  // Target system ID (typically 1 for autopilot)
+  uint32 target_system_id = 1;
+
+  // Target component ID (typically 1 for autopilot)
+  uint32 target_component_id = 2;
+
+  // MAV_CMD enum value (e.g., 22 for MAV_CMD_NAV_TAKEOFF, 20 for MAV_CMD_NAV_RETURN_TO_LAUNCH)
+  uint32 command = 3;
+
+  // Command parameters (param1 through param7)
+  float param1 = 4;
+  float param2 = 5;
+  float param3 = 6;
+  float param4 = 7;
+  float param5 = 8;
+  float param6 = 9;
+  float param7 = 10;
+}
+
+// Response to a SendCommand request
+message SendCommandResponse {
+  // Whether the command was sent successfully
+  bool success = 1;
+
+  // Error message if the command failed (optional)
+  string error_message = 2;
 }

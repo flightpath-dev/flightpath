@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"sort"
 	"strings"
@@ -171,3 +172,30 @@ func renderDashboard(latestHeartbeat *flightpath.SubscribeHeartbeatResponse, mes
 	// Write everything at once to minimize flicker
 	fmt.Fprint(os.Stdout, buf.String())
 }
+
+// logEvent
+// Logs an event received from the node.
+// This is useful for debugging to see all events including channel open/close, frames, and parse errors.
+func logEvent(evt gomavlib.Event) {
+	switch evt := evt.(type) {
+	case *gomavlib.EventFrame:
+		// msg := evt.Message()
+		// log.Printf("📨 EventFrame: system=%d, component=%d, message_id=%d, message_type=%T\n",
+		// 	evt.SystemID(), evt.ComponentID(), msg.GetID(), msg)
+
+	case *gomavlib.EventParseError:
+		log.Printf("⚠️  EventParseError: %v\n", evt)
+
+	case *gomavlib.EventChannelOpen:
+		log.Printf("✅ EventChannelOpen: %v\n", evt.Channel)
+
+	case *gomavlib.EventChannelClose:
+		log.Printf("🔌 EventChannelClose: %v\n", evt.Channel)
+
+	default:
+		log.Printf("❓ Unknown event type: %T, value: %v\n", evt, evt)
+	}
+}
+
+// Reference to logEvent to prevent "unused function" warning when not called
+var _ func(gomavlib.Event) = logEvent

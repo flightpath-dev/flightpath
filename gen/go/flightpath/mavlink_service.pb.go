@@ -353,6 +353,182 @@ func (*SubscribeMessagesResponse_ExtendedSysState) isSubscribeMessagesResponse_M
 
 func (*SubscribeMessagesResponse_StatusText) isSubscribeMessagesResponse_Message() {}
 
+// Send a MAVLink command to the drone
+type SendCommandRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Target system ID (typically 1 for autopilot)
+	TargetSystemId uint32 `protobuf:"varint,1,opt,name=target_system_id,json=targetSystemId,proto3" json:"target_system_id,omitempty"`
+	// Target component ID (typically 1 for autopilot)
+	TargetComponentId uint32 `protobuf:"varint,2,opt,name=target_component_id,json=targetComponentId,proto3" json:"target_component_id,omitempty"`
+	// MAV_CMD enum value (e.g., 22 for MAV_CMD_NAV_TAKEOFF, 20 for MAV_CMD_NAV_RETURN_TO_LAUNCH)
+	Command uint32 `protobuf:"varint,3,opt,name=command,proto3" json:"command,omitempty"`
+	// Command parameters (param1 through param7)
+	Param1        float32 `protobuf:"fixed32,4,opt,name=param1,proto3" json:"param1,omitempty"`
+	Param2        float32 `protobuf:"fixed32,5,opt,name=param2,proto3" json:"param2,omitempty"`
+	Param3        float32 `protobuf:"fixed32,6,opt,name=param3,proto3" json:"param3,omitempty"`
+	Param4        float32 `protobuf:"fixed32,7,opt,name=param4,proto3" json:"param4,omitempty"`
+	Param5        float32 `protobuf:"fixed32,8,opt,name=param5,proto3" json:"param5,omitempty"`
+	Param6        float32 `protobuf:"fixed32,9,opt,name=param6,proto3" json:"param6,omitempty"`
+	Param7        float32 `protobuf:"fixed32,10,opt,name=param7,proto3" json:"param7,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendCommandRequest) Reset() {
+	*x = SendCommandRequest{}
+	mi := &file_flightpath_mavlink_service_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendCommandRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendCommandRequest) ProtoMessage() {}
+
+func (x *SendCommandRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_flightpath_mavlink_service_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendCommandRequest.ProtoReflect.Descriptor instead.
+func (*SendCommandRequest) Descriptor() ([]byte, []int) {
+	return file_flightpath_mavlink_service_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SendCommandRequest) GetTargetSystemId() uint32 {
+	if x != nil {
+		return x.TargetSystemId
+	}
+	return 0
+}
+
+func (x *SendCommandRequest) GetTargetComponentId() uint32 {
+	if x != nil {
+		return x.TargetComponentId
+	}
+	return 0
+}
+
+func (x *SendCommandRequest) GetCommand() uint32 {
+	if x != nil {
+		return x.Command
+	}
+	return 0
+}
+
+func (x *SendCommandRequest) GetParam1() float32 {
+	if x != nil {
+		return x.Param1
+	}
+	return 0
+}
+
+func (x *SendCommandRequest) GetParam2() float32 {
+	if x != nil {
+		return x.Param2
+	}
+	return 0
+}
+
+func (x *SendCommandRequest) GetParam3() float32 {
+	if x != nil {
+		return x.Param3
+	}
+	return 0
+}
+
+func (x *SendCommandRequest) GetParam4() float32 {
+	if x != nil {
+		return x.Param4
+	}
+	return 0
+}
+
+func (x *SendCommandRequest) GetParam5() float32 {
+	if x != nil {
+		return x.Param5
+	}
+	return 0
+}
+
+func (x *SendCommandRequest) GetParam6() float32 {
+	if x != nil {
+		return x.Param6
+	}
+	return 0
+}
+
+func (x *SendCommandRequest) GetParam7() float32 {
+	if x != nil {
+		return x.Param7
+	}
+	return 0
+}
+
+// Response to a SendCommand request
+type SendCommandResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Whether the command was sent successfully
+	Success bool `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	// Error message if the command failed (optional)
+	ErrorMessage  string `protobuf:"bytes,2,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendCommandResponse) Reset() {
+	*x = SendCommandResponse{}
+	mi := &file_flightpath_mavlink_service_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendCommandResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendCommandResponse) ProtoMessage() {}
+
+func (x *SendCommandResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_flightpath_mavlink_service_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendCommandResponse.ProtoReflect.Descriptor instead.
+func (*SendCommandResponse) Descriptor() ([]byte, []int) {
+	return file_flightpath_mavlink_service_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SendCommandResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SendCommandResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_flightpath_mavlink_service_proto protoreflect.FileDescriptor
 
 const file_flightpath_mavlink_service_proto_rawDesc = "" +
@@ -377,7 +553,22 @@ const file_flightpath_mavlink_service_proto_rawDesc = "" +
 	"\x12extended_sys_state\x18\v \x01(\v2\x1c.flightpath.ExtendedSysStateH\x00R\x10extendedSysState\x129\n" +
 	"\vstatus_text\x18\f \x01(\v2\x16.flightpath.StatusTextH\x00R\n" +
 	"statusTextB\t\n" +
-	"\amessage*\xf2\x02\n" +
+	"\amessage\"\xb0\x02\n" +
+	"\x12SendCommandRequest\x12(\n" +
+	"\x10target_system_id\x18\x01 \x01(\rR\x0etargetSystemId\x12.\n" +
+	"\x13target_component_id\x18\x02 \x01(\rR\x11targetComponentId\x12\x18\n" +
+	"\acommand\x18\x03 \x01(\rR\acommand\x12\x16\n" +
+	"\x06param1\x18\x04 \x01(\x02R\x06param1\x12\x16\n" +
+	"\x06param2\x18\x05 \x01(\x02R\x06param2\x12\x16\n" +
+	"\x06param3\x18\x06 \x01(\x02R\x06param3\x12\x16\n" +
+	"\x06param4\x18\a \x01(\x02R\x06param4\x12\x16\n" +
+	"\x06param5\x18\b \x01(\x02R\x06param5\x12\x16\n" +
+	"\x06param6\x18\t \x01(\x02R\x06param6\x12\x16\n" +
+	"\x06param7\x18\n" +
+	" \x01(\x02R\x06param7\"T\n" +
+	"\x13SendCommandResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
+	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage*\xf2\x02\n" +
 	"\x12MavlinkMessageType\x12$\n" +
 	" MAVLINK_MESSAGE_TYPE_UNSPECIFIED\x10\x00\x12\"\n" +
 	"\x1eMAVLINK_MESSAGE_TYPE_HEARTBEAT\x10\x01\x12#\n" +
@@ -387,9 +578,10 @@ const file_flightpath_mavlink_service_proto_rawDesc = "" +
 	"\x1cMAVLINK_MESSAGE_TYPE_VFR_HUD\x10\x05\x12%\n" +
 	"!MAVLINK_MESSAGE_TYPE_RADIO_STATUS\x10\x06\x12+\n" +
 	"'MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE\x10\a\x12#\n" +
-	"\x1fMAVLINK_MESSAGE_TYPE_STATUSTEXT\x10\b2t\n" +
+	"\x1fMAVLINK_MESSAGE_TYPE_STATUSTEXT\x10\b2\xc4\x01\n" +
 	"\x0eMAVLinkService\x12b\n" +
-	"\x11SubscribeMessages\x12$.flightpath.SubscribeMessagesRequest\x1a%.flightpath.SubscribeMessagesResponse0\x01B\xa5\x01\n" +
+	"\x11SubscribeMessages\x12$.flightpath.SubscribeMessagesRequest\x1a%.flightpath.SubscribeMessagesResponse0\x01\x12N\n" +
+	"\vSendCommand\x12\x1e.flightpath.SendCommandRequest\x1a\x1f.flightpath.SendCommandResponseB\xa5\x01\n" +
 	"\x0ecom.flightpathB\x13MavlinkServiceProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -408,35 +600,39 @@ func file_flightpath_mavlink_service_proto_rawDescGZIP() []byte {
 }
 
 var file_flightpath_mavlink_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_flightpath_mavlink_service_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_flightpath_mavlink_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_flightpath_mavlink_service_proto_goTypes = []any{
 	(MavlinkMessageType)(0),           // 0: flightpath.MavlinkMessageType
 	(*SubscribeMessagesRequest)(nil),  // 1: flightpath.SubscribeMessagesRequest
 	(*SubscribeMessagesResponse)(nil), // 2: flightpath.SubscribeMessagesResponse
-	(*Heartbeat)(nil),                 // 3: flightpath.Heartbeat
-	(*SysStatus)(nil),                 // 4: flightpath.SysStatus
-	(*GpsRawInt)(nil),                 // 5: flightpath.GpsRawInt
-	(*GlobalPositionInt)(nil),         // 6: flightpath.GlobalPositionInt
-	(*VfrHud)(nil),                    // 7: flightpath.VfrHud
-	(*RadioStatus)(nil),               // 8: flightpath.RadioStatus
-	(*ExtendedSysState)(nil),          // 9: flightpath.ExtendedSysState
-	(*StatusText)(nil),                // 10: flightpath.StatusText
+	(*SendCommandRequest)(nil),        // 3: flightpath.SendCommandRequest
+	(*SendCommandResponse)(nil),       // 4: flightpath.SendCommandResponse
+	(*Heartbeat)(nil),                 // 5: flightpath.Heartbeat
+	(*SysStatus)(nil),                 // 6: flightpath.SysStatus
+	(*GpsRawInt)(nil),                 // 7: flightpath.GpsRawInt
+	(*GlobalPositionInt)(nil),         // 8: flightpath.GlobalPositionInt
+	(*VfrHud)(nil),                    // 9: flightpath.VfrHud
+	(*RadioStatus)(nil),               // 10: flightpath.RadioStatus
+	(*ExtendedSysState)(nil),          // 11: flightpath.ExtendedSysState
+	(*StatusText)(nil),                // 12: flightpath.StatusText
 }
 var file_flightpath_mavlink_service_proto_depIdxs = []int32{
 	0,  // 0: flightpath.SubscribeMessagesRequest.message_types:type_name -> flightpath.MavlinkMessageType
 	0,  // 1: flightpath.SubscribeMessagesResponse.message_type:type_name -> flightpath.MavlinkMessageType
-	3,  // 2: flightpath.SubscribeMessagesResponse.heartbeat:type_name -> flightpath.Heartbeat
-	4,  // 3: flightpath.SubscribeMessagesResponse.sys_status:type_name -> flightpath.SysStatus
-	5,  // 4: flightpath.SubscribeMessagesResponse.gps_raw_int:type_name -> flightpath.GpsRawInt
-	6,  // 5: flightpath.SubscribeMessagesResponse.global_position_int:type_name -> flightpath.GlobalPositionInt
-	7,  // 6: flightpath.SubscribeMessagesResponse.vfr_hud:type_name -> flightpath.VfrHud
-	8,  // 7: flightpath.SubscribeMessagesResponse.radio_status:type_name -> flightpath.RadioStatus
-	9,  // 8: flightpath.SubscribeMessagesResponse.extended_sys_state:type_name -> flightpath.ExtendedSysState
-	10, // 9: flightpath.SubscribeMessagesResponse.status_text:type_name -> flightpath.StatusText
+	5,  // 2: flightpath.SubscribeMessagesResponse.heartbeat:type_name -> flightpath.Heartbeat
+	6,  // 3: flightpath.SubscribeMessagesResponse.sys_status:type_name -> flightpath.SysStatus
+	7,  // 4: flightpath.SubscribeMessagesResponse.gps_raw_int:type_name -> flightpath.GpsRawInt
+	8,  // 5: flightpath.SubscribeMessagesResponse.global_position_int:type_name -> flightpath.GlobalPositionInt
+	9,  // 6: flightpath.SubscribeMessagesResponse.vfr_hud:type_name -> flightpath.VfrHud
+	10, // 7: flightpath.SubscribeMessagesResponse.radio_status:type_name -> flightpath.RadioStatus
+	11, // 8: flightpath.SubscribeMessagesResponse.extended_sys_state:type_name -> flightpath.ExtendedSysState
+	12, // 9: flightpath.SubscribeMessagesResponse.status_text:type_name -> flightpath.StatusText
 	1,  // 10: flightpath.MAVLinkService.SubscribeMessages:input_type -> flightpath.SubscribeMessagesRequest
-	2,  // 11: flightpath.MAVLinkService.SubscribeMessages:output_type -> flightpath.SubscribeMessagesResponse
-	11, // [11:12] is the sub-list for method output_type
-	10, // [10:11] is the sub-list for method input_type
+	3,  // 11: flightpath.MAVLinkService.SendCommand:input_type -> flightpath.SendCommandRequest
+	2,  // 12: flightpath.MAVLinkService.SubscribeMessages:output_type -> flightpath.SubscribeMessagesResponse
+	4,  // 13: flightpath.MAVLinkService.SendCommand:output_type -> flightpath.SendCommandResponse
+	12, // [12:14] is the sub-list for method output_type
+	10, // [10:12] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
 	10, // [10:10] is the sub-list for extension extendee
 	0,  // [0:10] is the sub-list for field type_name
@@ -471,7 +667,7 @@ func file_flightpath_mavlink_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_flightpath_mavlink_service_proto_rawDesc), len(file_flightpath_mavlink_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

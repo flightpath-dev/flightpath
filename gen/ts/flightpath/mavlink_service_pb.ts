@@ -26,7 +26,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file flightpath/mavlink_service.proto.
  */
 export const file_flightpath_mavlink_service: GenFile = /*@__PURE__*/
-  fileDesc("CiBmbGlnaHRwYXRoL21hdmxpbmtfc2VydmljZS5wcm90bxIKZmxpZ2h0cGF0aCJRChhTdWJzY3JpYmVNZXNzYWdlc1JlcXVlc3QSNQoNbWVzc2FnZV90eXBlcxgBIAMoDjIeLmZsaWdodHBhdGguTWF2bGlua01lc3NhZ2VUeXBlIqMEChlTdWJzY3JpYmVNZXNzYWdlc1Jlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAxIRCglzeXN0ZW1faWQYAiABKA0SFAoMY29tcG9uZW50X2lkGAMgASgNEjQKDG1lc3NhZ2VfdHlwZRgEIAEoDjIeLmZsaWdodHBhdGguTWF2bGlua01lc3NhZ2VUeXBlEioKCWhlYXJ0YmVhdBgFIAEoCzIVLmZsaWdodHBhdGguSGVhcnRiZWF0SAASKwoKc3lzX3N0YXR1cxgGIAEoCzIVLmZsaWdodHBhdGguU3lzU3RhdHVzSAASLAoLZ3BzX3Jhd19pbnQYByABKAsyFS5mbGlnaHRwYXRoLkdwc1Jhd0ludEgAEjwKE2dsb2JhbF9wb3NpdGlvbl9pbnQYCCABKAsyHS5mbGlnaHRwYXRoLkdsb2JhbFBvc2l0aW9uSW50SAASJQoHdmZyX2h1ZBgJIAEoCzISLmZsaWdodHBhdGguVmZySHVkSAASLwoMcmFkaW9fc3RhdHVzGAogASgLMhcuZmxpZ2h0cGF0aC5SYWRpb1N0YXR1c0gAEjoKEmV4dGVuZGVkX3N5c19zdGF0ZRgLIAEoCzIcLmZsaWdodHBhdGguRXh0ZW5kZWRTeXNTdGF0ZUgAEi0KC3N0YXR1c190ZXh0GAwgASgLMhYuZmxpZ2h0cGF0aC5TdGF0dXNUZXh0SABCCQoHbWVzc2FnZSryAgoSTWF2bGlua01lc3NhZ2VUeXBlEiQKIE1BVkxJTktfTUVTU0FHRV9UWVBFX1VOU1BFQ0lGSUVEEAASIgoeTUFWTElOS19NRVNTQUdFX1RZUEVfSEVBUlRCRUFUEAESIwofTUFWTElOS19NRVNTQUdFX1RZUEVfU1lTX1NUQVRVUxACEiQKIE1BVkxJTktfTUVTU0FHRV9UWVBFX0dQU19SQVdfSU5UEAMSLAooTUFWTElOS19NRVNTQUdFX1RZUEVfR0xPQkFMX1BPU0lUSU9OX0lOVBAEEiAKHE1BVkxJTktfTUVTU0FHRV9UWVBFX1ZGUl9IVUQQBRIlCiFNQVZMSU5LX01FU1NBR0VfVFlQRV9SQURJT19TVEFUVVMQBhIrCidNQVZMSU5LX01FU1NBR0VfVFlQRV9FWFRFTkRFRF9TWVNfU1RBVEUQBxIjCh9NQVZMSU5LX01FU1NBR0VfVFlQRV9TVEFUVVNURVhUEAgydAoOTUFWTGlua1NlcnZpY2USYgoRU3Vic2NyaWJlTWVzc2FnZXMSJC5mbGlnaHRwYXRoLlN1YnNjcmliZU1lc3NhZ2VzUmVxdWVzdBolLmZsaWdodHBhdGguU3Vic2NyaWJlTWVzc2FnZXNSZXNwb25zZTABQm0KDmNvbS5mbGlnaHRwYXRoQhNNYXZsaW5rU2VydmljZVByb3RvUAGiAgNGWFiqAgpGbGlnaHRwYXRoygIKRmxpZ2h0cGF0aOICFkZsaWdodHBhdGhcR1BCTWV0YWRhdGHqAgpGbGlnaHRwYXRoYgZwcm90bzM", [file_flightpath_extended_sys_state, file_flightpath_global_position_int, file_flightpath_gps_raw_int, file_flightpath_heartbeat, file_flightpath_radio_status, file_flightpath_statustext, file_flightpath_sys_status, file_flightpath_vfr_hud]);
+  fileDesc("CiBmbGlnaHRwYXRoL21hdmxpbmtfc2VydmljZS5wcm90bxIKZmxpZ2h0cGF0aCJRChhTdWJzY3JpYmVNZXNzYWdlc1JlcXVlc3QSNQoNbWVzc2FnZV90eXBlcxgBIAMoDjIeLmZsaWdodHBhdGguTWF2bGlua01lc3NhZ2VUeXBlIqMEChlTdWJzY3JpYmVNZXNzYWdlc1Jlc3BvbnNlEhQKDHRpbWVzdGFtcF9tcxgBIAEoAxIRCglzeXN0ZW1faWQYAiABKA0SFAoMY29tcG9uZW50X2lkGAMgASgNEjQKDG1lc3NhZ2VfdHlwZRgEIAEoDjIeLmZsaWdodHBhdGguTWF2bGlua01lc3NhZ2VUeXBlEioKCWhlYXJ0YmVhdBgFIAEoCzIVLmZsaWdodHBhdGguSGVhcnRiZWF0SAASKwoKc3lzX3N0YXR1cxgGIAEoCzIVLmZsaWdodHBhdGguU3lzU3RhdHVzSAASLAoLZ3BzX3Jhd19pbnQYByABKAsyFS5mbGlnaHRwYXRoLkdwc1Jhd0ludEgAEjwKE2dsb2JhbF9wb3NpdGlvbl9pbnQYCCABKAsyHS5mbGlnaHRwYXRoLkdsb2JhbFBvc2l0aW9uSW50SAASJQoHdmZyX2h1ZBgJIAEoCzISLmZsaWdodHBhdGguVmZySHVkSAASLwoMcmFkaW9fc3RhdHVzGAogASgLMhcuZmxpZ2h0cGF0aC5SYWRpb1N0YXR1c0gAEjoKEmV4dGVuZGVkX3N5c19zdGF0ZRgLIAEoCzIcLmZsaWdodHBhdGguRXh0ZW5kZWRTeXNTdGF0ZUgAEi0KC3N0YXR1c190ZXh0GAwgASgLMhYuZmxpZ2h0cGF0aC5TdGF0dXNUZXh0SABCCQoHbWVzc2FnZSLMAQoSU2VuZENvbW1hbmRSZXF1ZXN0EhgKEHRhcmdldF9zeXN0ZW1faWQYASABKA0SGwoTdGFyZ2V0X2NvbXBvbmVudF9pZBgCIAEoDRIPCgdjb21tYW5kGAMgASgNEg4KBnBhcmFtMRgEIAEoAhIOCgZwYXJhbTIYBSABKAISDgoGcGFyYW0zGAYgASgCEg4KBnBhcmFtNBgHIAEoAhIOCgZwYXJhbTUYCCABKAISDgoGcGFyYW02GAkgASgCEg4KBnBhcmFtNxgKIAEoAiI9ChNTZW5kQ29tbWFuZFJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSFQoNZXJyb3JfbWVzc2FnZRgCIAEoCSryAgoSTWF2bGlua01lc3NhZ2VUeXBlEiQKIE1BVkxJTktfTUVTU0FHRV9UWVBFX1VOU1BFQ0lGSUVEEAASIgoeTUFWTElOS19NRVNTQUdFX1RZUEVfSEVBUlRCRUFUEAESIwofTUFWTElOS19NRVNTQUdFX1RZUEVfU1lTX1NUQVRVUxACEiQKIE1BVkxJTktfTUVTU0FHRV9UWVBFX0dQU19SQVdfSU5UEAMSLAooTUFWTElOS19NRVNTQUdFX1RZUEVfR0xPQkFMX1BPU0lUSU9OX0lOVBAEEiAKHE1BVkxJTktfTUVTU0FHRV9UWVBFX1ZGUl9IVUQQBRIlCiFNQVZMSU5LX01FU1NBR0VfVFlQRV9SQURJT19TVEFUVVMQBhIrCidNQVZMSU5LX01FU1NBR0VfVFlQRV9FWFRFTkRFRF9TWVNfU1RBVEUQBxIjCh9NQVZMSU5LX01FU1NBR0VfVFlQRV9TVEFUVVNURVhUEAgyxAEKDk1BVkxpbmtTZXJ2aWNlEmIKEVN1YnNjcmliZU1lc3NhZ2VzEiQuZmxpZ2h0cGF0aC5TdWJzY3JpYmVNZXNzYWdlc1JlcXVlc3QaJS5mbGlnaHRwYXRoLlN1YnNjcmliZU1lc3NhZ2VzUmVzcG9uc2UwARJOCgtTZW5kQ29tbWFuZBIeLmZsaWdodHBhdGguU2VuZENvbW1hbmRSZXF1ZXN0Gh8uZmxpZ2h0cGF0aC5TZW5kQ29tbWFuZFJlc3BvbnNlQm0KDmNvbS5mbGlnaHRwYXRoQhNNYXZsaW5rU2VydmljZVByb3RvUAGiAgNGWFiqAgpGbGlnaHRwYXRoygIKRmxpZ2h0cGF0aOICFkZsaWdodHBhdGhcR1BCTWV0YWRhdGHqAgpGbGlnaHRwYXRoYgZwcm90bzM", [file_flightpath_extended_sys_state, file_flightpath_global_position_int, file_flightpath_gps_raw_int, file_flightpath_heartbeat, file_flightpath_radio_status, file_flightpath_statustext, file_flightpath_sys_status, file_flightpath_vfr_hud]);
 
 /**
  * Subscribe to all messages or a filtered subset
@@ -148,6 +148,106 @@ export const SubscribeMessagesResponseSchema: GenMessage<SubscribeMessagesRespon
   messageDesc(file_flightpath_mavlink_service, 1);
 
 /**
+ * Send a MAVLink command to the drone
+ *
+ * @generated from message flightpath.SendCommandRequest
+ */
+export type SendCommandRequest = Message<"flightpath.SendCommandRequest"> & {
+  /**
+   * Target system ID (typically 1 for autopilot)
+   *
+   * @generated from field: uint32 target_system_id = 1;
+   */
+  targetSystemId: number;
+
+  /**
+   * Target component ID (typically 1 for autopilot)
+   *
+   * @generated from field: uint32 target_component_id = 2;
+   */
+  targetComponentId: number;
+
+  /**
+   * MAV_CMD enum value (e.g., 22 for MAV_CMD_NAV_TAKEOFF, 20 for MAV_CMD_NAV_RETURN_TO_LAUNCH)
+   *
+   * @generated from field: uint32 command = 3;
+   */
+  command: number;
+
+  /**
+   * Command parameters (param1 through param7)
+   *
+   * @generated from field: float param1 = 4;
+   */
+  param1: number;
+
+  /**
+   * @generated from field: float param2 = 5;
+   */
+  param2: number;
+
+  /**
+   * @generated from field: float param3 = 6;
+   */
+  param3: number;
+
+  /**
+   * @generated from field: float param4 = 7;
+   */
+  param4: number;
+
+  /**
+   * @generated from field: float param5 = 8;
+   */
+  param5: number;
+
+  /**
+   * @generated from field: float param6 = 9;
+   */
+  param6: number;
+
+  /**
+   * @generated from field: float param7 = 10;
+   */
+  param7: number;
+};
+
+/**
+ * Describes the message flightpath.SendCommandRequest.
+ * Use `create(SendCommandRequestSchema)` to create a new message.
+ */
+export const SendCommandRequestSchema: GenMessage<SendCommandRequest> = /*@__PURE__*/
+  messageDesc(file_flightpath_mavlink_service, 2);
+
+/**
+ * Response to a SendCommand request
+ *
+ * @generated from message flightpath.SendCommandResponse
+ */
+export type SendCommandResponse = Message<"flightpath.SendCommandResponse"> & {
+  /**
+   * Whether the command was sent successfully
+   *
+   * @generated from field: bool success = 1;
+   */
+  success: boolean;
+
+  /**
+   * Error message if the command failed (optional)
+   *
+   * @generated from field: string error_message = 2;
+   */
+  errorMessage: string;
+};
+
+/**
+ * Describes the message flightpath.SendCommandResponse.
+ * Use `create(SendCommandResponseSchema)` to create a new message.
+ */
+export const SendCommandResponseSchema: GenMessage<SendCommandResponse> = /*@__PURE__*/
+  messageDesc(file_flightpath_mavlink_service, 3);
+
+/**
  * MavlinkMessageType identifies the type of MAVLink message
  *
  * @generated from enum flightpath.MavlinkMessageType
@@ -220,6 +320,16 @@ export const MAVLinkService: GenService<{
     methodKind: "server_streaming";
     input: typeof SubscribeMessagesRequestSchema;
     output: typeof SubscribeMessagesResponseSchema;
+  },
+  /**
+   * Send a MAVLink command to the drone
+   *
+   * @generated from rpc flightpath.MAVLinkService.SendCommand
+   */
+  sendCommand: {
+    methodKind: "unary";
+    input: typeof SendCommandRequestSchema;
+    output: typeof SendCommandResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_flightpath_mavlink_service, 0);

@@ -36,12 +36,17 @@ const (
 	// MAVLinkServiceSubscribeMessagesProcedure is the fully-qualified name of the MAVLinkService's
 	// SubscribeMessages RPC.
 	MAVLinkServiceSubscribeMessagesProcedure = "/flightpath.MAVLinkService/SubscribeMessages"
+	// MAVLinkServiceSendCommandProcedure is the fully-qualified name of the MAVLinkService's
+	// SendCommand RPC.
+	MAVLinkServiceSendCommandProcedure = "/flightpath.MAVLinkService/SendCommand"
 )
 
 // MAVLinkServiceClient is a client for the flightpath.MAVLinkService service.
 type MAVLinkServiceClient interface {
 	// Subscribe to all MAVLink messages (or a filtered subset)
 	SubscribeMessages(context.Context, *connect.Request[flightpath.SubscribeMessagesRequest]) (*connect.ServerStreamForClient[flightpath.SubscribeMessagesResponse], error)
+	// Send a MAVLink command to the drone
+	SendCommand(context.Context, *connect.Request[flightpath.SendCommandRequest]) (*connect.Response[flightpath.SendCommandResponse], error)
 }
 
 // NewMAVLinkServiceClient constructs a client for the flightpath.MAVLinkService service. By
@@ -61,12 +66,19 @@ func NewMAVLinkServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 			connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeMessages")),
 			connect.WithClientOptions(opts...),
 		),
+		sendCommand: connect.NewClient[flightpath.SendCommandRequest, flightpath.SendCommandResponse](
+			httpClient,
+			baseURL+MAVLinkServiceSendCommandProcedure,
+			connect.WithSchema(mAVLinkServiceMethods.ByName("SendCommand")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // mAVLinkServiceClient implements MAVLinkServiceClient.
 type mAVLinkServiceClient struct {
 	subscribeMessages *connect.Client[flightpath.SubscribeMessagesRequest, flightpath.SubscribeMessagesResponse]
+	sendCommand       *connect.Client[flightpath.SendCommandRequest, flightpath.SendCommandResponse]
 }
 
 // SubscribeMessages calls flightpath.MAVLinkService.SubscribeMessages.
@@ -74,10 +86,17 @@ func (c *mAVLinkServiceClient) SubscribeMessages(ctx context.Context, req *conne
 	return c.subscribeMessages.CallServerStream(ctx, req)
 }
 
+// SendCommand calls flightpath.MAVLinkService.SendCommand.
+func (c *mAVLinkServiceClient) SendCommand(ctx context.Context, req *connect.Request[flightpath.SendCommandRequest]) (*connect.Response[flightpath.SendCommandResponse], error) {
+	return c.sendCommand.CallUnary(ctx, req)
+}
+
 // MAVLinkServiceHandler is an implementation of the flightpath.MAVLinkService service.
 type MAVLinkServiceHandler interface {
 	// Subscribe to all MAVLink messages (or a filtered subset)
 	SubscribeMessages(context.Context, *connect.Request[flightpath.SubscribeMessagesRequest], *connect.ServerStream[flightpath.SubscribeMessagesResponse]) error
+	// Send a MAVLink command to the drone
+	SendCommand(context.Context, *connect.Request[flightpath.SendCommandRequest]) (*connect.Response[flightpath.SendCommandResponse], error)
 }
 
 // NewMAVLinkServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -93,10 +112,18 @@ func NewMAVLinkServiceHandler(svc MAVLinkServiceHandler, opts ...connect.Handler
 		connect.WithSchema(mAVLinkServiceMethods.ByName("SubscribeMessages")),
 		connect.WithHandlerOptions(opts...),
 	)
+	mAVLinkServiceSendCommandHandler := connect.NewUnaryHandler(
+		MAVLinkServiceSendCommandProcedure,
+		svc.SendCommand,
+		connect.WithSchema(mAVLinkServiceMethods.ByName("SendCommand")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/flightpath.MAVLinkService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case MAVLinkServiceSubscribeMessagesProcedure:
 			mAVLinkServiceSubscribeMessagesHandler.ServeHTTP(w, r)
+		case MAVLinkServiceSendCommandProcedure:
+			mAVLinkServiceSendCommandHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -108,4 +135,8 @@ type UnimplementedMAVLinkServiceHandler struct{}
 
 func (UnimplementedMAVLinkServiceHandler) SubscribeMessages(context.Context, *connect.Request[flightpath.SubscribeMessagesRequest], *connect.ServerStream[flightpath.SubscribeMessagesResponse]) error {
 	return connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SubscribeMessages is not implemented"))
+}
+
+func (UnimplementedMAVLinkServiceHandler) SendCommand(context.Context, *connect.Request[flightpath.SendCommandRequest]) (*connect.Response[flightpath.SendCommandResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("flightpath.MAVLinkService.SendCommand is not implemented"))
 }
