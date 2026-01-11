@@ -15,12 +15,12 @@ import (
 // ------------------------------------------------------------------------------------------------
 // MAVLinkService implements the gRPC service to distribute MAVLink messages to gRPC subscribers.
 // It is responsible for:
-//   - Receiving MAVLink messages from the message dispatcher
+//   - Receiving MAVLink messages from the message receiver
 //   - Converting them to protobuf
 //   - Distributing them to the appropriate gRPC subscribers
 //
-// MAVLinkService registers multiple message handlers with the message dispatcher so that it can
-// receive messages from it. See MessageDispatcher for more information.
+// MAVLinkService registers multiple message handlers with the message receiver so that it can
+// receive messages from it. See MAVLinkMessageReceiver for more information.
 // ------------------------------------------------------------------------------------------------
 type MAVLinkService struct {
 	flightpathconnect.UnimplementedMAVLinkServiceHandler
@@ -45,16 +45,16 @@ func NewMAVLinkService(ctx *ServiceContext) *MAVLinkService {
 		messagesStreams: make([]*messagesStream, 0),
 	}
 
-	// Register all handlers with dispatcher
-	if ctx.Dispatcher != nil {
-		ctx.Dispatcher.RegisterHandler("common.MessageHeartbeat", service)
-		ctx.Dispatcher.RegisterHandler("common.MessageGpsRawInt", service)
-		ctx.Dispatcher.RegisterHandler("common.MessageSysStatus", service)
-		ctx.Dispatcher.RegisterHandler("common.MessageExtendedSysState", service)
-		ctx.Dispatcher.RegisterHandler("common.MessageStatustext", service)
-		ctx.Dispatcher.RegisterHandler("common.MessageRadioStatus", service)
-		ctx.Dispatcher.RegisterHandler("common.MessageGlobalPositionInt", service)
-		ctx.Dispatcher.RegisterHandler("common.MessageVfrHud", service)
+	// Register all handlers with message receiver
+	if ctx.MessageReceiver != nil {
+		ctx.MessageReceiver.RegisterHandler("common.MessageHeartbeat", service)
+		ctx.MessageReceiver.RegisterHandler("common.MessageGpsRawInt", service)
+		ctx.MessageReceiver.RegisterHandler("common.MessageSysStatus", service)
+		ctx.MessageReceiver.RegisterHandler("common.MessageExtendedSysState", service)
+		ctx.MessageReceiver.RegisterHandler("common.MessageStatustext", service)
+		ctx.MessageReceiver.RegisterHandler("common.MessageRadioStatus", service)
+		ctx.MessageReceiver.RegisterHandler("common.MessageGlobalPositionInt", service)
+		ctx.MessageReceiver.RegisterHandler("common.MessageVfrHud", service)
 	}
 
 	return service
@@ -67,7 +67,7 @@ func (s *MAVLinkService) SubscribeMessages(
 	req *connect.Request[flightpath.SubscribeMessagesRequest],
 	stream *connect.ServerStream[flightpath.SubscribeMessagesResponse],
 ) error {
-	if s.ctx.Dispatcher == nil {
+	if s.ctx.MessageReceiver == nil {
 		return connect.NewError(connect.CodeFailedPrecondition, nil)
 	}
 
@@ -102,7 +102,7 @@ func (s *MAVLinkService) SubscribeMessages(
 }
 
 // OnMessage
-// Called by the dispatcher to distribute messages to all registered streams.
+// Called by the message receiver to distribute messages to all registered streams.
 func (s *MAVLinkService) OnMessage(systemID, componentID uint8, msg interface{}) {
 	switch m := msg.(type) {
 	case *flightpath.Heartbeat:

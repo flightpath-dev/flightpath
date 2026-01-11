@@ -28,26 +28,9 @@ import (
 // The main concept here is that Flightpath is a GCS that multiple clients can connect to.
 // Flightpath creates a MAVLink node to communicate with the drone.
 // The node represents the GCS, communicating with the configured endpoint (serial, UDP, etc.)
-// Flightpath then creates a message dispatcher to route messages to the various services.
+// Flightpath then creates a message receiver to route messages to the various services.
 //
 // See config.Load() function for all the available environment variables.
-//
-//  1. To run the server using the default configuration (MAVLink running as a UDP server on port 14550)
-//     go run cmd/server/main.go
-//
-//  2. Or configure a serial connection via environment variables:
-//     export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=serial
-//     export FLIGHTPATH_MAVLINK_SERIAL_DEVICE=/dev/cu.usbserial-D30JAXGS
-//     export FLIGHTPATH_MAVLINK_SERIAL_BAUD=57600
-//
-//     go run cmd/server/main.go
-//
-//  3. Or configure a UDP server connection via environment variables:
-//     export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=udp-server
-//     export FLIGHTPATH_MAVLINK_UDP_ADDRESS=0.0.0.0:14550
-//
-//     go run cmd/server/main.go
-//
 // ------------------------------------------------------------------------------------------------
 func main() {
 	// Load configuration from environment variables (with sensible defaults)
@@ -86,19 +69,19 @@ func main() {
 	// Ensure node is closed on any exit path
 	defer closeNode()
 
-	// Create message dispatcher, passing it the node, and start it
-	dispatcher := services.NewMessageDispatcher(node)
-	dispatcher.Start()
-	defer dispatcher.Stop()
+	// Create message receiver, passing it the node, and start it
+	messageReceiver := services.NewMAVLinkMessageReceiver(node)
+	messageReceiver.Start()
+	defer messageReceiver.Stop()
 
 	// Create server
 	srv := server.NewServer(cfg)
 
 	// Register services
-	registerServices(srv, node, dispatcher)
+	registerServices(srv, node, messageReceiver)
 
 	// Setup graceful shutdown
-	go handleShutdown(srv, dispatcher, closeNode)
+	go handleShutdown(srv, messageReceiver, closeNode)
 
 	// Start server
 	if err := srv.Start(); err != nil && err != http.ErrServerClosed {
@@ -107,13 +90,13 @@ func main() {
 }
 
 // Register all services
-func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *services.MessageDispatcher) {
+func registerServices(srv *server.Server, node *gomavlib.Node, receiver *services.MAVLinkMessageReceiver) {
 	// Create shared service context
 	ctx := &services.ServiceContext{
-		Config:     srv.Config(),
-		Logger:     srv.Logger(),
-		Node:       node,
-		Dispatcher: dispatcher,
+		Config:          srv.Config(),
+		Logger:          srv.Logger(),
+		Node:            node,
+		MessageReceiver: receiver,
 	}
 
 	// MAVLinkService - service to distribute all MAVLink messages
@@ -123,7 +106,7 @@ func registerServices(srv *server.Server, node *gomavlib.Node, dispatcher *servi
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals
-func handleShutdown(srv *server.Server, dispatcher *services.MessageDispatcher, closeNode func()) {
+func handleShutdown(srv *server.Server, receiver *services.MAVLinkMessageReceiver, closeNode func()) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 
@@ -140,8 +123,8 @@ func handleShutdown(srv *server.Server, dispatcher *services.MessageDispatcher, 
 		srv.Logger().Printf("Error during server shutdown: %v", err)
 	}
 
-	// Stop message dispatcher
-	dispatcher.Stop()
+	// Stop message receiver
+	receiver.Stop()
 
 	// Close MAVLink node (sync.Once ensures this is only called once)
 	closeNode()

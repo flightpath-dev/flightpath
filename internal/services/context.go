@@ -11,8 +11,8 @@ import (
 // This provides a clean way to pass common dependencies (config, logger, etc.)
 // to service constructors without requiring multiple parameters.
 type ServiceContext struct {
-	Config     *config.Config
-	Logger     *log.Logger
-	Node       *gomavlib.Node
-	Dispatcher *MessageDispatcher
+	Config          *config.Config
+	Logger          *log.Logger
+	Node            *gomavlib.Node
+	MessageReceiver *MAVLinkMessageReceiver
 }
