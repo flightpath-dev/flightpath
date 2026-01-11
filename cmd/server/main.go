@@ -25,6 +25,11 @@ import (
 // It loads configuration from environment variables, and connects to the drone on the configured
 // MAVLink endpoint. It then starts the gRPC server, exposing the various services.
 //
+// The main concept here is that Flightpath is a GCS that multiple clients can connect to.
+// Flightpath creates a MAVLink node to communicate with the drone.
+// The node represents the GCS, communicating with the configured endpoint (serial, UDP, etc.)
+// Flightpath then creates a message dispatcher to route messages to the various services.
+//
 // See config.Load() function for all the available environment variables.
 //
 //  1. To run the server using the default configuration (MAVLink running as a UDP server on port 14550)
@@ -52,6 +57,7 @@ func main() {
 	}
 
 	// Initialize MAVLink node
+	// The node represents the Flightpath GCS, communicating with the configured endpoint (serial, UDP, etc.)
 	// We use system ID 254 to coexist with QGroundControl (which uses 255).
 	log.Println("📡 Initializing MAVLink node...")
 	node := &gomavlib.Node{
@@ -80,7 +86,7 @@ func main() {
 	// Ensure node is closed on any exit path
 	defer closeNode()
 
-	// Create message dispatcher and start it
+	// Create message dispatcher, passing it the node, and start it
 	dispatcher := services.NewMessageDispatcher(node)
 	dispatcher.Start()
 	defer dispatcher.Stop()

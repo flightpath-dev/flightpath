@@ -10,8 +10,18 @@ import (
 	"github.com/flightpath-dev/flightpath/gen/go/flightpath/flightpathconnect"
 )
 
-// MAVLinkService implements the gRPC service to distribute all MAVLink messages
-// to gRPC subscribers.
+// ------------------------------------------------------------------------------------------------
+// MAVLinkService
+// ------------------------------------------------------------------------------------------------
+// MAVLinkService implements the gRPC service to distribute MAVLink messages to gRPC subscribers.
+// It is responsible for:
+//   - Receiving MAVLink messages from the message dispatcher
+//   - Converting them to protobuf
+//   - Distributing them to the appropriate gRPC subscribers
+//
+// MAVLinkService registers multiple message handlers with the message dispatcher so that it can
+// receive messages from it. See MessageDispatcher for more information.
+// ------------------------------------------------------------------------------------------------
 type MAVLinkService struct {
 	flightpathconnect.UnimplementedMAVLinkServiceHandler
 	ctx *ServiceContext

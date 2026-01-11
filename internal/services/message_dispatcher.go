@@ -9,17 +9,32 @@ import (
 	"github.com/flightpath-dev/flightpath/internal/mavlink/message_converters"
 )
 
+// ------------------------------------------------------------------------------------------------
 // MessageHandler
-// Interface for services that handle a specific message type.
+// ------------------------------------------------------------------------------------------------
+// An interface for dispatching messages to a service.
+// Services will register handlers with the MessageDispatcher so that they can be called when
+// a message is received.
+// See RegisterHandler for more information.
+// ------------------------------------------------------------------------------------------------
 type MessageHandler interface {
 	// OnMessage is called when a message of the handler's type is received.
 	// The msg parameter will be the protobuf-converted message.
 	OnMessage(systemID, componentID uint8, msg interface{})
 }
 
+// ------------------------------------------------------------------------------------------------
 // MessageDispatcher
-// Central dispatcher that reads from MAVLink node events and routes messages
-// to registered handlers via interface method calls.
+// ------------------------------------------------------------------------------------------------
+// Central dispatcher that reads drone messages and routes them to registered handlers.
+//
+//   - The main app creates it using `NewMessageDispatcher()`, passing it an initialized node.
+//   - `Node` is a MAVLink concept that is used to communicate with a drone on a configured endpoint
+//     (serial, UDP, etc.).
+//   - The dispatcher reads from the node's events and routes messages to the handlers registered
+//     by various services.
+//
+// ------------------------------------------------------------------------------------------------
 type MessageDispatcher struct {
 	node *gomavlib.Node
 
@@ -34,7 +49,7 @@ type MessageDispatcher struct {
 }
 
 // NewMessageDispatcher
-// Creates a new message dispatcher that will start processing events from the node.
+// Creates a new message dispatcher using the provided node.
 func NewMessageDispatcher(node *gomavlib.Node) *MessageDispatcher {
 	ctx, cancel := context.WithCancel(context.Background())
 	return &MessageDispatcher{
@@ -78,6 +93,8 @@ func (d *MessageDispatcher) run() {
 		select {
 		case <-d.ctx.Done():
 			return
+		// This is where the dispatcher reads from the node's events and routes messages to
+		// the handlers registered by various services.
 		case evt, ok := <-d.node.Events():
 			if !ok {
 				// Node events channel closed
