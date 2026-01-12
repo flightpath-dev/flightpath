@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"log"
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/flightpath-dev/flightpath/internal/logger"
 )
 
 // ----------------------------------------------------------------------------
@@ -15,7 +16,7 @@ import (
 // their method, path, status code, duration, bytes written, and cancellation status.
 // The log is written after the handler completes (including canceled requests).
 // ----------------------------------------------------------------------------
-func Logging(logger *log.Logger) func(http.Handler) http.Handler {
+func Logging(logger *logger.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			start := time.Now() // Track request start time for duration calculation
@@ -30,20 +31,18 @@ func Logging(logger *log.Logger) func(http.Handler) http.Handler {
 			duration := time.Since(start)
 
 			// Check if request context was canceled (e.g., client disconnected)
-			canceled := ""
+			attrs := []any{
+				"method", r.Method,
+				"path", r.URL.Path,
+				"status", wrapped.statusCode,
+				"duration", duration,
+				"bytes", wrapped.written,
+			}
 			if r.Context().Err() == context.Canceled {
-				canceled = " [canceled]"
+				attrs = append(attrs, "canceled", true)
 			}
 
-			logger.Printf(
-				"%s %s %d %s %d bytes%s",
-				r.Method,
-				r.URL.Path,
-				wrapped.statusCode,
-				duration,
-				wrapped.written,
-				canceled,
-			)
+			logger.Info("HTTP request", attrs...)
 		})
 	}
 }

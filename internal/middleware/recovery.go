@@ -2,9 +2,10 @@ package middleware
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"runtime/debug"
+
+	"github.com/flightpath-dev/flightpath/internal/logger"
 )
 
 // ----------------------------------------------------------------------------
@@ -22,7 +23,7 @@ import (
 //   - A middleware function that wraps HTTP handlers with panic recovery
 //
 // ----------------------------------------------------------------------------
-func Recovery(logger *log.Logger) func(http.Handler) http.Handler {
+func Recovery(logger *logger.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			// defer ensures this function runs when the surrounding function returns,
@@ -35,7 +36,7 @@ func Recovery(logger *log.Logger) func(http.Handler) http.Handler {
 					// Log the panic value and the full stack trace for debugging.
 					// debug.Stack() returns the current goroutine's stack trace as a byte slice,
 					// which helps identify where the panic occurred in the code.
-					logger.Printf("PANIC: %v\n%s", err, debug.Stack())
+					logger.Error("PANIC in handler", "error", err, "stack", string(debug.Stack()))
 
 					// Send a 500 Internal Server Error status to the client.
 					// This provides a proper HTTP response instead of the connection

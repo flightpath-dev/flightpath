@@ -89,7 +89,7 @@ func TestLoad_CORSOrigins(t *testing.T) {
 	})
 
 	t.Run("multiple origins", func(t *testing.T) {
-		t.Setenv("FLIGHTPATH_GRPC_CORS_ORIGINS", "http://localhost:3000,http://localhost:5173,http://example.com")
+		t.Setenv("FLIGHTPATH_GRPC_CORS_ORIGINS", "http://localhost:3000,http://localhost:4000,http://example.com")
 		t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "")
 
 		cfg, err := Load()
@@ -103,7 +103,7 @@ func TestLoad_CORSOrigins(t *testing.T) {
 	})
 
 	t.Run("origins with whitespace", func(t *testing.T) {
-		t.Setenv("FLIGHTPATH_GRPC_CORS_ORIGINS", " http://localhost:3000 , http://localhost:5173 ")
+		t.Setenv("FLIGHTPATH_GRPC_CORS_ORIGINS", " http://localhost:3000 , http://localhost:4000 ")
 		t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "")
 
 		cfg, err := Load()
@@ -121,7 +121,7 @@ func TestLoad_CORSOrigins(t *testing.T) {
 	})
 
 	t.Run("empty values filtered out", func(t *testing.T) {
-		t.Setenv("FLIGHTPATH_GRPC_CORS_ORIGINS", "http://localhost:3000,,http://localhost:5173,")
+		t.Setenv("FLIGHTPATH_GRPC_CORS_ORIGINS", "http://localhost:3000,,http://localhost:4000,")
 		t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "")
 
 		cfg, err := Load()

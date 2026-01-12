@@ -2,10 +2,10 @@ package server
 
 import (
 	"context"
-	"log"
 	"net/http"
 
 	"github.com/flightpath-dev/flightpath/internal/config"
+	"github.com/flightpath-dev/flightpath/internal/logger"
 	"github.com/flightpath-dev/flightpath/internal/middleware"
 )
 
@@ -16,7 +16,7 @@ type Server struct {
 	httpServer *http.Server
 	mux        *http.ServeMux
 	config     *config.Config
-	logger     *log.Logger
+	logger     *logger.Logger
 }
 
 // NewServer creates a new Server instance
@@ -24,7 +24,7 @@ func NewServer(cfg *config.Config) *Server {
 	return &Server{
 		mux:    http.NewServeMux(),
 		config: cfg,
-		logger: log.New(log.Writer(), "[flightpath] ", log.LstdFlags|log.Lshortfile),
+		logger: logger.New(cfg.LogLevel, cfg.LogFormat).WithPrefix("server"),
 	}
 }
 
@@ -34,13 +34,13 @@ func (s *Server) Config() *config.Config {
 }
 
 // Logger returns the server's logger
-func (s *Server) Logger() *log.Logger {
+func (s *Server) Logger() *logger.Logger {
 	return s.logger
 }
 
 // Registers a service handler
 func (s *Server) RegisterService(path string, handler http.Handler) {
-	s.logger.Printf("Registering service: %s", path)
+	s.logger.Info("Registering service", "path", path)
 	s.mux.Handle(path, handler)
 }
 
@@ -54,8 +54,8 @@ func (s *Server) Start() error {
 		Handler: handler,
 	}
 
-	s.logger.Printf("🚀 Flightpath server starting on %s", addr)
-	s.logger.Printf("📡 Ready to accept Connect protocol requests")
+	s.logger.Info("Flightpath server starting", "address", addr)
+	s.logger.Info("Ready to accept Connect protocol requests")
 
 	return s.httpServer.ListenAndServe()
 }

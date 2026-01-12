@@ -1,10 +1,9 @@
 package services
 
 import (
-	"log"
-
 	"github.com/bluenviron/gomavlib/v3"
 	"github.com/flightpath-dev/flightpath/internal/config"
+	"github.com/flightpath-dev/flightpath/internal/logger"
 	"github.com/flightpath-dev/flightpath/internal/mavlink"
 )
 
@@ -13,7 +12,7 @@ import (
 // to service constructors without requiring multiple parameters.
 type ServiceContext struct {
 	Config            *config.Config
-	Logger            *log.Logger
+	Logger            *logger.Logger
 	Node              *gomavlib.Node
 	MessageReceiver   *mavlink.MAVLinkMessageReceiver
 	CommandDispatcher *mavlink.MAVLinkCommandDispatcher

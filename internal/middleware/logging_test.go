@@ -2,11 +2,13 @@ package middleware
 
 import (
 	"bytes"
-	"log"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/flightpath-dev/flightpath/internal/logger"
 )
 
 func TestLogging_StatusCode(t *testing.T) {
@@ -25,7 +27,8 @@ func TestLogging_StatusCode(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var buf bytes.Buffer
-			logger := log.New(&buf, "", 0)
+			slogHandler := slog.NewTextHandler(&buf, nil)
+			logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 			handler := Logging(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(tt.statusCode)
@@ -46,7 +49,8 @@ func TestLogging_StatusCode(t *testing.T) {
 
 func TestLogging_BytesWritten(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	responseBody := "Hello, World!"
 	handler := Logging(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -59,9 +63,9 @@ func TestLogging_BytesWritten(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	logOutput := buf.String()
-	expectedBytes := "13 bytes" // len("Hello, World!") = 13
-	if !strings.Contains(logOutput, expectedBytes) {
-		t.Errorf("log should contain %q, got: %s", expectedBytes, logOutput)
+	// Structured logging format: bytes=13
+	if !strings.Contains(logOutput, "bytes=13") {
+		t.Errorf("log should contain bytes=13, got: %s", logOutput)
 	}
 }
 
@@ -79,7 +83,8 @@ func TestLogging_MethodAndPath(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.method+" "+tt.path, func(t *testing.T) {
 			var buf bytes.Buffer
-			logger := log.New(&buf, "", 0)
+			slogHandler := slog.NewTextHandler(&buf, nil)
+			logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 			handler := Logging(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusOK)
@@ -103,7 +108,8 @@ func TestLogging_MethodAndPath(t *testing.T) {
 
 func TestLogging_DefaultStatusCode(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	// Handler that writes body without explicitly setting status code
 	handler := Logging(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -124,7 +130,8 @@ func TestLogging_DefaultStatusCode(t *testing.T) {
 
 func TestResponseWriter_Flush(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	handler := Logging(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("First chunk"))
@@ -148,15 +155,16 @@ func TestResponseWriter_Flush(t *testing.T) {
 
 	// Verify bytes written is correct
 	logOutput := buf.String()
-	expectedBytes := "23 bytes" // len("First chunk") + len("Second chunk") = 11 + 12 = 23
-	if !strings.Contains(logOutput, expectedBytes) {
-		t.Errorf("log should contain %q, got: %s", expectedBytes, logOutput)
+	// Structured logging format: bytes=23
+	if !strings.Contains(logOutput, "bytes=23") {
+		t.Errorf("log should contain bytes=23, got: %s", logOutput)
 	}
 }
 
 func TestResponseWriter_MultipleWrites(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	handler := Logging(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("A"))
@@ -170,15 +178,16 @@ func TestResponseWriter_MultipleWrites(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	logOutput := buf.String()
-	expectedBytes := "6 bytes" // 1 + 2 + 3 = 6
-	if !strings.Contains(logOutput, expectedBytes) {
-		t.Errorf("log should contain %q, got: %s", expectedBytes, logOutput)
+	// Structured logging format: bytes=6
+	if !strings.Contains(logOutput, "bytes=6") {
+		t.Errorf("log should contain bytes=6, got: %s", logOutput)
 	}
 }
 
 func TestLogging_DurationLogged(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	handler := Logging(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

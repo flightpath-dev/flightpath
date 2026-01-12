@@ -20,6 +20,8 @@ flightpath/
 │   ├── config/
 │   │   ├── config.go               # Configuration structure
 │   │   └── loader.go               # Configuration loader
+│   ├── logger/                     # Structured logger based on slog
+│   │   └── logger.go
 │   ├── mavlink/                    # Drone side communication code
 │   │   ├── command_dispatcher.go   # Sends commands to drone
 │   │   └── message_receiver.go     # Receives messages from Drone
@@ -86,6 +88,71 @@ go run examples/message_monitor_flightpath/main.go
 
 # 3. Monitor messages from the drone
 go run examples/message_monitor_flightpath/main.go
+```
+
+## Configuration
+
+Flightpath uses environment variables for configuration, following the 12-factor app pattern.
+
+### Server Configuration
+
+- **FLIGHTPATH_GRPC_HOST**: gRPC server host (string, default: "0.0.0.0")
+- **FLIGHTPATH_GRPC_PORT**: gRPC server port (integer, 1-65535, default: 8080)
+- **FLIGHTPATH_GRPC_CORS_ORIGINS**: Comma-separated list of allowed CORS origins (default: "http://localhost:3000")
+
+### MAVLink Configuration
+
+- **FLIGHTPATH_MAVLINK_ENDPOINT_TYPE**: MAVLink endpoint type (string, required, default: `udp-server`)
+  - Valid values: `serial`, `udp-server`, `udp-client`, `tcp-server`, `tcp-client`
+
+#### Serial Endpoint
+
+- **FLIGHTPATH_MAVLINK_SERIAL_DEVICE**: Serial device path (string, required if type is "serial")
+  - Example: `/dev/cu.usbserial-D30JAXGS` (Mac), `/dev/ttyUSB0` (Linux) or `COM3` (Windows)
+- **FLIGHTPATH_MAVLINK_SERIAL_BAUD**: Serial baud rate (integer, required if type is "serial", default: 57600)
+  - Example: `57600`, `115200`
+
+#### UDP Endpoint
+
+- **FLIGHTPATH_MAVLINK_UDP_ADDRESS**: UDP address in "host:port" format (string, required for UDP endpoints, default: "0.0.0.0:14550")
+  - Example: `0.0.0.0:14550` (server) or `127.0.0.1:14550` (client)
+
+#### TCP Endpoint
+
+- **FLIGHTPATH_MAVLINK_TCP_ADDRESS**: TCP address in "host:port" format (string, required for TCP endpoints)
+  - Example: `0.0.0.0:5760` (server) or `127.0.0.1:5760` (client)
+
+### Logging Configuration
+
+- **FLIGHTPATH_LOG_LEVEL**: Log level (string, case-insensitive, default: "INFO")
+  - Valid values: `DEBUG`, `INFO`, `WARN`, `ERROR`
+  - Example: `export FLIGHTPATH_LOG_LEVEL=DEBUG`
+- **FLIGHTPATH_LOG_FORMAT**: Log format (string, case-insensitive, default: "text")
+  - Valid values: `text`, `json`
+  - `text`: Short, human-readable format (e.g., `INFO [main] Starting the server`)
+  - `json`: Structured JSON format for log aggregation tools
+  - Example: `export FLIGHTPATH_LOG_FORMAT=json`
+
+### Example Configuration
+
+```bash
+# Server configuration
+export FLIGHTPATH_GRPC_HOST=0.0.0.0
+export FLIGHTPATH_GRPC_PORT=8080
+export FLIGHTPATH_GRPC_CORS_ORIGINS=http://localhost:3000,http://localhost:4000
+
+# MAVLink serial configuration
+export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=serial
+export FLIGHTPATH_MAVLINK_SERIAL_DEVICE=/dev/cu.usbserial-D30JAXGS
+export FLIGHTPATH_MAVLINK_SERIAL_BAUD=57600
+
+# Or MAVLink UDP configuration
+export FLIGHTPATH_MAVLINK_ENDPOINT_TYPE=udp-server
+export FLIGHTPATH_MAVLINK_UDP_ADDRESS=0.0.0.0:14550
+
+# Logging configuration
+export FLIGHTPATH_LOG_LEVEL=WARN
+export FLIGHTPATH_LOG_FORMAT=text
 ```
 
 ## Testing

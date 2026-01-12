@@ -5,6 +5,7 @@
         "bitfield",
         "bluenviron",
         "connectrpc",
+        "D30JAXGS",
         "dylib",
         "flightpathconnect",
         "gomavlib",
@@ -22,6 +23,7 @@
         "rssi",
         "SITL",
         "statustext",
+        "usbserial",
         "vite"
     ]
 }
