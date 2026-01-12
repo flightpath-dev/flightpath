@@ -11,7 +11,7 @@ import "flightpath/statustext.proto";
 import "flightpath/sys_status.proto";
 import "flightpath/vfr_hud.proto";
 
-// MAVLinkService handles all MAVLink messages
+// MAVLinkService handles commands and messages from the gRPC clients
 service MAVLinkService {
   // Subscribe to all MAVLink messages (or a filtered subset)
   rpc SubscribeMessages(SubscribeMessagesRequest) returns (stream SubscribeMessagesResponse);

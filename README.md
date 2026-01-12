@@ -13,22 +13,16 @@ flightpath/
 │   └── server/
 │       └── main.go                 # Server entry point
 ├── examples/                       # API usage examples
-│   └── message_monitor.go
-├── gen/                            # Generated files
-│   ├── go/flightpath
-│   |   ├── action_pb.go
-│   |   ├── connection_pb.go
-│   |   └── telemetry_pb.go
-│   └── ts/flightpath
-│       ├── action_pb.go
-│       ├── connection_pb.go
-│       └── telemetry_pb.go
+├── gen/                            # Generated gRPC code
+│   ├── go/
+│   └── ts/
 ├── internal/
 │   ├── config/
 │   │   ├── config.go               # Configuration structure
 │   │   └── loader.go               # Configuration loader
 │   ├── mavlink/
-│   │   └── mavlink_connector.go    # Drone interface using MAVLink
+│   │   ├── command_dispatcher.go   # Send commands to drone
+│   │   └── message_receiver.go     # Receives messages from Drone
 │   ├── middleware/
 │   │   ├── cors.go                 # CORS middleware
 │   │   ├── logging.go              # Request logging
@@ -37,14 +31,10 @@ flightpath/
 │   │   └── server.go               # Represents the flightpath server
 │   └── services/
 │       ├── context.go              # Shared context for all services (config, logger, etc.)
-│       ├── action.go               # Handles drone actions
-│       ├── connection.go           # Handles drone connection
-│       └── telemetry.go            # Handles drone telemetry
+│       └── mavlink_service.go      # Distributes MAVLink messages to gRPC subscribers
 ├── proto/
 │   └── flightpath/
-│       ├── action.proto            # Drone actions
-│       ├── connection.proto        # Drone connection
-│       └── telemetry.proto         # Drone telemetry
+│       └── mavlink_service.proto   # handles commands and messages from the gRPC clients
 ├── go.mod
 └── go.sum
 ```
