@@ -73,6 +73,8 @@ func main() {
 	// Create message receiver, passing it the node, and start it
 	messageReceiver := mavlink.NewMAVLinkMessageReceiver(node)
 	messageReceiver.Start()
+
+	// Ensure message receiver is stopped on any exit path
 	defer messageReceiver.Stop()
 
 	// Create command dispatcher
@@ -85,7 +87,7 @@ func main() {
 	registerServices(srv, node, messageReceiver, commandDispatcher)
 
 	// Setup graceful shutdown
-	go handleShutdown(srv, messageReceiver, closeNode)
+	go handleShutdown(srv)
 
 	// Start server
 	if err := srv.Start(); err != nil && err != http.ErrServerClosed {
@@ -111,7 +113,8 @@ func registerServices(srv *server.Server, node *gomavlib.Node, receiver *mavlink
 }
 
 // handleShutdown handles graceful shutdown on interrupt signals
-func handleShutdown(srv *server.Server, receiver *mavlink.MAVLinkMessageReceiver, closeNode func()) {
+// Cleanup will happen via defer statements in main(), so we don't call cleanup here
+func handleShutdown(srv *server.Server) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 
@@ -128,12 +131,6 @@ func handleShutdown(srv *server.Server, receiver *mavlink.MAVLinkMessageReceiver
 		srv.Logger().Printf("Error during server shutdown: %v", err)
 	}
 
-	// Stop message receiver
-	receiver.Stop()
-
-	// Close MAVLink node (sync.Once ensures this is only called once)
-	closeNode()
-
-	srv.Logger().Println("✅ Cleanup complete")
-	os.Exit(0)
+	// Cleanup will happen via defer statements in main()
+	srv.Logger().Println("✅ Shutdown initiated")
 }
