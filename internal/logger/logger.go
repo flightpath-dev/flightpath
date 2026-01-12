@@ -33,7 +33,8 @@ const (
 	LogLevelError
 )
 
-// toSlogLevel converts LogLevel to slog.Level
+// toSlogLevel
+// Converts LogLevel to slog.Level.
 func (l LogLevel) toSlogLevel() slog.Level {
 	switch l {
 	case LogLevelDebug:
@@ -54,8 +55,44 @@ type Logger struct {
 	*slog.Logger
 }
 
-// shortTextHandler is a custom handler that produces short, human-readable log lines
+// New
+// Creates a new structured logger with the specified level and format.
+// Log level and format are required parameters.
+func New(level LogLevel, format LogFormat) *Logger {
+	opts := &slog.HandlerOptions{
+		Level: level.toSlogLevel(),
+	}
+
+	var handler slog.Handler
+	switch format {
+	case LogFormatJSON:
+		// Use slog's built-in JSON handler
+		handler = slog.NewJSONHandler(os.Stderr, opts)
+	case LogFormatText:
+		fallthrough
+	default:
+		// Use custom short text handler
+		handler = newShortTextHandler(os.Stderr, opts)
+	}
+
+	return &Logger{
+		Logger: slog.New(handler),
+	}
+}
+
+// WithPrefix
+// Creates a new logger with a prefix attribute.
+func (l *Logger) WithPrefix(prefix string) *Logger {
+	return &Logger{
+		Logger: l.Logger.With(slog.String("component", prefix)),
+	}
+}
+
+// ----------------------------------------------------------------------------
+// shortTextHandler (internal)
+// Implements slog.Handler interface to produce short, human-readable log lines.
 // Format: LEVEL [component] message [key=value ...]
+// ----------------------------------------------------------------------------
 type shortTextHandler struct {
 	w         io.Writer
 	opts      slog.HandlerOptions
@@ -129,6 +166,30 @@ func (h *shortTextHandler) Handle(ctx context.Context, r slog.Record) error {
 	return err
 }
 
+func (h *shortTextHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+	// Create a new handler with additional attributes
+	newHandler := &shortTextHandler{
+		w:         h.w,
+		opts:      h.opts,
+		level:     h.level,
+		attrs:     append(append([]slog.Attr{}, h.attrs...), attrs...),
+		groupName: h.groupName,
+	}
+	return newHandler
+}
+
+func (h *shortTextHandler) WithGroup(name string) slog.Handler {
+	// Groups are not used in our short format, but we need to track the name
+	newHandler := &shortTextHandler{
+		w:         h.w,
+		opts:      h.opts,
+		level:     h.level,
+		attrs:     h.attrs,
+		groupName: name,
+	}
+	return newHandler
+}
+
 func formatAttr(a slog.Attr) string {
 	switch a.Value.Kind() {
 	case slog.KindString:
@@ -150,57 +211,4 @@ func formatAttr(a slog.Attr) string {
 	}
 }
 
-func (h *shortTextHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
-	// Create a new handler with additional attributes
-	newHandler := &shortTextHandler{
-		w:         h.w,
-		opts:      h.opts,
-		level:     h.level,
-		attrs:     append(h.attrs, attrs...),
-		groupName: h.groupName,
-	}
-	return newHandler
-}
-
-func (h *shortTextHandler) WithGroup(name string) slog.Handler {
-	// Groups are not used in our short format, but we need to track the name
-	newHandler := &shortTextHandler{
-		w:         h.w,
-		opts:      h.opts,
-		level:     h.level,
-		attrs:     h.attrs,
-		groupName: name,
-	}
-	return newHandler
-}
-
-// New creates a new structured logger with the specified level and format.
-// Log level and format are required parameters.
-func New(level LogLevel, format LogFormat) *Logger {
-	opts := &slog.HandlerOptions{
-		Level: level.toSlogLevel(),
-	}
-
-	var handler slog.Handler
-	switch format {
-	case LogFormatJSON:
-		// Use slog's built-in JSON handler
-		handler = slog.NewJSONHandler(os.Stderr, opts)
-	case LogFormatText:
-		fallthrough
-	default:
-		// Use custom short text handler
-		handler = newShortTextHandler(os.Stderr, opts)
-	}
-
-	return &Logger{
-		Logger: slog.New(handler),
-	}
-}
-
-// WithPrefix creates a new logger with a prefix attribute
-func (l *Logger) WithPrefix(prefix string) *Logger {
-	return &Logger{
-		Logger: l.Logger.With(slog.String("component", prefix)),
-	}
-}
+// ----------------------------------------------------------------------------
