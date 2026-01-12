@@ -61,7 +61,7 @@ Start a PX4 SITL by following the instructions in [PX4 SITL Setup](docs/px4-sitl
 go run cmd/server/main.go
 
 # 2. Monitor messages from the SITL
-go run examples/monitor_heartbeat_flightpath/main.go
+go run examples/message_monitor_flightpath/main.go
 ```
 
 ### Run with a drone connected to a serial port
@@ -73,7 +73,7 @@ go run examples/monitor_heartbeat_flightpath/main.go
 ./scripts/run-serial.sh
 
 # 3. Monitor messages from the drone
-go run examples/monitor_heartbeat_flightpath/main.go
+go run examples/message_monitor_flightpath/main.go
 ```
 
 ### Run with a drone connected over a UDP port
@@ -85,7 +85,27 @@ go run examples/monitor_heartbeat_flightpath/main.go
 ./scripts/run-udp.sh
 
 # 3. Monitor messages from the drone
-go run examples/monitor_heartbeat_flightpath/main.go
+go run examples/message_monitor_flightpath/main.go
+```
+
+## Testing
+
+Run all tests:
+
+```bash
+go test ./...
+```
+
+Run tests with coverage:
+
+```bash
+go test -cover ./...
+```
+
+Run tests with verbose output:
+
+```bash
+go test -v ./...
 ```
 
 ## License
