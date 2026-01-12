@@ -132,114 +132,63 @@ func (r *MAVLinkMessageReceiver) run() {
 	}
 }
 
-// dispatchHeartbeat
-// Converts a HEARTBEAT message to protobuf and dispatches it to the registered handler.
-func (r *MAVLinkMessageReceiver) dispatchHeartbeat(systemID, componentID uint8, msg *common.MessageHeartbeat) {
-	pbHeartbeat := message_converters.HeartbeatToProtobuf(msg)
-
+// dispatch
+// Generic helper that looks up and invokes the handler for a message type.
+// Handles mutex locking and nil handler checks in a single place.
+func (r *MAVLinkMessageReceiver) dispatch(handlerKey string, systemID, componentID uint8, pbMsg interface{}) {
 	r.mu.RLock()
-	handler := r.handlers["common.MessageHeartbeat"]
+	handler := r.handlers[handlerKey]
 	r.mu.RUnlock()
 
 	if handler != nil {
-		handler.OnMessage(systemID, componentID, pbHeartbeat)
+		handler.OnMessage(systemID, componentID, pbMsg)
 	}
+}
+
+// dispatchHeartbeat
+// Converts a HEARTBEAT message to protobuf and dispatches it to the registered handler.
+func (r *MAVLinkMessageReceiver) dispatchHeartbeat(systemID, componentID uint8, msg *common.MessageHeartbeat) {
+	r.dispatch("common.MessageHeartbeat", systemID, componentID, message_converters.HeartbeatToProtobuf(msg))
 }
 
 // dispatchGpsRawInt
 // Converts a GPS_RAW_INT message to protobuf and dispatches it to the registered handler.
 func (r *MAVLinkMessageReceiver) dispatchGpsRawInt(systemID, componentID uint8, msg *common.MessageGpsRawInt) {
-	pbGpsRawInt := message_converters.GpsRawIntToProtobuf(msg)
-
-	r.mu.RLock()
-	handler := r.handlers["common.MessageGpsRawInt"]
-	r.mu.RUnlock()
-
-	if handler != nil {
-		handler.OnMessage(systemID, componentID, pbGpsRawInt)
-	}
+	r.dispatch("common.MessageGpsRawInt", systemID, componentID, message_converters.GpsRawIntToProtobuf(msg))
 }
 
 // dispatchSysStatus
 // Converts a SYS_STATUS message to protobuf and dispatches it to the registered handler.
 func (r *MAVLinkMessageReceiver) dispatchSysStatus(systemID, componentID uint8, msg *common.MessageSysStatus) {
-	pbSysStatus := message_converters.SysStatusToProtobuf(msg)
-
-	r.mu.RLock()
-	handler := r.handlers["common.MessageSysStatus"]
-	r.mu.RUnlock()
-
-	if handler != nil {
-		handler.OnMessage(systemID, componentID, pbSysStatus)
-	}
+	r.dispatch("common.MessageSysStatus", systemID, componentID, message_converters.SysStatusToProtobuf(msg))
 }
 
 // dispatchExtendedSysState
 // Converts an EXTENDED_SYS_STATE message to protobuf and dispatches it to the registered handler.
 func (r *MAVLinkMessageReceiver) dispatchExtendedSysState(systemID, componentID uint8, msg *common.MessageExtendedSysState) {
-	pbExtendedSysState := message_converters.ExtendedSysStateToProtobuf(msg)
-
-	r.mu.RLock()
-	handler := r.handlers["common.MessageExtendedSysState"]
-	r.mu.RUnlock()
-
-	if handler != nil {
-		handler.OnMessage(systemID, componentID, pbExtendedSysState)
-	}
+	r.dispatch("common.MessageExtendedSysState", systemID, componentID, message_converters.ExtendedSysStateToProtobuf(msg))
 }
 
 // dispatchStatusText
 // Converts a STATUSTEXT message to protobuf and dispatches it to the registered handler.
 func (r *MAVLinkMessageReceiver) dispatchStatusText(systemID, componentID uint8, msg *common.MessageStatustext) {
-	pbStatusText := message_converters.StatusTextToProtobuf(msg)
-
-	r.mu.RLock()
-	handler := r.handlers["common.MessageStatustext"]
-	r.mu.RUnlock()
-
-	if handler != nil {
-		handler.OnMessage(systemID, componentID, pbStatusText)
-	}
+	r.dispatch("common.MessageStatustext", systemID, componentID, message_converters.StatusTextToProtobuf(msg))
 }
 
 // dispatchRadioStatus
 // Converts a RADIO_STATUS message to protobuf and dispatches it to the registered handler.
 func (r *MAVLinkMessageReceiver) dispatchRadioStatus(systemID, componentID uint8, msg *common.MessageRadioStatus) {
-	pbRadioStatus := message_converters.RadioStatusToProtobuf(msg)
-
-	r.mu.RLock()
-	handler := r.handlers["common.MessageRadioStatus"]
-	r.mu.RUnlock()
-
-	if handler != nil {
-		handler.OnMessage(systemID, componentID, pbRadioStatus)
-	}
+	r.dispatch("common.MessageRadioStatus", systemID, componentID, message_converters.RadioStatusToProtobuf(msg))
 }
 
 // dispatchGlobalPositionInt
 // Converts a GLOBAL_POSITION_INT message to protobuf and dispatches it to the registered handler.
 func (r *MAVLinkMessageReceiver) dispatchGlobalPositionInt(systemID, componentID uint8, msg *common.MessageGlobalPositionInt) {
-	pbGlobalPositionInt := message_converters.GlobalPositionIntToProtobuf(msg)
-
-	r.mu.RLock()
-	handler := r.handlers["common.MessageGlobalPositionInt"]
-	r.mu.RUnlock()
-
-	if handler != nil {
-		handler.OnMessage(systemID, componentID, pbGlobalPositionInt)
-	}
+	r.dispatch("common.MessageGlobalPositionInt", systemID, componentID, message_converters.GlobalPositionIntToProtobuf(msg))
 }
 
 // dispatchVfrHud
 // Converts a VFR_HUD message to protobuf and dispatches it to the registered handler.
 func (r *MAVLinkMessageReceiver) dispatchVfrHud(systemID, componentID uint8, msg *common.MessageVfrHud) {
-	pbVfrHud := message_converters.VfrHudToProtobuf(msg)
-
-	r.mu.RLock()
-	handler := r.handlers["common.MessageVfrHud"]
-	r.mu.RUnlock()
-
-	if handler != nil {
-		handler.OnMessage(systemID, componentID, pbVfrHud)
-	}
+	r.dispatch("common.MessageVfrHud", systemID, componentID, message_converters.VfrHudToProtobuf(msg))
 }
