@@ -205,8 +205,8 @@ func GpsFixTypeToProtobuf(fixType common.GPS_FIX_TYPE) flightpath.GpsFixType {
 // Note: Direct cast assumes MAVLink enum values match protobuf enum values.
 // If values don't match, explicit mapping may be needed.
 func MavAutopilotToProtobuf(autopilot common.MAV_AUTOPILOT) flightpath.MavAutopilot {
-	// Direct mapping: MAVLink enum values should match protobuf enum values
-	// MAV_AUTOPILOT_PX4 = 13 in both MAVLink and protobuf
+	// Direct mapping: MAVLink enum values match protobuf enum values
+	// e.g., MAV_AUTOPILOT_PX4 = 12 in both MAVLink and protobuf
 	return flightpath.MavAutopilot(autopilot)
 }
 
@@ -224,8 +224,8 @@ func MavStateToProtobuf(state common.MAV_STATE) flightpath.MavState {
 // Note: Direct cast assumes MAVLink enum values match protobuf enum values.
 // If values don't match, explicit mapping may be needed.
 func MavTypeToProtobuf(mavType common.MAV_TYPE) flightpath.MavType {
-	// Direct mapping: MAVLink enum values should match protobuf enum values
-	// MAV_TYPE_QUADROTOR = 3 in both MAVLink and protobuf
+	// Direct mapping: MAVLink enum values match protobuf enum values
+	// e.g., MAV_TYPE_QUADROTOR = 2 in both MAVLink and protobuf
 	return flightpath.MavType(mavType)
 }
 
