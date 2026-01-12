@@ -14,6 +14,7 @@ import (
 	"github.com/bluenviron/gomavlib/v3/pkg/dialects/common"
 	"github.com/flightpath-dev/flightpath/gen/go/flightpath/flightpathconnect"
 	"github.com/flightpath-dev/flightpath/internal/config"
+	"github.com/flightpath-dev/flightpath/internal/logger"
 	"github.com/flightpath-dev/flightpath/internal/mavlink"
 	"github.com/flightpath-dev/flightpath/internal/server"
 	"github.com/flightpath-dev/flightpath/internal/services"
@@ -40,10 +41,13 @@ func main() {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
 
+	// Create structured logger with log level and format from config
+	appLogger := logger.New(cfg.LogLevel, cfg.LogFormat).WithPrefix("main")
+
 	// Initialize MAVLink node
 	// The node represents the Flightpath GCS, communicating with the configured endpoint (serial, UDP, etc.)
 	// We use system ID 254 to coexist with QGroundControl (which uses 255).
-	log.Println("📡 Initializing MAVLink node...")
+	appLogger.Info("Initializing MAVLink node")
 	node := &gomavlib.Node{
 		Endpoints:   []gomavlib.EndpointConf{cfg.MAVLink.Endpoint},
 		Dialect:     common.Dialect,
@@ -52,15 +56,16 @@ func main() {
 	}
 	err = node.Initialize()
 	if err != nil {
+		appLogger.Error("Failed to initialize MAVLink node", "error", err)
 		log.Fatalf("Failed to initialize MAVLink node: %v", err)
 	}
-	log.Println("✅ MAVLink node initialized successfully")
+	appLogger.Info("MAVLink node initialized successfully")
 
 	// Use sync.Once to ensure node is closed exactly once
 	var nodeCloseOnce sync.Once
 	closeNode := func() {
 		nodeCloseOnce.Do(func() {
-			log.Println("🔌 Closing MAVLink node...")
+			appLogger.Info("Closing MAVLink node")
 			if node != nil {
 				node.Close()
 			}
@@ -91,7 +96,8 @@ func main() {
 
 	// Start server
 	if err := srv.Start(); err != nil && err != http.ErrServerClosed {
-		srv.Logger().Fatalf("Server error: %v", err)
+		srv.Logger().Error("Server error", "error", err)
+		log.Fatalf("Server error: %v", err)
 	}
 }
 
@@ -120,7 +126,7 @@ func handleShutdown(srv *server.Server) {
 
 	<-sigChan
 
-	srv.Logger().Println("🛑 Shutting down server gracefully...")
+	srv.Logger().Info("Shutting down server gracefully")
 
 	// Create a context with timeout for graceful shutdown
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -128,9 +134,9 @@ func handleShutdown(srv *server.Server) {
 
 	// Shutdown the server
 	if err := srv.Shutdown(ctx); err != nil {
-		srv.Logger().Printf("Error during server shutdown: %v", err)
+		srv.Logger().Error("Error during server shutdown", "error", err)
 	}
 
 	// Cleanup will happen via defer statements in main()
-	srv.Logger().Println("✅ Shutdown initiated")
+	srv.Logger().Info("Shutdown initiated")
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bluenviron/gomavlib/v3"
+	"github.com/flightpath-dev/flightpath/internal/logger"
 )
 
 // Config holds all application configuration.
@@ -20,15 +21,17 @@ import (
 // Environment Variable Naming:
 // All environment variables are prefixed with FLIGHTPATH_ to avoid conflicts.
 // Examples:
-//   - FLIGHTPATH_GRPC_PORT: gRPC server port (default: 8080)
 //   - FLIGHTPATH_GRPC_HOST: gRPC server host (default: 0.0.0.0)
-//   - FLIGHTPATH_GRPC_CORS_ORIGINS: Comma-separated CORS origins (default: localhost:5173,localhost:3000)
+//   - FLIGHTPATH_GRPC_PORT: gRPC server port (default: 8080)
+//   - FLIGHTPATH_GRPC_CORS_ORIGINS: Comma-separated CORS origins (default: localhost:3000)
 //
 // This follows the convention over configuration principle: sensible defaults
 // with optional overrides for production environments.
 type Config struct {
-	Server  ServerConfig
-	MAVLink MAVLinkConfig
+	Server    ServerConfig
+	MAVLink   MAVLinkConfig
+	LogLevel  logger.LogLevel  // Log level enum (default: LogLevelInfo)
+	LogFormat logger.LogFormat // Log format enum (default: LogFormatText)
 }
 
 // ServerConfig holds server-related configuration
@@ -67,6 +70,8 @@ func Default() *Config {
 			// Default to UDP server on port 14550 (standard PX4 SITL port)
 			Endpoint: gomavlib.EndpointUDPServer{Address: "0.0.0.0:14550"},
 		},
+		LogLevel:  logger.LogLevelInfo,
+		LogFormat: logger.LogFormatText,
 	}
 }
 

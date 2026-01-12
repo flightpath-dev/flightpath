@@ -2,13 +2,49 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
 
 	"github.com/bluenviron/gomavlib/v3"
+	"github.com/flightpath-dev/flightpath/internal/logger"
 )
+
+// parseLogLevel
+// Parses log level string to LogLevel enum.
+// Valid values: DEBUG, INFO, WARN, ERROR (case-insensitive)
+// Defaults to LogLevelInfo if invalid value.
+func parseLogLevel(levelStr string) logger.LogLevel {
+	levelStr = strings.ToUpper(levelStr)
+	switch levelStr {
+	case "DEBUG":
+		return logger.LogLevelDebug
+	case "INFO":
+		return logger.LogLevelInfo
+	case "WARN":
+		return logger.LogLevelWarn
+	case "ERROR":
+		return logger.LogLevelError
+	default:
+		return logger.LogLevelInfo
+	}
+}
+
+// parseLogFormat
+// Parses log format string to LogFormat enum.
+// Valid values: text, json (case-insensitive)
+// Defaults to LogFormatText if invalid value.
+func parseLogFormat(formatStr string) logger.LogFormat {
+	formatStr = strings.ToLower(formatStr)
+	switch formatStr {
+	case "json":
+		return logger.LogFormatJSON
+	case "text":
+		fallthrough
+	default:
+		return logger.LogFormatText
+	}
+}
 
 // Load loads configuration from environment variables, falling back to defaults
 // for any missing values. This implements the 12-factor app configuration pattern.
@@ -27,6 +63,8 @@ import (
 //   - FLIGHTPATH_MAVLINK_SERIAL_BAUD: Serial baud rate (default: 57600, required if type is "serial")
 //   - FLIGHTPATH_MAVLINK_UDP_ADDRESS: UDP address in "host:port" format (default: "0.0.0.0:14550")
 //   - FLIGHTPATH_MAVLINK_TCP_ADDRESS: TCP address in "host:port" format (required if type is "tcp-server" or "tcp-client")
+//   - FLIGHTPATH_LOG_LEVEL: Log level (string, case-insensitive, default: "INFO")
+//   - FLIGHTPATH_LOG_FORMAT: Log format (string, case-insensitive, default: "text")
 //
 // Example usage:
 //
@@ -56,6 +94,16 @@ func Load() (*Config, error) {
 				cfg.Server.CORSOrigins = append(cfg.Server.CORSOrigins, trimmed)
 			}
 		}
+	}
+
+	// Load log level from environment variable
+	if logLevel := os.Getenv("FLIGHTPATH_LOG_LEVEL"); logLevel != "" {
+		cfg.LogLevel = parseLogLevel(logLevel)
+	}
+
+	// Load log format from environment variable
+	if logFormat := os.Getenv("FLIGHTPATH_LOG_FORMAT"); logFormat != "" {
+		cfg.LogFormat = parseLogFormat(logFormat)
 	}
 
 	// Load MAVLink configuration from environment variables
@@ -152,31 +200,65 @@ func loadMAVLinkConfig(cfg *Config) error {
 // Logs the loaded configuration for debugging and transparency.
 // Shows server configuration and MAVLink endpoint details.
 func logConfig(cfg *Config) {
-	log.Println("=== Configuration ===")
-	log.Printf("Server: %s:%d", cfg.Server.Host, cfg.Server.Port)
+	configLogger := logger.New(cfg.LogLevel, cfg.LogFormat).WithPrefix("config")
+
+	// Convert log level to string for logging
+	logLevelStr := "INFO"
+	switch cfg.LogLevel {
+	case logger.LogLevelDebug:
+		logLevelStr = "DEBUG"
+	case logger.LogLevelInfo:
+		logLevelStr = "INFO"
+	case logger.LogLevelWarn:
+		logLevelStr = "WARN"
+	case logger.LogLevelError:
+		logLevelStr = "ERROR"
+	}
+
+	configLogger.Info("Configuration loaded",
+		"server_host", cfg.Server.Host,
+		"server_port", cfg.Server.Port,
+		"log_level", logLevelStr,
+	)
+
 	if len(cfg.Server.CORSOrigins) > 0 {
-		log.Printf("CORS Origins: %s", strings.Join(cfg.Server.CORSOrigins, ", "))
+		configLogger.Info("CORS origins configured", "origins", strings.Join(cfg.Server.CORSOrigins, ", "))
 	}
 
 	if cfg.MAVLink.Endpoint == nil {
-		log.Println("MAVLink: Not configured")
+		configLogger.Info("MAVLink endpoint not configured")
 		return
 	}
 
 	// Log endpoint details based on type
 	switch endpoint := cfg.MAVLink.Endpoint.(type) {
 	case gomavlib.EndpointSerial:
-		log.Printf("MAVLink: Serial - Device: %s, Baud: %d", endpoint.Device, endpoint.Baud)
+		configLogger.Info("MAVLink endpoint configured",
+			"type", "serial",
+			"device", endpoint.Device,
+			"baud", endpoint.Baud,
+		)
 	case gomavlib.EndpointUDPServer:
-		log.Printf("MAVLink: UDP Server - Address: %s", endpoint.Address)
+		configLogger.Info("MAVLink endpoint configured",
+			"type", "udp-server",
+			"address", endpoint.Address,
+		)
 	case gomavlib.EndpointUDPClient:
-		log.Printf("MAVLink: UDP Client - Address: %s", endpoint.Address)
+		configLogger.Info("MAVLink endpoint configured",
+			"type", "udp-client",
+			"address", endpoint.Address,
+		)
 	case gomavlib.EndpointTCPServer:
-		log.Printf("MAVLink: TCP Server - Address: %s", endpoint.Address)
+		configLogger.Info("MAVLink endpoint configured",
+			"type", "tcp-server",
+			"address", endpoint.Address,
+		)
 	case gomavlib.EndpointTCPClient:
-		log.Printf("MAVLink: TCP Client - Address: %s", endpoint.Address)
+		configLogger.Info("MAVLink endpoint configured",
+			"type", "tcp-client",
+			"address", endpoint.Address,
+		)
 	default:
-		log.Printf("MAVLink: Unknown endpoint type: %T", endpoint)
+		configLogger.Warn("MAVLink endpoint configured with unknown type", "type", fmt.Sprintf("%T", endpoint))
 	}
-	log.Println("====================")
 }

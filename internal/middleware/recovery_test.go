@@ -2,16 +2,19 @@ package middleware
 
 import (
 	"bytes"
-	"log"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/flightpath-dev/flightpath/internal/logger"
 )
 
 func TestRecovery_NoPanic(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	handler := Recovery(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -39,7 +42,8 @@ func TestRecovery_NoPanic(t *testing.T) {
 
 func TestRecovery_WithPanic(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	handler := Recovery(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		panic("something went wrong!")
@@ -73,7 +77,8 @@ func TestRecovery_WithPanic(t *testing.T) {
 
 func TestRecovery_WithPanicError(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	handler := Recovery(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var slice []int
@@ -101,7 +106,8 @@ func TestRecovery_WithPanicError(t *testing.T) {
 
 func TestRecovery_WithNilPanic(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	handler := Recovery(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var ptr *string
@@ -123,7 +129,8 @@ func TestRecovery_WithNilPanic(t *testing.T) {
 
 func TestRecovery_StackTraceLogged(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	handler := Recovery(logger)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		panic("test panic")
@@ -144,7 +151,8 @@ func TestRecovery_StackTraceLogged(t *testing.T) {
 
 func TestRecovery_ChainedMiddleware(t *testing.T) {
 	var buf bytes.Buffer
-	logger := log.New(&buf, "", 0)
+	slogHandler := slog.NewTextHandler(&buf, nil)
+	logger := &logger.Logger{Logger: slog.New(slogHandler)}
 
 	// Chain recovery with another middleware
 	handler := Recovery(logger)(
