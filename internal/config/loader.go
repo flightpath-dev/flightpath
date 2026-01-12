@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -58,7 +59,9 @@ func Load() (*Config, error) {
 	}
 
 	// Load MAVLink configuration from environment variables
-	loadMAVLinkConfig(cfg)
+	if err := loadMAVLinkConfig(cfg); err != nil {
+		return nil, err
+	}
 
 	// Validate configuration (fail-fast)
 	if err := cfg.Validate(); err != nil {
@@ -76,12 +79,13 @@ func Load() (*Config, error) {
 //
 // Only overrides defaults if environment variables are present.
 // If FLIGHTPATH_MAVLINK_ENDPOINT_TYPE is set, all required parameters for that
-// endpoint type must be provided via environment variables (no defaults used).
-func loadMAVLinkConfig(cfg *Config) {
+// endpoint type must be provided via environment variables.
+// Returns an error if the endpoint type is set but required parameters are missing.
+func loadMAVLinkConfig(cfg *Config) error {
 	endpointType := os.Getenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE")
 	if endpointType == "" {
 		// No override - use default from Default()
-		return
+		return nil
 	}
 
 	switch endpointType {
@@ -89,15 +93,19 @@ func loadMAVLinkConfig(cfg *Config) {
 		device := os.Getenv("FLIGHTPATH_MAVLINK_SERIAL_DEVICE")
 		baudStr := os.Getenv("FLIGHTPATH_MAVLINK_SERIAL_BAUD")
 
-		if device == "" || baudStr == "" {
-			// Required parameters missing - don't override
-			return
+		if device == "" {
+			return fmt.Errorf("FLIGHTPATH_MAVLINK_SERIAL_DEVICE is required when endpoint type is 'serial'")
+		}
+		if baudStr == "" {
+			return fmt.Errorf("FLIGHTPATH_MAVLINK_SERIAL_BAUD is required when endpoint type is 'serial'")
 		}
 
 		baud, err := strconv.Atoi(baudStr)
-		if err != nil || baud <= 0 {
-			// Invalid baud rate - don't override
-			return
+		if err != nil {
+			return fmt.Errorf("FLIGHTPATH_MAVLINK_SERIAL_BAUD must be a valid integer: %w", err)
+		}
+		if baud <= 0 {
+			return fmt.Errorf("FLIGHTPATH_MAVLINK_SERIAL_BAUD must be greater than 0, got %d", baud)
 		}
 
 		cfg.MAVLink.Endpoint = gomavlib.EndpointSerial{
@@ -108,35 +116,36 @@ func loadMAVLinkConfig(cfg *Config) {
 	case "udp-server":
 		address := os.Getenv("FLIGHTPATH_MAVLINK_UDP_ADDRESS")
 		if address == "" {
-			// Required parameter missing - don't override
-			return
+			return fmt.Errorf("FLIGHTPATH_MAVLINK_UDP_ADDRESS is required when endpoint type is 'udp-server'")
 		}
 		cfg.MAVLink.Endpoint = gomavlib.EndpointUDPServer{Address: address}
 
 	case "udp-client":
 		address := os.Getenv("FLIGHTPATH_MAVLINK_UDP_ADDRESS")
 		if address == "" {
-			// Required parameter missing - don't override
-			return
+			return fmt.Errorf("FLIGHTPATH_MAVLINK_UDP_ADDRESS is required when endpoint type is 'udp-client'")
 		}
 		cfg.MAVLink.Endpoint = gomavlib.EndpointUDPClient{Address: address}
 
 	case "tcp-server":
 		address := os.Getenv("FLIGHTPATH_MAVLINK_TCP_ADDRESS")
 		if address == "" {
-			// Required parameter missing - don't override
-			return
+			return fmt.Errorf("FLIGHTPATH_MAVLINK_TCP_ADDRESS is required when endpoint type is 'tcp-server'")
 		}
 		cfg.MAVLink.Endpoint = gomavlib.EndpointTCPServer{Address: address}
 
 	case "tcp-client":
 		address := os.Getenv("FLIGHTPATH_MAVLINK_TCP_ADDRESS")
 		if address == "" {
-			// Required parameter missing - don't override
-			return
+			return fmt.Errorf("FLIGHTPATH_MAVLINK_TCP_ADDRESS is required when endpoint type is 'tcp-client'")
 		}
 		cfg.MAVLink.Endpoint = gomavlib.EndpointTCPClient{Address: address}
+
+	default:
+		return fmt.Errorf("unknown FLIGHTPATH_MAVLINK_ENDPOINT_TYPE: %q (valid types: serial, udp-server, udp-client, tcp-server, tcp-client)", endpointType)
 	}
+
+	return nil
 }
 
 // logConfig
