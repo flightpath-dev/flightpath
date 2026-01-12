@@ -88,8 +88,6 @@ go run examples/monitor_heartbeat_flightpath/main.go
 go run examples/monitor_heartbeat_flightpath/main.go
 ```
 
-## Development
-
 ## License
 
 MIT
