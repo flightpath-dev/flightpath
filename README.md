@@ -9,32 +9,32 @@ Go platform exposing a gRPC API to control a drone.
 ## Project Structure
 ```
 flightpath/
-├── cmd/
-│   └── server/
-│       └── main.go                 # Server entry point
+├── cmd/                            # Main applications for this project
+│   └── server/                     # Server entry point
+│       └── main.go
 ├── examples/                       # API usage examples
-├── gen/                            # Generated gRPC code
+├── gen/                            # gRPC code generated from protobufs
 │   ├── go/
 │   └── ts/
-├── internal/
+├── internal/                       # Private application and library code
 │   ├── config/
 │   │   ├── config.go               # Configuration structure
 │   │   └── loader.go               # Configuration loader
-│   ├── mavlink/
-│   │   ├── command_dispatcher.go   # Send commands to drone
+│   ├── mavlink/                    # Drone side communication code
+│   │   ├── command_dispatcher.go   # Sends commands to drone
 │   │   └── message_receiver.go     # Receives messages from Drone
-│   ├── middleware/
+│   ├── middleware/                 # Handlers to process HTTP requests
 │   │   ├── cors.go                 # CORS middleware
-│   │   ├── logging.go              # Request logging
-│   │   └── recovery.go             # Panic recovery
-│   ├── server/
-│   │   └── server.go               # Represents the flightpath server
-│   └── services/
+│   │   ├── logging.go              # Request logging middleware
+│   │   └── recovery.go             # Panic recovery middleware
+│   ├── server/                     # Server state and lifecycle management
+│   │   └── server.go
+│   └── services/                   # Core functionality offered by the application
 │       ├── context.go              # Shared context for all services (config, logger, etc.)
 │       └── mavlink_service.go      # Distributes MAVLink messages to gRPC subscribers
-├── proto/
+├── proto/                          # Protocol Buffers definitions
 │   └── flightpath/
-│       └── mavlink_service.proto   # handles commands and messages from the gRPC clients
+│       └── mavlink_service.proto   # Handles commands and messages from gRPC clients
 ├── go.mod
 └── go.sum
 ```
