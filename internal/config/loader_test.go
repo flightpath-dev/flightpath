@@ -157,23 +157,92 @@ func TestLoad_MAVLinkSerial(t *testing.T) {
 	}
 }
 
-func TestLoad_MAVLinkSerial_MissingParams(t *testing.T) {
-	// When endpoint type is set but required params are missing,
-	// the loader currently falls back to defaults (this behavior may change)
+func TestLoad_MAVLinkSerial_MissingDevice(t *testing.T) {
 	t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "serial")
 	t.Setenv("FLIGHTPATH_MAVLINK_SERIAL_DEVICE", "")
+	t.Setenv("FLIGHTPATH_MAVLINK_SERIAL_BAUD", "115200")
+
+	_, err := Load()
+	if err == nil {
+		t.Fatal("expected error when serial device is missing, got nil")
+	}
+}
+
+func TestLoad_MAVLinkSerial_MissingBaud(t *testing.T) {
+	t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "serial")
+	t.Setenv("FLIGHTPATH_MAVLINK_SERIAL_DEVICE", "/dev/ttyUSB0")
 	t.Setenv("FLIGHTPATH_MAVLINK_SERIAL_BAUD", "")
 
-	cfg, err := Load()
-	if err != nil {
-		t.Fatalf("Load() returned error: %v", err)
+	_, err := Load()
+	if err == nil {
+		t.Fatal("expected error when serial baud is missing, got nil")
 	}
+}
 
-	// Should fall back to default UDP endpoint
-	_, ok := cfg.MAVLink.Endpoint.(gomavlib.EndpointUDPServer)
-	if !ok {
-		t.Errorf("expected fallback to EndpointUDPServer when serial params missing, got %T", cfg.MAVLink.Endpoint)
+func TestLoad_MAVLinkSerial_InvalidBaud(t *testing.T) {
+	t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "serial")
+	t.Setenv("FLIGHTPATH_MAVLINK_SERIAL_DEVICE", "/dev/ttyUSB0")
+	t.Setenv("FLIGHTPATH_MAVLINK_SERIAL_BAUD", "not-a-number")
+
+	_, err := Load()
+	if err == nil {
+		t.Fatal("expected error when serial baud is invalid, got nil")
 	}
+}
+
+func TestLoad_MAVLinkSerial_NegativeBaud(t *testing.T) {
+	t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "serial")
+	t.Setenv("FLIGHTPATH_MAVLINK_SERIAL_DEVICE", "/dev/ttyUSB0")
+	t.Setenv("FLIGHTPATH_MAVLINK_SERIAL_BAUD", "-1")
+
+	_, err := Load()
+	if err == nil {
+		t.Fatal("expected error when serial baud is negative, got nil")
+	}
+}
+
+func TestLoad_MAVLinkUDP_MissingAddress(t *testing.T) {
+	t.Run("udp-server", func(t *testing.T) {
+		t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "udp-server")
+		t.Setenv("FLIGHTPATH_MAVLINK_UDP_ADDRESS", "")
+
+		_, err := Load()
+		if err == nil {
+			t.Fatal("expected error when UDP address is missing for udp-server, got nil")
+		}
+	})
+
+	t.Run("udp-client", func(t *testing.T) {
+		t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "udp-client")
+		t.Setenv("FLIGHTPATH_MAVLINK_UDP_ADDRESS", "")
+
+		_, err := Load()
+		if err == nil {
+			t.Fatal("expected error when UDP address is missing for udp-client, got nil")
+		}
+	})
+}
+
+func TestLoad_MAVLinkTCP_MissingAddress(t *testing.T) {
+	t.Run("tcp-server", func(t *testing.T) {
+		t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "tcp-server")
+		t.Setenv("FLIGHTPATH_MAVLINK_TCP_ADDRESS", "")
+
+		_, err := Load()
+		if err == nil {
+			t.Fatal("expected error when TCP address is missing for tcp-server, got nil")
+		}
+	})
+
+	t.Run("tcp-client", func(t *testing.T) {
+		t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "tcp-client")
+		t.Setenv("FLIGHTPATH_MAVLINK_TCP_ADDRESS", "")
+
+		_, err := Load()
+		if err == nil {
+			t.Fatal("expected error when TCP address is missing for tcp-client, got nil")
+		}
+	})
 }
 
 func TestLoad_MAVLinkUDPServer(t *testing.T) {
@@ -251,14 +320,8 @@ func TestLoad_MAVLinkTCPClient(t *testing.T) {
 func TestLoad_UnknownEndpointType(t *testing.T) {
 	t.Setenv("FLIGHTPATH_MAVLINK_ENDPOINT_TYPE", "unknown-type")
 
-	cfg, err := Load()
-	if err != nil {
-		t.Fatalf("Load() returned error: %v", err)
-	}
-
-	// Unknown type should fall back to default
-	_, ok := cfg.MAVLink.Endpoint.(gomavlib.EndpointUDPServer)
-	if !ok {
-		t.Errorf("expected fallback to EndpointUDPServer for unknown type, got %T", cfg.MAVLink.Endpoint)
+	_, err := Load()
+	if err == nil {
+		t.Fatal("expected error for unknown endpoint type, got nil")
 	}
 }
