@@ -1,6 +1,6 @@
-# Flightpath
+# Flightpath — Autonomous Drone Control Platform
 
-Autonomous Drone Control Platform
+A Go-based server for autonomous drone control via the MAVLink protocol. For the front-end, see the [Flightpath UI](https://github.com/flightpath-dev/flightpath-ui) repository.
 
 ## Architecture
 
