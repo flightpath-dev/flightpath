@@ -1,6 +1,6 @@
 # Flightpath
 
-Go platform exposing a gRPC API to control a drone.
+Autonomous Drone Control Platform
 
 ## Architecture
 
