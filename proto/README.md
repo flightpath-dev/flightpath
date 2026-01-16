@@ -180,32 +180,35 @@ This repository uses semantic versioning (v1.0.0, v1.1.0, etc.) and manual relea
    - Update `package.json` version for npm releases
    - The Go module version is determined by the git tag
 
-5. **Commit all changes**:
-   ```bash
-   git add protos/ gen/go/ gen/ts/ package.json
-   git commit -m "feat: add new field to ConnectionRequest"
-   ```
-
-6. **If this is after the first publish, update go.sum**:
+5. **If this is after the first publish, update go.sum**:
    ```bash
    go mod tidy
    git add go.sum
    git commit -m "chore: update go.sum"
    ```
 
-7. **Create and push the tag**:
+6. **Commit all changes**:
+   ```bash
+   git add protos/ gen/go/ gen/ts/ package.json
+   git commit -m "feat: add new field to ConnectionRequest"
+   ```
+
+7. **Create a PR**
+   Create a PR and get it reviewed. Once approved, merge to main.
+
+8. **Create and push a tag on main**:
    ```bash
    git tag -a v0.0.1 -m "Release v0.0.1"
    git push origin main
    git push origin v0.0.1
    ```
 
-8. **Publish to npm** (if needed):
+9. **Publish to npm** (if needed):
    ```bash
    npm publish --access public
    ```
 
-9. **Users can then update**:
+10. **Users can then update**:
    
    **Go:**
    ```bash
