@@ -26,31 +26,511 @@ const (
 type MavCmd int32
 
 const (
-	MavCmd_MAV_CMD_UNSPECIFIED MavCmd = 0
-	// Navigation commands
-	MavCmd_MAV_CMD_NAV_RETURN_TO_LAUNCH MavCmd = 20
-	MavCmd_MAV_CMD_NAV_TAKEOFF          MavCmd = 22
-	// Mode commands
-	MavCmd_MAV_CMD_DO_SET_MODE MavCmd = 176
-	// Component commands
-	MavCmd_MAV_CMD_COMPONENT_ARM_DISARM MavCmd = 400
+	MavCmd_MAV_CMD_UNSPECIFIED                        MavCmd = 0
+	MavCmd_MAV_CMD_NAV_WAYPOINT                       MavCmd = 16
+	MavCmd_MAV_CMD_NAV_LOITER_UNLIM                   MavCmd = 17
+	MavCmd_MAV_CMD_NAV_LOITER_TURNS                   MavCmd = 18
+	MavCmd_MAV_CMD_NAV_LOITER_TIME                    MavCmd = 19
+	MavCmd_MAV_CMD_NAV_RETURN_TO_LAUNCH               MavCmd = 20
+	MavCmd_MAV_CMD_NAV_LAND                           MavCmd = 21
+	MavCmd_MAV_CMD_NAV_TAKEOFF                        MavCmd = 22
+	MavCmd_MAV_CMD_NAV_LAND_LOCAL                     MavCmd = 23
+	MavCmd_MAV_CMD_NAV_TAKEOFF_LOCAL                  MavCmd = 24
+	MavCmd_MAV_CMD_NAV_FOLLOW                         MavCmd = 25
+	MavCmd_MAV_CMD_NAV_CONTINUE_AND_CHANGE_ALT        MavCmd = 30
+	MavCmd_MAV_CMD_NAV_LOITER_TO_ALT                  MavCmd = 31
+	MavCmd_MAV_CMD_DO_FOLLOW                          MavCmd = 32
+	MavCmd_MAV_CMD_DO_FOLLOW_REPOSITION               MavCmd = 33
+	MavCmd_MAV_CMD_DO_ORBIT                           MavCmd = 34
+	MavCmd_MAV_CMD_NAV_ROI                            MavCmd = 80
+	MavCmd_MAV_CMD_NAV_PATHPLANNING                   MavCmd = 81
+	MavCmd_MAV_CMD_NAV_SPLINE_WAYPOINT                MavCmd = 82
+	MavCmd_MAV_CMD_NAV_VTOL_TAKEOFF                   MavCmd = 84
+	MavCmd_MAV_CMD_NAV_VTOL_LAND                      MavCmd = 85
+	MavCmd_MAV_CMD_NAV_GUIDED_ENABLE                  MavCmd = 92
+	MavCmd_MAV_CMD_NAV_DELAY                          MavCmd = 93
+	MavCmd_MAV_CMD_NAV_PAYLOAD_PLACE                  MavCmd = 94
+	MavCmd_MAV_CMD_NAV_LAST                           MavCmd = 95
+	MavCmd_MAV_CMD_CONDITION_DELAY                    MavCmd = 112
+	MavCmd_MAV_CMD_CONDITION_CHANGE_ALT               MavCmd = 113
+	MavCmd_MAV_CMD_CONDITION_DISTANCE                 MavCmd = 114
+	MavCmd_MAV_CMD_CONDITION_YAW                      MavCmd = 115
+	MavCmd_MAV_CMD_CONDITION_LAST                     MavCmd = 159
+	MavCmd_MAV_CMD_DO_SET_MODE                        MavCmd = 176
+	MavCmd_MAV_CMD_DO_JUMP                            MavCmd = 177
+	MavCmd_MAV_CMD_DO_CHANGE_SPEED                    MavCmd = 178
+	MavCmd_MAV_CMD_DO_SET_HOME                        MavCmd = 179
+	MavCmd_MAV_CMD_DO_SET_PARAMETER                   MavCmd = 180
+	MavCmd_MAV_CMD_DO_SET_RELAY                       MavCmd = 181
+	MavCmd_MAV_CMD_DO_REPEAT_RELAY                    MavCmd = 182
+	MavCmd_MAV_CMD_DO_SET_SERVO                       MavCmd = 183
+	MavCmd_MAV_CMD_DO_REPEAT_SERVO                    MavCmd = 184
+	MavCmd_MAV_CMD_DO_FLIGHTTERMINATION               MavCmd = 185
+	MavCmd_MAV_CMD_DO_CHANGE_ALTITUDE                 MavCmd = 186
+	MavCmd_MAV_CMD_DO_SET_ACTUATOR                    MavCmd = 187
+	MavCmd_MAV_CMD_DO_RETURN_PATH_START               MavCmd = 188
+	MavCmd_MAV_CMD_DO_LAND_START                      MavCmd = 189
+	MavCmd_MAV_CMD_DO_RALLY_LAND                      MavCmd = 190
+	MavCmd_MAV_CMD_DO_GO_AROUND                       MavCmd = 191
+	MavCmd_MAV_CMD_DO_REPOSITION                      MavCmd = 192
+	MavCmd_MAV_CMD_DO_PAUSE_CONTINUE                  MavCmd = 193
+	MavCmd_MAV_CMD_DO_SET_REVERSE                     MavCmd = 194
+	MavCmd_MAV_CMD_DO_SET_ROI_LOCATION                MavCmd = 195
+	MavCmd_MAV_CMD_DO_SET_ROI_WPNEXT_OFFSET           MavCmd = 196
+	MavCmd_MAV_CMD_DO_SET_ROI_NONE                    MavCmd = 197
+	MavCmd_MAV_CMD_DO_SET_ROI_SYSID                   MavCmd = 198
+	MavCmd_MAV_CMD_DO_CONTROL_VIDEO                   MavCmd = 200
+	MavCmd_MAV_CMD_DO_SET_ROI                         MavCmd = 201
+	MavCmd_MAV_CMD_DO_DIGICAM_CONFIGURE               MavCmd = 202
+	MavCmd_MAV_CMD_DO_DIGICAM_CONTROL                 MavCmd = 203
+	MavCmd_MAV_CMD_DO_MOUNT_CONFIGURE                 MavCmd = 204
+	MavCmd_MAV_CMD_DO_MOUNT_CONTROL                   MavCmd = 205
+	MavCmd_MAV_CMD_DO_SET_CAM_TRIGG_DIST              MavCmd = 206
+	MavCmd_MAV_CMD_DO_FENCE_ENABLE                    MavCmd = 207
+	MavCmd_MAV_CMD_DO_PARACHUTE                       MavCmd = 208
+	MavCmd_MAV_CMD_DO_MOTOR_TEST                      MavCmd = 209
+	MavCmd_MAV_CMD_DO_INVERTED_FLIGHT                 MavCmd = 210
+	MavCmd_MAV_CMD_DO_GRIPPER                         MavCmd = 211
+	MavCmd_MAV_CMD_DO_AUTOTUNE_ENABLE                 MavCmd = 212
+	MavCmd_MAV_CMD_NAV_SET_YAW_SPEED                  MavCmd = 213
+	MavCmd_MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL          MavCmd = 214
+	MavCmd_MAV_CMD_DO_MOUNT_CONTROL_QUAT              MavCmd = 220
+	MavCmd_MAV_CMD_DO_GUIDED_MASTER                   MavCmd = 221
+	MavCmd_MAV_CMD_DO_GUIDED_LIMITS                   MavCmd = 222
+	MavCmd_MAV_CMD_DO_ENGINE_CONTROL                  MavCmd = 223
+	MavCmd_MAV_CMD_DO_SET_MISSION_CURRENT             MavCmd = 224
+	MavCmd_MAV_CMD_DO_LAST                            MavCmd = 240
+	MavCmd_MAV_CMD_PREFLIGHT_CALIBRATION              MavCmd = 241
+	MavCmd_MAV_CMD_PREFLIGHT_SET_SENSOR_OFFSETS       MavCmd = 242
+	MavCmd_MAV_CMD_PREFLIGHT_UAVCAN                   MavCmd = 243
+	MavCmd_MAV_CMD_PREFLIGHT_STORAGE                  MavCmd = 245
+	MavCmd_MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN          MavCmd = 246
+	MavCmd_MAV_CMD_OVERRIDE_GOTO                      MavCmd = 252
+	MavCmd_MAV_CMD_OBLIQUE_SURVEY                     MavCmd = 260
+	MavCmd_MAV_CMD_DO_SET_STANDARD_MODE               MavCmd = 262
+	MavCmd_MAV_CMD_MISSION_START                      MavCmd = 300
+	MavCmd_MAV_CMD_ACTUATOR_TEST                      MavCmd = 310
+	MavCmd_MAV_CMD_CONFIGURE_ACTUATOR                 MavCmd = 311
+	MavCmd_MAV_CMD_COMPONENT_ARM_DISARM               MavCmd = 400
+	MavCmd_MAV_CMD_RUN_PREARM_CHECKS                  MavCmd = 401
+	MavCmd_MAV_CMD_ILLUMINATOR_ON_OFF                 MavCmd = 405
+	MavCmd_MAV_CMD_DO_ILLUMINATOR_CONFIGURE           MavCmd = 406
+	MavCmd_MAV_CMD_GET_HOME_POSITION                  MavCmd = 410
+	MavCmd_MAV_CMD_INJECT_FAILURE                     MavCmd = 420
+	MavCmd_MAV_CMD_START_RX_PAIR                      MavCmd = 500
+	MavCmd_MAV_CMD_GET_MESSAGE_INTERVAL               MavCmd = 510
+	MavCmd_MAV_CMD_SET_MESSAGE_INTERVAL               MavCmd = 511
+	MavCmd_MAV_CMD_REQUEST_MESSAGE                    MavCmd = 512
+	MavCmd_MAV_CMD_REQUEST_PROTOCOL_VERSION           MavCmd = 519
+	MavCmd_MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES     MavCmd = 520
+	MavCmd_MAV_CMD_REQUEST_CAMERA_INFORMATION         MavCmd = 521
+	MavCmd_MAV_CMD_REQUEST_CAMERA_SETTINGS            MavCmd = 522
+	MavCmd_MAV_CMD_REQUEST_STORAGE_INFORMATION        MavCmd = 525
+	MavCmd_MAV_CMD_STORAGE_FORMAT                     MavCmd = 526
+	MavCmd_MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS      MavCmd = 527
+	MavCmd_MAV_CMD_REQUEST_FLIGHT_INFORMATION         MavCmd = 528
+	MavCmd_MAV_CMD_RESET_CAMERA_SETTINGS              MavCmd = 529
+	MavCmd_MAV_CMD_SET_CAMERA_MODE                    MavCmd = 530
+	MavCmd_MAV_CMD_SET_CAMERA_ZOOM                    MavCmd = 531
+	MavCmd_MAV_CMD_SET_CAMERA_FOCUS                   MavCmd = 532
+	MavCmd_MAV_CMD_SET_STORAGE_USAGE                  MavCmd = 533
+	MavCmd_MAV_CMD_SET_CAMERA_SOURCE                  MavCmd = 534
+	MavCmd_MAV_CMD_JUMP_TAG                           MavCmd = 600
+	MavCmd_MAV_CMD_DO_JUMP_TAG                        MavCmd = 601
+	MavCmd_MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW         MavCmd = 1000
+	MavCmd_MAV_CMD_DO_GIMBAL_MANAGER_CONFIGURE        MavCmd = 1001
+	MavCmd_MAV_CMD_IMAGE_START_CAPTURE                MavCmd = 2000
+	MavCmd_MAV_CMD_IMAGE_STOP_CAPTURE                 MavCmd = 2001
+	MavCmd_MAV_CMD_REQUEST_CAMERA_IMAGE_CAPTURE       MavCmd = 2002
+	MavCmd_MAV_CMD_DO_TRIGGER_CONTROL                 MavCmd = 2003
+	MavCmd_MAV_CMD_CAMERA_TRACK_POINT                 MavCmd = 2004
+	MavCmd_MAV_CMD_CAMERA_TRACK_RECTANGLE             MavCmd = 2005
+	MavCmd_MAV_CMD_CAMERA_STOP_TRACKING               MavCmd = 2010
+	MavCmd_MAV_CMD_VIDEO_START_CAPTURE                MavCmd = 2500
+	MavCmd_MAV_CMD_VIDEO_STOP_CAPTURE                 MavCmd = 2501
+	MavCmd_MAV_CMD_VIDEO_START_STREAMING              MavCmd = 2502
+	MavCmd_MAV_CMD_VIDEO_STOP_STREAMING               MavCmd = 2503
+	MavCmd_MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION   MavCmd = 2504
+	MavCmd_MAV_CMD_REQUEST_VIDEO_STREAM_STATUS        MavCmd = 2505
+	MavCmd_MAV_CMD_LOGGING_START                      MavCmd = 2510
+	MavCmd_MAV_CMD_LOGGING_STOP                       MavCmd = 2511
+	MavCmd_MAV_CMD_AIRFRAME_CONFIGURATION             MavCmd = 2520
+	MavCmd_MAV_CMD_CONTROL_HIGH_LATENCY               MavCmd = 2600
+	MavCmd_MAV_CMD_PANORAMA_CREATE                    MavCmd = 2800
+	MavCmd_MAV_CMD_DO_VTOL_TRANSITION                 MavCmd = 3000
+	MavCmd_MAV_CMD_ARM_AUTHORIZATION_REQUEST          MavCmd = 3001
+	MavCmd_MAV_CMD_SET_GUIDED_SUBMODE_STANDARD        MavCmd = 4000
+	MavCmd_MAV_CMD_SET_GUIDED_SUBMODE_CIRCLE          MavCmd = 4001
+	MavCmd_MAV_CMD_CONDITION_GATE                     MavCmd = 4501
+	MavCmd_MAV_CMD_NAV_FENCE_RETURN_POINT             MavCmd = 5000
+	MavCmd_MAV_CMD_NAV_FENCE_POLYGON_VERTEX_INCLUSION MavCmd = 5001
+	MavCmd_MAV_CMD_NAV_FENCE_POLYGON_VERTEX_EXCLUSION MavCmd = 5002
+	MavCmd_MAV_CMD_NAV_FENCE_CIRCLE_INCLUSION         MavCmd = 5003
+	MavCmd_MAV_CMD_NAV_FENCE_CIRCLE_EXCLUSION         MavCmd = 5004
+	MavCmd_MAV_CMD_NAV_RALLY_POINT                    MavCmd = 5100
+	MavCmd_MAV_CMD_UAVCAN_GET_NODE_INFO               MavCmd = 5200
+	MavCmd_MAV_CMD_DO_SET_SAFETY_SWITCH_STATE         MavCmd = 5300
+	MavCmd_MAV_CMD_DO_ADSB_OUT_IDENT                  MavCmd = 10001
+	MavCmd_MAV_CMD_WAYPOINT_USER_1                    MavCmd = 31000
+	MavCmd_MAV_CMD_WAYPOINT_USER_2                    MavCmd = 31001
+	MavCmd_MAV_CMD_WAYPOINT_USER_3                    MavCmd = 31002
+	MavCmd_MAV_CMD_WAYPOINT_USER_4                    MavCmd = 31003
+	MavCmd_MAV_CMD_WAYPOINT_USER_5                    MavCmd = 31004
+	MavCmd_MAV_CMD_SPATIAL_USER_1                     MavCmd = 31005
+	MavCmd_MAV_CMD_SPATIAL_USER_2                     MavCmd = 31006
+	MavCmd_MAV_CMD_SPATIAL_USER_3                     MavCmd = 31007
+	MavCmd_MAV_CMD_SPATIAL_USER_4                     MavCmd = 31008
+	MavCmd_MAV_CMD_SPATIAL_USER_5                     MavCmd = 31009
+	MavCmd_MAV_CMD_USER_1                             MavCmd = 31010
+	MavCmd_MAV_CMD_USER_2                             MavCmd = 31011
+	MavCmd_MAV_CMD_USER_3                             MavCmd = 31012
+	MavCmd_MAV_CMD_USER_4                             MavCmd = 31013
+	MavCmd_MAV_CMD_USER_5                             MavCmd = 31014
+	MavCmd_MAV_CMD_CAN_FORWARD                        MavCmd = 32000
+	MavCmd_MAV_CMD_PAYLOAD_PREPARE_DEPLOY             MavCmd = 30001
+	MavCmd_MAV_CMD_PAYLOAD_CONTROL_DEPLOY             MavCmd = 30002
+	MavCmd_MAV_CMD_FIXED_MAG_CAL_YAW                  MavCmd = 42006
+	MavCmd_MAV_CMD_DO_WINCH                           MavCmd = 42600
+	MavCmd_MAV_CMD_EXTERNAL_POSITION_ESTIMATE         MavCmd = 43003
 )
 
 // Enum value maps for MavCmd.
 var (
 	MavCmd_name = map[int32]string{
-		0:   "MAV_CMD_UNSPECIFIED",
-		20:  "MAV_CMD_NAV_RETURN_TO_LAUNCH",
-		22:  "MAV_CMD_NAV_TAKEOFF",
-		176: "MAV_CMD_DO_SET_MODE",
-		400: "MAV_CMD_COMPONENT_ARM_DISARM",
+		0:     "MAV_CMD_UNSPECIFIED",
+		16:    "MAV_CMD_NAV_WAYPOINT",
+		17:    "MAV_CMD_NAV_LOITER_UNLIM",
+		18:    "MAV_CMD_NAV_LOITER_TURNS",
+		19:    "MAV_CMD_NAV_LOITER_TIME",
+		20:    "MAV_CMD_NAV_RETURN_TO_LAUNCH",
+		21:    "MAV_CMD_NAV_LAND",
+		22:    "MAV_CMD_NAV_TAKEOFF",
+		23:    "MAV_CMD_NAV_LAND_LOCAL",
+		24:    "MAV_CMD_NAV_TAKEOFF_LOCAL",
+		25:    "MAV_CMD_NAV_FOLLOW",
+		30:    "MAV_CMD_NAV_CONTINUE_AND_CHANGE_ALT",
+		31:    "MAV_CMD_NAV_LOITER_TO_ALT",
+		32:    "MAV_CMD_DO_FOLLOW",
+		33:    "MAV_CMD_DO_FOLLOW_REPOSITION",
+		34:    "MAV_CMD_DO_ORBIT",
+		80:    "MAV_CMD_NAV_ROI",
+		81:    "MAV_CMD_NAV_PATHPLANNING",
+		82:    "MAV_CMD_NAV_SPLINE_WAYPOINT",
+		84:    "MAV_CMD_NAV_VTOL_TAKEOFF",
+		85:    "MAV_CMD_NAV_VTOL_LAND",
+		92:    "MAV_CMD_NAV_GUIDED_ENABLE",
+		93:    "MAV_CMD_NAV_DELAY",
+		94:    "MAV_CMD_NAV_PAYLOAD_PLACE",
+		95:    "MAV_CMD_NAV_LAST",
+		112:   "MAV_CMD_CONDITION_DELAY",
+		113:   "MAV_CMD_CONDITION_CHANGE_ALT",
+		114:   "MAV_CMD_CONDITION_DISTANCE",
+		115:   "MAV_CMD_CONDITION_YAW",
+		159:   "MAV_CMD_CONDITION_LAST",
+		176:   "MAV_CMD_DO_SET_MODE",
+		177:   "MAV_CMD_DO_JUMP",
+		178:   "MAV_CMD_DO_CHANGE_SPEED",
+		179:   "MAV_CMD_DO_SET_HOME",
+		180:   "MAV_CMD_DO_SET_PARAMETER",
+		181:   "MAV_CMD_DO_SET_RELAY",
+		182:   "MAV_CMD_DO_REPEAT_RELAY",
+		183:   "MAV_CMD_DO_SET_SERVO",
+		184:   "MAV_CMD_DO_REPEAT_SERVO",
+		185:   "MAV_CMD_DO_FLIGHTTERMINATION",
+		186:   "MAV_CMD_DO_CHANGE_ALTITUDE",
+		187:   "MAV_CMD_DO_SET_ACTUATOR",
+		188:   "MAV_CMD_DO_RETURN_PATH_START",
+		189:   "MAV_CMD_DO_LAND_START",
+		190:   "MAV_CMD_DO_RALLY_LAND",
+		191:   "MAV_CMD_DO_GO_AROUND",
+		192:   "MAV_CMD_DO_REPOSITION",
+		193:   "MAV_CMD_DO_PAUSE_CONTINUE",
+		194:   "MAV_CMD_DO_SET_REVERSE",
+		195:   "MAV_CMD_DO_SET_ROI_LOCATION",
+		196:   "MAV_CMD_DO_SET_ROI_WPNEXT_OFFSET",
+		197:   "MAV_CMD_DO_SET_ROI_NONE",
+		198:   "MAV_CMD_DO_SET_ROI_SYSID",
+		200:   "MAV_CMD_DO_CONTROL_VIDEO",
+		201:   "MAV_CMD_DO_SET_ROI",
+		202:   "MAV_CMD_DO_DIGICAM_CONFIGURE",
+		203:   "MAV_CMD_DO_DIGICAM_CONTROL",
+		204:   "MAV_CMD_DO_MOUNT_CONFIGURE",
+		205:   "MAV_CMD_DO_MOUNT_CONTROL",
+		206:   "MAV_CMD_DO_SET_CAM_TRIGG_DIST",
+		207:   "MAV_CMD_DO_FENCE_ENABLE",
+		208:   "MAV_CMD_DO_PARACHUTE",
+		209:   "MAV_CMD_DO_MOTOR_TEST",
+		210:   "MAV_CMD_DO_INVERTED_FLIGHT",
+		211:   "MAV_CMD_DO_GRIPPER",
+		212:   "MAV_CMD_DO_AUTOTUNE_ENABLE",
+		213:   "MAV_CMD_NAV_SET_YAW_SPEED",
+		214:   "MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL",
+		220:   "MAV_CMD_DO_MOUNT_CONTROL_QUAT",
+		221:   "MAV_CMD_DO_GUIDED_MASTER",
+		222:   "MAV_CMD_DO_GUIDED_LIMITS",
+		223:   "MAV_CMD_DO_ENGINE_CONTROL",
+		224:   "MAV_CMD_DO_SET_MISSION_CURRENT",
+		240:   "MAV_CMD_DO_LAST",
+		241:   "MAV_CMD_PREFLIGHT_CALIBRATION",
+		242:   "MAV_CMD_PREFLIGHT_SET_SENSOR_OFFSETS",
+		243:   "MAV_CMD_PREFLIGHT_UAVCAN",
+		245:   "MAV_CMD_PREFLIGHT_STORAGE",
+		246:   "MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN",
+		252:   "MAV_CMD_OVERRIDE_GOTO",
+		260:   "MAV_CMD_OBLIQUE_SURVEY",
+		262:   "MAV_CMD_DO_SET_STANDARD_MODE",
+		300:   "MAV_CMD_MISSION_START",
+		310:   "MAV_CMD_ACTUATOR_TEST",
+		311:   "MAV_CMD_CONFIGURE_ACTUATOR",
+		400:   "MAV_CMD_COMPONENT_ARM_DISARM",
+		401:   "MAV_CMD_RUN_PREARM_CHECKS",
+		405:   "MAV_CMD_ILLUMINATOR_ON_OFF",
+		406:   "MAV_CMD_DO_ILLUMINATOR_CONFIGURE",
+		410:   "MAV_CMD_GET_HOME_POSITION",
+		420:   "MAV_CMD_INJECT_FAILURE",
+		500:   "MAV_CMD_START_RX_PAIR",
+		510:   "MAV_CMD_GET_MESSAGE_INTERVAL",
+		511:   "MAV_CMD_SET_MESSAGE_INTERVAL",
+		512:   "MAV_CMD_REQUEST_MESSAGE",
+		519:   "MAV_CMD_REQUEST_PROTOCOL_VERSION",
+		520:   "MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES",
+		521:   "MAV_CMD_REQUEST_CAMERA_INFORMATION",
+		522:   "MAV_CMD_REQUEST_CAMERA_SETTINGS",
+		525:   "MAV_CMD_REQUEST_STORAGE_INFORMATION",
+		526:   "MAV_CMD_STORAGE_FORMAT",
+		527:   "MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS",
+		528:   "MAV_CMD_REQUEST_FLIGHT_INFORMATION",
+		529:   "MAV_CMD_RESET_CAMERA_SETTINGS",
+		530:   "MAV_CMD_SET_CAMERA_MODE",
+		531:   "MAV_CMD_SET_CAMERA_ZOOM",
+		532:   "MAV_CMD_SET_CAMERA_FOCUS",
+		533:   "MAV_CMD_SET_STORAGE_USAGE",
+		534:   "MAV_CMD_SET_CAMERA_SOURCE",
+		600:   "MAV_CMD_JUMP_TAG",
+		601:   "MAV_CMD_DO_JUMP_TAG",
+		1000:  "MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW",
+		1001:  "MAV_CMD_DO_GIMBAL_MANAGER_CONFIGURE",
+		2000:  "MAV_CMD_IMAGE_START_CAPTURE",
+		2001:  "MAV_CMD_IMAGE_STOP_CAPTURE",
+		2002:  "MAV_CMD_REQUEST_CAMERA_IMAGE_CAPTURE",
+		2003:  "MAV_CMD_DO_TRIGGER_CONTROL",
+		2004:  "MAV_CMD_CAMERA_TRACK_POINT",
+		2005:  "MAV_CMD_CAMERA_TRACK_RECTANGLE",
+		2010:  "MAV_CMD_CAMERA_STOP_TRACKING",
+		2500:  "MAV_CMD_VIDEO_START_CAPTURE",
+		2501:  "MAV_CMD_VIDEO_STOP_CAPTURE",
+		2502:  "MAV_CMD_VIDEO_START_STREAMING",
+		2503:  "MAV_CMD_VIDEO_STOP_STREAMING",
+		2504:  "MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION",
+		2505:  "MAV_CMD_REQUEST_VIDEO_STREAM_STATUS",
+		2510:  "MAV_CMD_LOGGING_START",
+		2511:  "MAV_CMD_LOGGING_STOP",
+		2520:  "MAV_CMD_AIRFRAME_CONFIGURATION",
+		2600:  "MAV_CMD_CONTROL_HIGH_LATENCY",
+		2800:  "MAV_CMD_PANORAMA_CREATE",
+		3000:  "MAV_CMD_DO_VTOL_TRANSITION",
+		3001:  "MAV_CMD_ARM_AUTHORIZATION_REQUEST",
+		4000:  "MAV_CMD_SET_GUIDED_SUBMODE_STANDARD",
+		4001:  "MAV_CMD_SET_GUIDED_SUBMODE_CIRCLE",
+		4501:  "MAV_CMD_CONDITION_GATE",
+		5000:  "MAV_CMD_NAV_FENCE_RETURN_POINT",
+		5001:  "MAV_CMD_NAV_FENCE_POLYGON_VERTEX_INCLUSION",
+		5002:  "MAV_CMD_NAV_FENCE_POLYGON_VERTEX_EXCLUSION",
+		5003:  "MAV_CMD_NAV_FENCE_CIRCLE_INCLUSION",
+		5004:  "MAV_CMD_NAV_FENCE_CIRCLE_EXCLUSION",
+		5100:  "MAV_CMD_NAV_RALLY_POINT",
+		5200:  "MAV_CMD_UAVCAN_GET_NODE_INFO",
+		5300:  "MAV_CMD_DO_SET_SAFETY_SWITCH_STATE",
+		10001: "MAV_CMD_DO_ADSB_OUT_IDENT",
+		31000: "MAV_CMD_WAYPOINT_USER_1",
+		31001: "MAV_CMD_WAYPOINT_USER_2",
+		31002: "MAV_CMD_WAYPOINT_USER_3",
+		31003: "MAV_CMD_WAYPOINT_USER_4",
+		31004: "MAV_CMD_WAYPOINT_USER_5",
+		31005: "MAV_CMD_SPATIAL_USER_1",
+		31006: "MAV_CMD_SPATIAL_USER_2",
+		31007: "MAV_CMD_SPATIAL_USER_3",
+		31008: "MAV_CMD_SPATIAL_USER_4",
+		31009: "MAV_CMD_SPATIAL_USER_5",
+		31010: "MAV_CMD_USER_1",
+		31011: "MAV_CMD_USER_2",
+		31012: "MAV_CMD_USER_3",
+		31013: "MAV_CMD_USER_4",
+		31014: "MAV_CMD_USER_5",
+		32000: "MAV_CMD_CAN_FORWARD",
+		30001: "MAV_CMD_PAYLOAD_PREPARE_DEPLOY",
+		30002: "MAV_CMD_PAYLOAD_CONTROL_DEPLOY",
+		42006: "MAV_CMD_FIXED_MAG_CAL_YAW",
+		42600: "MAV_CMD_DO_WINCH",
+		43003: "MAV_CMD_EXTERNAL_POSITION_ESTIMATE",
 	}
 	MavCmd_value = map[string]int32{
-		"MAV_CMD_UNSPECIFIED":          0,
-		"MAV_CMD_NAV_RETURN_TO_LAUNCH": 20,
-		"MAV_CMD_NAV_TAKEOFF":          22,
-		"MAV_CMD_DO_SET_MODE":          176,
-		"MAV_CMD_COMPONENT_ARM_DISARM": 400,
+		"MAV_CMD_UNSPECIFIED":                        0,
+		"MAV_CMD_NAV_WAYPOINT":                       16,
+		"MAV_CMD_NAV_LOITER_UNLIM":                   17,
+		"MAV_CMD_NAV_LOITER_TURNS":                   18,
+		"MAV_CMD_NAV_LOITER_TIME":                    19,
+		"MAV_CMD_NAV_RETURN_TO_LAUNCH":               20,
+		"MAV_CMD_NAV_LAND":                           21,
+		"MAV_CMD_NAV_TAKEOFF":                        22,
+		"MAV_CMD_NAV_LAND_LOCAL":                     23,
+		"MAV_CMD_NAV_TAKEOFF_LOCAL":                  24,
+		"MAV_CMD_NAV_FOLLOW":                         25,
+		"MAV_CMD_NAV_CONTINUE_AND_CHANGE_ALT":        30,
+		"MAV_CMD_NAV_LOITER_TO_ALT":                  31,
+		"MAV_CMD_DO_FOLLOW":                          32,
+		"MAV_CMD_DO_FOLLOW_REPOSITION":               33,
+		"MAV_CMD_DO_ORBIT":                           34,
+		"MAV_CMD_NAV_ROI":                            80,
+		"MAV_CMD_NAV_PATHPLANNING":                   81,
+		"MAV_CMD_NAV_SPLINE_WAYPOINT":                82,
+		"MAV_CMD_NAV_VTOL_TAKEOFF":                   84,
+		"MAV_CMD_NAV_VTOL_LAND":                      85,
+		"MAV_CMD_NAV_GUIDED_ENABLE":                  92,
+		"MAV_CMD_NAV_DELAY":                          93,
+		"MAV_CMD_NAV_PAYLOAD_PLACE":                  94,
+		"MAV_CMD_NAV_LAST":                           95,
+		"MAV_CMD_CONDITION_DELAY":                    112,
+		"MAV_CMD_CONDITION_CHANGE_ALT":               113,
+		"MAV_CMD_CONDITION_DISTANCE":                 114,
+		"MAV_CMD_CONDITION_YAW":                      115,
+		"MAV_CMD_CONDITION_LAST":                     159,
+		"MAV_CMD_DO_SET_MODE":                        176,
+		"MAV_CMD_DO_JUMP":                            177,
+		"MAV_CMD_DO_CHANGE_SPEED":                    178,
+		"MAV_CMD_DO_SET_HOME":                        179,
+		"MAV_CMD_DO_SET_PARAMETER":                   180,
+		"MAV_CMD_DO_SET_RELAY":                       181,
+		"MAV_CMD_DO_REPEAT_RELAY":                    182,
+		"MAV_CMD_DO_SET_SERVO":                       183,
+		"MAV_CMD_DO_REPEAT_SERVO":                    184,
+		"MAV_CMD_DO_FLIGHTTERMINATION":               185,
+		"MAV_CMD_DO_CHANGE_ALTITUDE":                 186,
+		"MAV_CMD_DO_SET_ACTUATOR":                    187,
+		"MAV_CMD_DO_RETURN_PATH_START":               188,
+		"MAV_CMD_DO_LAND_START":                      189,
+		"MAV_CMD_DO_RALLY_LAND":                      190,
+		"MAV_CMD_DO_GO_AROUND":                       191,
+		"MAV_CMD_DO_REPOSITION":                      192,
+		"MAV_CMD_DO_PAUSE_CONTINUE":                  193,
+		"MAV_CMD_DO_SET_REVERSE":                     194,
+		"MAV_CMD_DO_SET_ROI_LOCATION":                195,
+		"MAV_CMD_DO_SET_ROI_WPNEXT_OFFSET":           196,
+		"MAV_CMD_DO_SET_ROI_NONE":                    197,
+		"MAV_CMD_DO_SET_ROI_SYSID":                   198,
+		"MAV_CMD_DO_CONTROL_VIDEO":                   200,
+		"MAV_CMD_DO_SET_ROI":                         201,
+		"MAV_CMD_DO_DIGICAM_CONFIGURE":               202,
+		"MAV_CMD_DO_DIGICAM_CONTROL":                 203,
+		"MAV_CMD_DO_MOUNT_CONFIGURE":                 204,
+		"MAV_CMD_DO_MOUNT_CONTROL":                   205,
+		"MAV_CMD_DO_SET_CAM_TRIGG_DIST":              206,
+		"MAV_CMD_DO_FENCE_ENABLE":                    207,
+		"MAV_CMD_DO_PARACHUTE":                       208,
+		"MAV_CMD_DO_MOTOR_TEST":                      209,
+		"MAV_CMD_DO_INVERTED_FLIGHT":                 210,
+		"MAV_CMD_DO_GRIPPER":                         211,
+		"MAV_CMD_DO_AUTOTUNE_ENABLE":                 212,
+		"MAV_CMD_NAV_SET_YAW_SPEED":                  213,
+		"MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL":          214,
+		"MAV_CMD_DO_MOUNT_CONTROL_QUAT":              220,
+		"MAV_CMD_DO_GUIDED_MASTER":                   221,
+		"MAV_CMD_DO_GUIDED_LIMITS":                   222,
+		"MAV_CMD_DO_ENGINE_CONTROL":                  223,
+		"MAV_CMD_DO_SET_MISSION_CURRENT":             224,
+		"MAV_CMD_DO_LAST":                            240,
+		"MAV_CMD_PREFLIGHT_CALIBRATION":              241,
+		"MAV_CMD_PREFLIGHT_SET_SENSOR_OFFSETS":       242,
+		"MAV_CMD_PREFLIGHT_UAVCAN":                   243,
+		"MAV_CMD_PREFLIGHT_STORAGE":                  245,
+		"MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN":          246,
+		"MAV_CMD_OVERRIDE_GOTO":                      252,
+		"MAV_CMD_OBLIQUE_SURVEY":                     260,
+		"MAV_CMD_DO_SET_STANDARD_MODE":               262,
+		"MAV_CMD_MISSION_START":                      300,
+		"MAV_CMD_ACTUATOR_TEST":                      310,
+		"MAV_CMD_CONFIGURE_ACTUATOR":                 311,
+		"MAV_CMD_COMPONENT_ARM_DISARM":               400,
+		"MAV_CMD_RUN_PREARM_CHECKS":                  401,
+		"MAV_CMD_ILLUMINATOR_ON_OFF":                 405,
+		"MAV_CMD_DO_ILLUMINATOR_CONFIGURE":           406,
+		"MAV_CMD_GET_HOME_POSITION":                  410,
+		"MAV_CMD_INJECT_FAILURE":                     420,
+		"MAV_CMD_START_RX_PAIR":                      500,
+		"MAV_CMD_GET_MESSAGE_INTERVAL":               510,
+		"MAV_CMD_SET_MESSAGE_INTERVAL":               511,
+		"MAV_CMD_REQUEST_MESSAGE":                    512,
+		"MAV_CMD_REQUEST_PROTOCOL_VERSION":           519,
+		"MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES":     520,
+		"MAV_CMD_REQUEST_CAMERA_INFORMATION":         521,
+		"MAV_CMD_REQUEST_CAMERA_SETTINGS":            522,
+		"MAV_CMD_REQUEST_STORAGE_INFORMATION":        525,
+		"MAV_CMD_STORAGE_FORMAT":                     526,
+		"MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS":      527,
+		"MAV_CMD_REQUEST_FLIGHT_INFORMATION":         528,
+		"MAV_CMD_RESET_CAMERA_SETTINGS":              529,
+		"MAV_CMD_SET_CAMERA_MODE":                    530,
+		"MAV_CMD_SET_CAMERA_ZOOM":                    531,
+		"MAV_CMD_SET_CAMERA_FOCUS":                   532,
+		"MAV_CMD_SET_STORAGE_USAGE":                  533,
+		"MAV_CMD_SET_CAMERA_SOURCE":                  534,
+		"MAV_CMD_JUMP_TAG":                           600,
+		"MAV_CMD_DO_JUMP_TAG":                        601,
+		"MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW":         1000,
+		"MAV_CMD_DO_GIMBAL_MANAGER_CONFIGURE":        1001,
+		"MAV_CMD_IMAGE_START_CAPTURE":                2000,
+		"MAV_CMD_IMAGE_STOP_CAPTURE":                 2001,
+		"MAV_CMD_REQUEST_CAMERA_IMAGE_CAPTURE":       2002,
+		"MAV_CMD_DO_TRIGGER_CONTROL":                 2003,
+		"MAV_CMD_CAMERA_TRACK_POINT":                 2004,
+		"MAV_CMD_CAMERA_TRACK_RECTANGLE":             2005,
+		"MAV_CMD_CAMERA_STOP_TRACKING":               2010,
+		"MAV_CMD_VIDEO_START_CAPTURE":                2500,
+		"MAV_CMD_VIDEO_STOP_CAPTURE":                 2501,
+		"MAV_CMD_VIDEO_START_STREAMING":              2502,
+		"MAV_CMD_VIDEO_STOP_STREAMING":               2503,
+		"MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION":   2504,
+		"MAV_CMD_REQUEST_VIDEO_STREAM_STATUS":        2505,
+		"MAV_CMD_LOGGING_START":                      2510,
+		"MAV_CMD_LOGGING_STOP":                       2511,
+		"MAV_CMD_AIRFRAME_CONFIGURATION":             2520,
+		"MAV_CMD_CONTROL_HIGH_LATENCY":               2600,
+		"MAV_CMD_PANORAMA_CREATE":                    2800,
+		"MAV_CMD_DO_VTOL_TRANSITION":                 3000,
+		"MAV_CMD_ARM_AUTHORIZATION_REQUEST":          3001,
+		"MAV_CMD_SET_GUIDED_SUBMODE_STANDARD":        4000,
+		"MAV_CMD_SET_GUIDED_SUBMODE_CIRCLE":          4001,
+		"MAV_CMD_CONDITION_GATE":                     4501,
+		"MAV_CMD_NAV_FENCE_RETURN_POINT":             5000,
+		"MAV_CMD_NAV_FENCE_POLYGON_VERTEX_INCLUSION": 5001,
+		"MAV_CMD_NAV_FENCE_POLYGON_VERTEX_EXCLUSION": 5002,
+		"MAV_CMD_NAV_FENCE_CIRCLE_INCLUSION":         5003,
+		"MAV_CMD_NAV_FENCE_CIRCLE_EXCLUSION":         5004,
+		"MAV_CMD_NAV_RALLY_POINT":                    5100,
+		"MAV_CMD_UAVCAN_GET_NODE_INFO":               5200,
+		"MAV_CMD_DO_SET_SAFETY_SWITCH_STATE":         5300,
+		"MAV_CMD_DO_ADSB_OUT_IDENT":                  10001,
+		"MAV_CMD_WAYPOINT_USER_1":                    31000,
+		"MAV_CMD_WAYPOINT_USER_2":                    31001,
+		"MAV_CMD_WAYPOINT_USER_3":                    31002,
+		"MAV_CMD_WAYPOINT_USER_4":                    31003,
+		"MAV_CMD_WAYPOINT_USER_5":                    31004,
+		"MAV_CMD_SPATIAL_USER_1":                     31005,
+		"MAV_CMD_SPATIAL_USER_2":                     31006,
+		"MAV_CMD_SPATIAL_USER_3":                     31007,
+		"MAV_CMD_SPATIAL_USER_4":                     31008,
+		"MAV_CMD_SPATIAL_USER_5":                     31009,
+		"MAV_CMD_USER_1":                             31010,
+		"MAV_CMD_USER_2":                             31011,
+		"MAV_CMD_USER_3":                             31012,
+		"MAV_CMD_USER_4":                             31013,
+		"MAV_CMD_USER_5":                             31014,
+		"MAV_CMD_CAN_FORWARD":                        32000,
+		"MAV_CMD_PAYLOAD_PREPARE_DEPLOY":             30001,
+		"MAV_CMD_PAYLOAD_CONTROL_DEPLOY":             30002,
+		"MAV_CMD_FIXED_MAG_CAL_YAW":                  42006,
+		"MAV_CMD_DO_WINCH":                           42600,
+		"MAV_CMD_EXTERNAL_POSITION_ESTIMATE":         43003,
 	}
 )
 
@@ -164,13 +644,174 @@ var File_flightpath_mavlink_commands_proto protoreflect.FileDescriptor
 const file_flightpath_mavlink_commands_proto_rawDesc = "" +
 	"\n" +
 	"!flightpath/mavlink_commands.proto\x12\n" +
-	"flightpath*\x99\x01\n" +
+	"flightpath*\xd4)\n" +
 	"\x06MavCmd\x12\x17\n" +
-	"\x13MAV_CMD_UNSPECIFIED\x10\x00\x12 \n" +
-	"\x1cMAV_CMD_NAV_RETURN_TO_LAUNCH\x10\x14\x12\x17\n" +
-	"\x13MAV_CMD_NAV_TAKEOFF\x10\x16\x12\x18\n" +
-	"\x13MAV_CMD_DO_SET_MODE\x10\xb0\x01\x12!\n" +
-	"\x1cMAV_CMD_COMPONENT_ARM_DISARM\x10\x90\x03*\xc2\x02\n" +
+	"\x13MAV_CMD_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14MAV_CMD_NAV_WAYPOINT\x10\x10\x12\x1c\n" +
+	"\x18MAV_CMD_NAV_LOITER_UNLIM\x10\x11\x12\x1c\n" +
+	"\x18MAV_CMD_NAV_LOITER_TURNS\x10\x12\x12\x1b\n" +
+	"\x17MAV_CMD_NAV_LOITER_TIME\x10\x13\x12 \n" +
+	"\x1cMAV_CMD_NAV_RETURN_TO_LAUNCH\x10\x14\x12\x14\n" +
+	"\x10MAV_CMD_NAV_LAND\x10\x15\x12\x17\n" +
+	"\x13MAV_CMD_NAV_TAKEOFF\x10\x16\x12\x1a\n" +
+	"\x16MAV_CMD_NAV_LAND_LOCAL\x10\x17\x12\x1d\n" +
+	"\x19MAV_CMD_NAV_TAKEOFF_LOCAL\x10\x18\x12\x16\n" +
+	"\x12MAV_CMD_NAV_FOLLOW\x10\x19\x12'\n" +
+	"#MAV_CMD_NAV_CONTINUE_AND_CHANGE_ALT\x10\x1e\x12\x1d\n" +
+	"\x19MAV_CMD_NAV_LOITER_TO_ALT\x10\x1f\x12\x15\n" +
+	"\x11MAV_CMD_DO_FOLLOW\x10 \x12 \n" +
+	"\x1cMAV_CMD_DO_FOLLOW_REPOSITION\x10!\x12\x14\n" +
+	"\x10MAV_CMD_DO_ORBIT\x10\"\x12\x13\n" +
+	"\x0fMAV_CMD_NAV_ROI\x10P\x12\x1c\n" +
+	"\x18MAV_CMD_NAV_PATHPLANNING\x10Q\x12\x1f\n" +
+	"\x1bMAV_CMD_NAV_SPLINE_WAYPOINT\x10R\x12\x1c\n" +
+	"\x18MAV_CMD_NAV_VTOL_TAKEOFF\x10T\x12\x19\n" +
+	"\x15MAV_CMD_NAV_VTOL_LAND\x10U\x12\x1d\n" +
+	"\x19MAV_CMD_NAV_GUIDED_ENABLE\x10\\\x12\x15\n" +
+	"\x11MAV_CMD_NAV_DELAY\x10]\x12\x1d\n" +
+	"\x19MAV_CMD_NAV_PAYLOAD_PLACE\x10^\x12\x14\n" +
+	"\x10MAV_CMD_NAV_LAST\x10_\x12\x1b\n" +
+	"\x17MAV_CMD_CONDITION_DELAY\x10p\x12 \n" +
+	"\x1cMAV_CMD_CONDITION_CHANGE_ALT\x10q\x12\x1e\n" +
+	"\x1aMAV_CMD_CONDITION_DISTANCE\x10r\x12\x19\n" +
+	"\x15MAV_CMD_CONDITION_YAW\x10s\x12\x1b\n" +
+	"\x16MAV_CMD_CONDITION_LAST\x10\x9f\x01\x12\x18\n" +
+	"\x13MAV_CMD_DO_SET_MODE\x10\xb0\x01\x12\x14\n" +
+	"\x0fMAV_CMD_DO_JUMP\x10\xb1\x01\x12\x1c\n" +
+	"\x17MAV_CMD_DO_CHANGE_SPEED\x10\xb2\x01\x12\x18\n" +
+	"\x13MAV_CMD_DO_SET_HOME\x10\xb3\x01\x12\x1d\n" +
+	"\x18MAV_CMD_DO_SET_PARAMETER\x10\xb4\x01\x12\x19\n" +
+	"\x14MAV_CMD_DO_SET_RELAY\x10\xb5\x01\x12\x1c\n" +
+	"\x17MAV_CMD_DO_REPEAT_RELAY\x10\xb6\x01\x12\x19\n" +
+	"\x14MAV_CMD_DO_SET_SERVO\x10\xb7\x01\x12\x1c\n" +
+	"\x17MAV_CMD_DO_REPEAT_SERVO\x10\xb8\x01\x12!\n" +
+	"\x1cMAV_CMD_DO_FLIGHTTERMINATION\x10\xb9\x01\x12\x1f\n" +
+	"\x1aMAV_CMD_DO_CHANGE_ALTITUDE\x10\xba\x01\x12\x1c\n" +
+	"\x17MAV_CMD_DO_SET_ACTUATOR\x10\xbb\x01\x12!\n" +
+	"\x1cMAV_CMD_DO_RETURN_PATH_START\x10\xbc\x01\x12\x1a\n" +
+	"\x15MAV_CMD_DO_LAND_START\x10\xbd\x01\x12\x1a\n" +
+	"\x15MAV_CMD_DO_RALLY_LAND\x10\xbe\x01\x12\x19\n" +
+	"\x14MAV_CMD_DO_GO_AROUND\x10\xbf\x01\x12\x1a\n" +
+	"\x15MAV_CMD_DO_REPOSITION\x10\xc0\x01\x12\x1e\n" +
+	"\x19MAV_CMD_DO_PAUSE_CONTINUE\x10\xc1\x01\x12\x1b\n" +
+	"\x16MAV_CMD_DO_SET_REVERSE\x10\xc2\x01\x12 \n" +
+	"\x1bMAV_CMD_DO_SET_ROI_LOCATION\x10\xc3\x01\x12%\n" +
+	" MAV_CMD_DO_SET_ROI_WPNEXT_OFFSET\x10\xc4\x01\x12\x1c\n" +
+	"\x17MAV_CMD_DO_SET_ROI_NONE\x10\xc5\x01\x12\x1d\n" +
+	"\x18MAV_CMD_DO_SET_ROI_SYSID\x10\xc6\x01\x12\x1d\n" +
+	"\x18MAV_CMD_DO_CONTROL_VIDEO\x10\xc8\x01\x12\x17\n" +
+	"\x12MAV_CMD_DO_SET_ROI\x10\xc9\x01\x12!\n" +
+	"\x1cMAV_CMD_DO_DIGICAM_CONFIGURE\x10\xca\x01\x12\x1f\n" +
+	"\x1aMAV_CMD_DO_DIGICAM_CONTROL\x10\xcb\x01\x12\x1f\n" +
+	"\x1aMAV_CMD_DO_MOUNT_CONFIGURE\x10\xcc\x01\x12\x1d\n" +
+	"\x18MAV_CMD_DO_MOUNT_CONTROL\x10\xcd\x01\x12\"\n" +
+	"\x1dMAV_CMD_DO_SET_CAM_TRIGG_DIST\x10\xce\x01\x12\x1c\n" +
+	"\x17MAV_CMD_DO_FENCE_ENABLE\x10\xcf\x01\x12\x19\n" +
+	"\x14MAV_CMD_DO_PARACHUTE\x10\xd0\x01\x12\x1a\n" +
+	"\x15MAV_CMD_DO_MOTOR_TEST\x10\xd1\x01\x12\x1f\n" +
+	"\x1aMAV_CMD_DO_INVERTED_FLIGHT\x10\xd2\x01\x12\x17\n" +
+	"\x12MAV_CMD_DO_GRIPPER\x10\xd3\x01\x12\x1f\n" +
+	"\x1aMAV_CMD_DO_AUTOTUNE_ENABLE\x10\xd4\x01\x12\x1e\n" +
+	"\x19MAV_CMD_NAV_SET_YAW_SPEED\x10\xd5\x01\x12&\n" +
+	"!MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL\x10\xd6\x01\x12\"\n" +
+	"\x1dMAV_CMD_DO_MOUNT_CONTROL_QUAT\x10\xdc\x01\x12\x1d\n" +
+	"\x18MAV_CMD_DO_GUIDED_MASTER\x10\xdd\x01\x12\x1d\n" +
+	"\x18MAV_CMD_DO_GUIDED_LIMITS\x10\xde\x01\x12\x1e\n" +
+	"\x19MAV_CMD_DO_ENGINE_CONTROL\x10\xdf\x01\x12#\n" +
+	"\x1eMAV_CMD_DO_SET_MISSION_CURRENT\x10\xe0\x01\x12\x14\n" +
+	"\x0fMAV_CMD_DO_LAST\x10\xf0\x01\x12\"\n" +
+	"\x1dMAV_CMD_PREFLIGHT_CALIBRATION\x10\xf1\x01\x12)\n" +
+	"$MAV_CMD_PREFLIGHT_SET_SENSOR_OFFSETS\x10\xf2\x01\x12\x1d\n" +
+	"\x18MAV_CMD_PREFLIGHT_UAVCAN\x10\xf3\x01\x12\x1e\n" +
+	"\x19MAV_CMD_PREFLIGHT_STORAGE\x10\xf5\x01\x12&\n" +
+	"!MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN\x10\xf6\x01\x12\x1a\n" +
+	"\x15MAV_CMD_OVERRIDE_GOTO\x10\xfc\x01\x12\x1b\n" +
+	"\x16MAV_CMD_OBLIQUE_SURVEY\x10\x84\x02\x12!\n" +
+	"\x1cMAV_CMD_DO_SET_STANDARD_MODE\x10\x86\x02\x12\x1a\n" +
+	"\x15MAV_CMD_MISSION_START\x10\xac\x02\x12\x1a\n" +
+	"\x15MAV_CMD_ACTUATOR_TEST\x10\xb6\x02\x12\x1f\n" +
+	"\x1aMAV_CMD_CONFIGURE_ACTUATOR\x10\xb7\x02\x12!\n" +
+	"\x1cMAV_CMD_COMPONENT_ARM_DISARM\x10\x90\x03\x12\x1e\n" +
+	"\x19MAV_CMD_RUN_PREARM_CHECKS\x10\x91\x03\x12\x1f\n" +
+	"\x1aMAV_CMD_ILLUMINATOR_ON_OFF\x10\x95\x03\x12%\n" +
+	" MAV_CMD_DO_ILLUMINATOR_CONFIGURE\x10\x96\x03\x12\x1e\n" +
+	"\x19MAV_CMD_GET_HOME_POSITION\x10\x9a\x03\x12\x1b\n" +
+	"\x16MAV_CMD_INJECT_FAILURE\x10\xa4\x03\x12\x1a\n" +
+	"\x15MAV_CMD_START_RX_PAIR\x10\xf4\x03\x12!\n" +
+	"\x1cMAV_CMD_GET_MESSAGE_INTERVAL\x10\xfe\x03\x12!\n" +
+	"\x1cMAV_CMD_SET_MESSAGE_INTERVAL\x10\xff\x03\x12\x1c\n" +
+	"\x17MAV_CMD_REQUEST_MESSAGE\x10\x80\x04\x12%\n" +
+	" MAV_CMD_REQUEST_PROTOCOL_VERSION\x10\x87\x04\x12+\n" +
+	"&MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES\x10\x88\x04\x12'\n" +
+	"\"MAV_CMD_REQUEST_CAMERA_INFORMATION\x10\x89\x04\x12$\n" +
+	"\x1fMAV_CMD_REQUEST_CAMERA_SETTINGS\x10\x8a\x04\x12(\n" +
+	"#MAV_CMD_REQUEST_STORAGE_INFORMATION\x10\x8d\x04\x12\x1b\n" +
+	"\x16MAV_CMD_STORAGE_FORMAT\x10\x8e\x04\x12*\n" +
+	"%MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS\x10\x8f\x04\x12'\n" +
+	"\"MAV_CMD_REQUEST_FLIGHT_INFORMATION\x10\x90\x04\x12\"\n" +
+	"\x1dMAV_CMD_RESET_CAMERA_SETTINGS\x10\x91\x04\x12\x1c\n" +
+	"\x17MAV_CMD_SET_CAMERA_MODE\x10\x92\x04\x12\x1c\n" +
+	"\x17MAV_CMD_SET_CAMERA_ZOOM\x10\x93\x04\x12\x1d\n" +
+	"\x18MAV_CMD_SET_CAMERA_FOCUS\x10\x94\x04\x12\x1e\n" +
+	"\x19MAV_CMD_SET_STORAGE_USAGE\x10\x95\x04\x12\x1e\n" +
+	"\x19MAV_CMD_SET_CAMERA_SOURCE\x10\x96\x04\x12\x15\n" +
+	"\x10MAV_CMD_JUMP_TAG\x10\xd8\x04\x12\x18\n" +
+	"\x13MAV_CMD_DO_JUMP_TAG\x10\xd9\x04\x12'\n" +
+	"\"MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW\x10\xe8\a\x12(\n" +
+	"#MAV_CMD_DO_GIMBAL_MANAGER_CONFIGURE\x10\xe9\a\x12 \n" +
+	"\x1bMAV_CMD_IMAGE_START_CAPTURE\x10\xd0\x0f\x12\x1f\n" +
+	"\x1aMAV_CMD_IMAGE_STOP_CAPTURE\x10\xd1\x0f\x12)\n" +
+	"$MAV_CMD_REQUEST_CAMERA_IMAGE_CAPTURE\x10\xd2\x0f\x12\x1f\n" +
+	"\x1aMAV_CMD_DO_TRIGGER_CONTROL\x10\xd3\x0f\x12\x1f\n" +
+	"\x1aMAV_CMD_CAMERA_TRACK_POINT\x10\xd4\x0f\x12#\n" +
+	"\x1eMAV_CMD_CAMERA_TRACK_RECTANGLE\x10\xd5\x0f\x12!\n" +
+	"\x1cMAV_CMD_CAMERA_STOP_TRACKING\x10\xda\x0f\x12 \n" +
+	"\x1bMAV_CMD_VIDEO_START_CAPTURE\x10\xc4\x13\x12\x1f\n" +
+	"\x1aMAV_CMD_VIDEO_STOP_CAPTURE\x10\xc5\x13\x12\"\n" +
+	"\x1dMAV_CMD_VIDEO_START_STREAMING\x10\xc6\x13\x12!\n" +
+	"\x1cMAV_CMD_VIDEO_STOP_STREAMING\x10\xc7\x13\x12-\n" +
+	"(MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION\x10\xc8\x13\x12(\n" +
+	"#MAV_CMD_REQUEST_VIDEO_STREAM_STATUS\x10\xc9\x13\x12\x1a\n" +
+	"\x15MAV_CMD_LOGGING_START\x10\xce\x13\x12\x19\n" +
+	"\x14MAV_CMD_LOGGING_STOP\x10\xcf\x13\x12#\n" +
+	"\x1eMAV_CMD_AIRFRAME_CONFIGURATION\x10\xd8\x13\x12!\n" +
+	"\x1cMAV_CMD_CONTROL_HIGH_LATENCY\x10\xa8\x14\x12\x1c\n" +
+	"\x17MAV_CMD_PANORAMA_CREATE\x10\xf0\x15\x12\x1f\n" +
+	"\x1aMAV_CMD_DO_VTOL_TRANSITION\x10\xb8\x17\x12&\n" +
+	"!MAV_CMD_ARM_AUTHORIZATION_REQUEST\x10\xb9\x17\x12(\n" +
+	"#MAV_CMD_SET_GUIDED_SUBMODE_STANDARD\x10\xa0\x1f\x12&\n" +
+	"!MAV_CMD_SET_GUIDED_SUBMODE_CIRCLE\x10\xa1\x1f\x12\x1b\n" +
+	"\x16MAV_CMD_CONDITION_GATE\x10\x95#\x12#\n" +
+	"\x1eMAV_CMD_NAV_FENCE_RETURN_POINT\x10\x88'\x12/\n" +
+	"*MAV_CMD_NAV_FENCE_POLYGON_VERTEX_INCLUSION\x10\x89'\x12/\n" +
+	"*MAV_CMD_NAV_FENCE_POLYGON_VERTEX_EXCLUSION\x10\x8a'\x12'\n" +
+	"\"MAV_CMD_NAV_FENCE_CIRCLE_INCLUSION\x10\x8b'\x12'\n" +
+	"\"MAV_CMD_NAV_FENCE_CIRCLE_EXCLUSION\x10\x8c'\x12\x1c\n" +
+	"\x17MAV_CMD_NAV_RALLY_POINT\x10\xec'\x12!\n" +
+	"\x1cMAV_CMD_UAVCAN_GET_NODE_INFO\x10\xd0(\x12'\n" +
+	"\"MAV_CMD_DO_SET_SAFETY_SWITCH_STATE\x10\xb4)\x12\x1e\n" +
+	"\x19MAV_CMD_DO_ADSB_OUT_IDENT\x10\x91N\x12\x1d\n" +
+	"\x17MAV_CMD_WAYPOINT_USER_1\x10\x98\xf2\x01\x12\x1d\n" +
+	"\x17MAV_CMD_WAYPOINT_USER_2\x10\x99\xf2\x01\x12\x1d\n" +
+	"\x17MAV_CMD_WAYPOINT_USER_3\x10\x9a\xf2\x01\x12\x1d\n" +
+	"\x17MAV_CMD_WAYPOINT_USER_4\x10\x9b\xf2\x01\x12\x1d\n" +
+	"\x17MAV_CMD_WAYPOINT_USER_5\x10\x9c\xf2\x01\x12\x1c\n" +
+	"\x16MAV_CMD_SPATIAL_USER_1\x10\x9d\xf2\x01\x12\x1c\n" +
+	"\x16MAV_CMD_SPATIAL_USER_2\x10\x9e\xf2\x01\x12\x1c\n" +
+	"\x16MAV_CMD_SPATIAL_USER_3\x10\x9f\xf2\x01\x12\x1c\n" +
+	"\x16MAV_CMD_SPATIAL_USER_4\x10\xa0\xf2\x01\x12\x1c\n" +
+	"\x16MAV_CMD_SPATIAL_USER_5\x10\xa1\xf2\x01\x12\x14\n" +
+	"\x0eMAV_CMD_USER_1\x10\xa2\xf2\x01\x12\x14\n" +
+	"\x0eMAV_CMD_USER_2\x10\xa3\xf2\x01\x12\x14\n" +
+	"\x0eMAV_CMD_USER_3\x10\xa4\xf2\x01\x12\x14\n" +
+	"\x0eMAV_CMD_USER_4\x10\xa5\xf2\x01\x12\x14\n" +
+	"\x0eMAV_CMD_USER_5\x10\xa6\xf2\x01\x12\x19\n" +
+	"\x13MAV_CMD_CAN_FORWARD\x10\x80\xfa\x01\x12$\n" +
+	"\x1eMAV_CMD_PAYLOAD_PREPARE_DEPLOY\x10\xb1\xea\x01\x12$\n" +
+	"\x1eMAV_CMD_PAYLOAD_CONTROL_DEPLOY\x10\xb2\xea\x01\x12\x1f\n" +
+	"\x19MAV_CMD_FIXED_MAG_CAL_YAW\x10\x96\xc8\x02\x12\x16\n" +
+	"\x10MAV_CMD_DO_WINCH\x10\xe8\xcc\x02\x12(\n" +
+	"\"MAV_CMD_EXTERNAL_POSITION_ESTIMATE\x10\xfb\xcf\x02*\xc2\x02\n" +
 	"\vMavModeFlag\x12\x1d\n" +
 	"\x19MAV_MODE_FLAG_UNSPECIFIED\x10\x00\x12%\n" +
 	"!MAV_MODE_FLAG_CUSTOM_MODE_ENABLED\x10\x01\x12\x1e\n" +
