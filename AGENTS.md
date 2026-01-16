@@ -5,7 +5,13 @@ This project exposes a gRPC API to control a drone.
 - It uses Protobuf to define the API and Go language to implement it.
 - It uses the [MAVLink Protocol](https://mavlink.io/en/) to control the drone.
 
-## Code Style
+## Reference documentation
+
+- [MAVLink Protocol](https://mavlink.io/en/): Used to control the drone.
+- [gomavlib](https://github.com/bluenviron/gomavlib): The Go library used to send MAVLink commands to the drone and receive MAVLink messages. Especially, look at the [examples](https://github.com/bluenviron/gomavlib/tree/main/examples) directory to understand MAVLink workflows to achieve specific goals.
+- [Protobuf Style Guide](https://buf.build/docs/best-practices/style-guide/)
+
+## Coding Style
 
 - Use Go for all new files
 - Follow the project structure defined in README.md
@@ -30,8 +36,3 @@ func HeartbeatMessageToMap(msg *common.MessageHeartbeat) (map[string]interface{}
     // ...
 }
 ```
-
-## Reference documentation
-- MAVLink Protocol: https://mavlink.io/en/
-- gomavlib – a library that implements the Mavlink protocol in Go: https://github.com/bluenviron/gomavlib
-- Protobuf Style Guide: https://buf.build/docs/best-practices/style-guide/

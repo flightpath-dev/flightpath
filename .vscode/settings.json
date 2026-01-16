@@ -15,6 +15,7 @@
         "mavsdk",
         "mavserver",
         "naresh",
+        "pixhawk",
         "POSCTL",
         "protoc",
         "protocolbuffers",
