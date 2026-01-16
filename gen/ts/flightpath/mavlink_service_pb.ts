@@ -306,7 +306,7 @@ export const MavlinkMessageTypeSchema: GenEnum<MavlinkMessageType> = /*@__PURE__
   enumDesc(file_flightpath_mavlink_service, 0);
 
 /**
- * MAVLinkService handles all MAVLink messages
+ * MAVLinkService handles commands and messages from the gRPC clients
  *
  * @generated from service flightpath.MAVLinkService
  */
