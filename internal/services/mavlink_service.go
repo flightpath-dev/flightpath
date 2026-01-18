@@ -103,25 +103,50 @@ func (s *MAVLinkService) SubscribeMessages(
 	return ctx.Err()
 }
 
-// SendCommand
-// Sends a MAVLink command to the drone.
-func (s *MAVLinkService) SendCommand(
+// SendCommandLong
+// Sends a MAVLink COMMAND_LONG (76) message to the drone.
+// All parameters are floats.
+func (s *MAVLinkService) SendCommandLong(
 	ctx context.Context,
-	req *connect.Request[flightpath.SendCommandRequest],
-) (*connect.Response[flightpath.SendCommandResponse], error) {
+	req *connect.Request[flightpath.SendCommandLongRequest],
+) (*connect.Response[flightpath.SendCommandLongResponse], error) {
 	if s.ctx.CommandDispatcher == nil {
 		return nil, connect.NewError(connect.CodeFailedPrecondition, nil)
 	}
 
-	err := s.ctx.CommandDispatcher.SendCommand(req.Msg)
+	err := s.ctx.CommandDispatcher.SendCommandLong(req.Msg)
 	if err != nil {
-		return connect.NewResponse(&flightpath.SendCommandResponse{
+		return connect.NewResponse(&flightpath.SendCommandLongResponse{
 			Success:      false,
 			ErrorMessage: err.Error(),
 		}), nil
 	}
 
-	return connect.NewResponse(&flightpath.SendCommandResponse{
+	return connect.NewResponse(&flightpath.SendCommandLongResponse{
+		Success: true,
+	}), nil
+}
+
+// SendCommandInt
+// Sends a MAVLink COMMAND_INT (75) message to the drone.
+// Parameters 5 and 6 (x, y) are int32 for higher precision (e.g., lat/lon scaled by 1E7).
+func (s *MAVLinkService) SendCommandInt(
+	ctx context.Context,
+	req *connect.Request[flightpath.SendCommandIntRequest],
+) (*connect.Response[flightpath.SendCommandIntResponse], error) {
+	if s.ctx.CommandDispatcher == nil {
+		return nil, connect.NewError(connect.CodeFailedPrecondition, nil)
+	}
+
+	err := s.ctx.CommandDispatcher.SendCommandInt(req.Msg)
+	if err != nil {
+		return connect.NewResponse(&flightpath.SendCommandIntResponse{
+			Success:      false,
+			ErrorMessage: err.Error(),
+		}), nil
+	}
+
+	return connect.NewResponse(&flightpath.SendCommandIntResponse{
 		Success: true,
 	}), nil
 }

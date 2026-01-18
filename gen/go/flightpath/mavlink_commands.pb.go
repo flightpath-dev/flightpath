@@ -639,6 +639,109 @@ func (MavModeFlag) EnumDescriptor() ([]byte, []int) {
 	return file_flightpath_mavlink_commands_proto_rawDescGZIP(), []int{1}
 }
 
+// MavFrame represents MAV_FRAME enum values.
+// Used in COMMAND_INT messages to specify the coordinate frame.
+// Reference: https://mavlink.io/en/messages/common.html#MAV_FRAME
+type MavFrame int32
+
+const (
+	MavFrame_MAV_FRAME_UNSPECIFIED             MavFrame = 0  // Unspecified frame (maps to MAV_FRAME_GLOBAL = 0 in MAVLink)
+	MavFrame_MAV_FRAME_LOCAL_NED               MavFrame = 1  // Local coordinate frame, Z-down (x: north, y: east, z: down)
+	MavFrame_MAV_FRAME_MISSION                 MavFrame = 2  // NOT a coordinate frame, indicates a mission command
+	MavFrame_MAV_FRAME_GLOBAL_RELATIVE_ALT     MavFrame = 3  // Global (WGS84) coordinate frame + altitude relative to the home position
+	MavFrame_MAV_FRAME_LOCAL_ENU               MavFrame = 4  // Local coordinate frame, Z-up (x: east, y: north, z: up)
+	MavFrame_MAV_FRAME_GLOBAL_INT              MavFrame = 5  // Global (WGS84) coordinate frame (scaled) + altitude relative to mean sea level (MSL)
+	MavFrame_MAV_FRAME_GLOBAL_RELATIVE_ALT_INT MavFrame = 6  // Global (WGS84) coordinate frame (scaled) + altitude relative to the home position
+	MavFrame_MAV_FRAME_LOCAL_OFFSET_NED        MavFrame = 7  // Offset to the current local frame. Whatever the current local frame is, the altitude value is added to it
+	MavFrame_MAV_FRAME_BODY_NED                MavFrame = 8  // Setpoint in body NED frame. This makes sense when all position control is externalized - e.g. useful to command 2 m/s^2 acceleration to the right
+	MavFrame_MAV_FRAME_BODY_OFFSET_NED         MavFrame = 9  // Offset in body NED frame. This makes sense when adding setpoints to the current flight path, to avoid an obstacle or similar
+	MavFrame_MAV_FRAME_GLOBAL_TERRAIN_ALT      MavFrame = 10 // Global (WGS84) coordinate frame with AGL altitude (at the waypoint coordinate). First value is longitude, second is latitude, third is AGL altitude
+	MavFrame_MAV_FRAME_GLOBAL_TERRAIN_ALT_INT  MavFrame = 11 // Global (WGS84) coordinate frame (scaled) with AGL altitude (at the waypoint coordinate). First value is longitude, second is latitude, third is AGL altitude
+	MavFrame_MAV_FRAME_BODY_FRD                MavFrame = 12 // Body fixed frame of reference, Z-down (x: forward, y: right, z: down)
+	MavFrame_MAV_FRAME_BODY_FLU                MavFrame = 13 // Body fixed frame of reference, Z-up (x: forward, y: left, z: up)
+	MavFrame_MAV_FRAME_MOCAP_NED               MavFrame = 14 // Odometry local coordinate frame of data given by a motion capture system, Z-down (x: north, y: east, z: down)
+	MavFrame_MAV_FRAME_MOCAP_ENU               MavFrame = 15 // Odometry local coordinate frame of data given by a motion capture system, Z-up (x: east, y: north, z: up)
+	MavFrame_MAV_FRAME_VISION_NED              MavFrame = 16 // Odometry local coordinate frame of data given by a vision estimation system, Z-down (x: north, y: east, z: down)
+	MavFrame_MAV_FRAME_VISION_ENU              MavFrame = 17 // Odometry local coordinate frame of data given by a vision estimation system, Z-up (x: east, y: north, z: up)
+	MavFrame_MAV_FRAME_ESTIM_NED               MavFrame = 18 // Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-down (x: north, y: east, z: down)
+	MavFrame_MAV_FRAME_ESTIM_ENU               MavFrame = 19 // Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-up (x: east, y: north, z: up)
+)
+
+// Enum value maps for MavFrame.
+var (
+	MavFrame_name = map[int32]string{
+		0:  "MAV_FRAME_UNSPECIFIED",
+		1:  "MAV_FRAME_LOCAL_NED",
+		2:  "MAV_FRAME_MISSION",
+		3:  "MAV_FRAME_GLOBAL_RELATIVE_ALT",
+		4:  "MAV_FRAME_LOCAL_ENU",
+		5:  "MAV_FRAME_GLOBAL_INT",
+		6:  "MAV_FRAME_GLOBAL_RELATIVE_ALT_INT",
+		7:  "MAV_FRAME_LOCAL_OFFSET_NED",
+		8:  "MAV_FRAME_BODY_NED",
+		9:  "MAV_FRAME_BODY_OFFSET_NED",
+		10: "MAV_FRAME_GLOBAL_TERRAIN_ALT",
+		11: "MAV_FRAME_GLOBAL_TERRAIN_ALT_INT",
+		12: "MAV_FRAME_BODY_FRD",
+		13: "MAV_FRAME_BODY_FLU",
+		14: "MAV_FRAME_MOCAP_NED",
+		15: "MAV_FRAME_MOCAP_ENU",
+		16: "MAV_FRAME_VISION_NED",
+		17: "MAV_FRAME_VISION_ENU",
+		18: "MAV_FRAME_ESTIM_NED",
+		19: "MAV_FRAME_ESTIM_ENU",
+	}
+	MavFrame_value = map[string]int32{
+		"MAV_FRAME_UNSPECIFIED":             0,
+		"MAV_FRAME_LOCAL_NED":               1,
+		"MAV_FRAME_MISSION":                 2,
+		"MAV_FRAME_GLOBAL_RELATIVE_ALT":     3,
+		"MAV_FRAME_LOCAL_ENU":               4,
+		"MAV_FRAME_GLOBAL_INT":              5,
+		"MAV_FRAME_GLOBAL_RELATIVE_ALT_INT": 6,
+		"MAV_FRAME_LOCAL_OFFSET_NED":        7,
+		"MAV_FRAME_BODY_NED":                8,
+		"MAV_FRAME_BODY_OFFSET_NED":         9,
+		"MAV_FRAME_GLOBAL_TERRAIN_ALT":      10,
+		"MAV_FRAME_GLOBAL_TERRAIN_ALT_INT":  11,
+		"MAV_FRAME_BODY_FRD":                12,
+		"MAV_FRAME_BODY_FLU":                13,
+		"MAV_FRAME_MOCAP_NED":               14,
+		"MAV_FRAME_MOCAP_ENU":               15,
+		"MAV_FRAME_VISION_NED":              16,
+		"MAV_FRAME_VISION_ENU":              17,
+		"MAV_FRAME_ESTIM_NED":               18,
+		"MAV_FRAME_ESTIM_ENU":               19,
+	}
+)
+
+func (x MavFrame) Enum() *MavFrame {
+	p := new(MavFrame)
+	*p = x
+	return p
+}
+
+func (x MavFrame) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (MavFrame) Descriptor() protoreflect.EnumDescriptor {
+	return file_flightpath_mavlink_commands_proto_enumTypes[2].Descriptor()
+}
+
+func (MavFrame) Type() protoreflect.EnumType {
+	return &file_flightpath_mavlink_commands_proto_enumTypes[2]
+}
+
+func (x MavFrame) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use MavFrame.Descriptor instead.
+func (MavFrame) EnumDescriptor() ([]byte, []int) {
+	return file_flightpath_mavlink_commands_proto_rawDescGZIP(), []int{2}
+}
+
 var File_flightpath_mavlink_commands_proto protoreflect.FileDescriptor
 
 const file_flightpath_mavlink_commands_proto_rawDesc = "" +
@@ -821,7 +924,29 @@ const file_flightpath_mavlink_commands_proto_rawDesc = "" +
 	"\x1fMAV_MODE_FLAG_STABILIZE_ENABLED\x10\x10\x12\x1d\n" +
 	"\x19MAV_MODE_FLAG_HIL_ENABLED\x10 \x12&\n" +
 	"\"MAV_MODE_FLAG_MANUAL_INPUT_ENABLED\x10@\x12\x1f\n" +
-	"\x1aMAV_MODE_FLAG_SAFETY_ARMED\x10\x80\x01B\xa6\x01\n" +
+	"\x1aMAV_MODE_FLAG_SAFETY_ARMED\x10\x80\x01*\xb9\x04\n" +
+	"\bMavFrame\x12\x19\n" +
+	"\x15MAV_FRAME_UNSPECIFIED\x10\x00\x12\x17\n" +
+	"\x13MAV_FRAME_LOCAL_NED\x10\x01\x12\x15\n" +
+	"\x11MAV_FRAME_MISSION\x10\x02\x12!\n" +
+	"\x1dMAV_FRAME_GLOBAL_RELATIVE_ALT\x10\x03\x12\x17\n" +
+	"\x13MAV_FRAME_LOCAL_ENU\x10\x04\x12\x18\n" +
+	"\x14MAV_FRAME_GLOBAL_INT\x10\x05\x12%\n" +
+	"!MAV_FRAME_GLOBAL_RELATIVE_ALT_INT\x10\x06\x12\x1e\n" +
+	"\x1aMAV_FRAME_LOCAL_OFFSET_NED\x10\a\x12\x16\n" +
+	"\x12MAV_FRAME_BODY_NED\x10\b\x12\x1d\n" +
+	"\x19MAV_FRAME_BODY_OFFSET_NED\x10\t\x12 \n" +
+	"\x1cMAV_FRAME_GLOBAL_TERRAIN_ALT\x10\n" +
+	"\x12$\n" +
+	" MAV_FRAME_GLOBAL_TERRAIN_ALT_INT\x10\v\x12\x16\n" +
+	"\x12MAV_FRAME_BODY_FRD\x10\f\x12\x16\n" +
+	"\x12MAV_FRAME_BODY_FLU\x10\r\x12\x17\n" +
+	"\x13MAV_FRAME_MOCAP_NED\x10\x0e\x12\x17\n" +
+	"\x13MAV_FRAME_MOCAP_ENU\x10\x0f\x12\x18\n" +
+	"\x14MAV_FRAME_VISION_NED\x10\x10\x12\x18\n" +
+	"\x14MAV_FRAME_VISION_ENU\x10\x11\x12\x17\n" +
+	"\x13MAV_FRAME_ESTIM_NED\x10\x12\x12\x17\n" +
+	"\x13MAV_FRAME_ESTIM_ENU\x10\x13B\xa6\x01\n" +
 	"\x0ecom.flightpathB\x14MavlinkCommandsProtoP\x01Z6github.com/flightpath-dev/flightpath/gen/go/flightpath\xa2\x02\x03FXX\xaa\x02\n" +
 	"Flightpath\xca\x02\n" +
 	"Flightpath\xe2\x02\x16Flightpath\\GPBMetadata\xea\x02\n" +
@@ -839,10 +964,11 @@ func file_flightpath_mavlink_commands_proto_rawDescGZIP() []byte {
 	return file_flightpath_mavlink_commands_proto_rawDescData
 }
 
-var file_flightpath_mavlink_commands_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_flightpath_mavlink_commands_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_flightpath_mavlink_commands_proto_goTypes = []any{
 	(MavCmd)(0),      // 0: flightpath.MavCmd
 	(MavModeFlag)(0), // 1: flightpath.MavModeFlag
+	(MavFrame)(0),    // 2: flightpath.MavFrame
 }
 var file_flightpath_mavlink_commands_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -862,7 +988,7 @@ func file_flightpath_mavlink_commands_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_flightpath_mavlink_commands_proto_rawDesc), len(file_flightpath_mavlink_commands_proto_rawDesc)),
-			NumEnums:      2,
+			NumEnums:      3,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,

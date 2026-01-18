@@ -30,10 +30,11 @@ func NewMAVLinkCommandDispatcher(node *gomavlib.Node) *MAVLinkCommandDispatcher 
 	}
 }
 
-// SendCommand
-// Sends a MAVLink command to the drone.
+// SendCommandLong
+// Sends a MAVLink COMMAND_LONG (76) message to the drone.
 // Converts the protobuf request to a MAVLink MessageCommandLong and sends it.
-func (d *MAVLinkCommandDispatcher) SendCommand(req *flightpath.SendCommandRequest) error {
+// All parameters are floats.
+func (d *MAVLinkCommandDispatcher) SendCommandLong(req *flightpath.SendCommandLongRequest) error {
 	// Convert protobuf request to MAVLink MessageCommandLong
 	msg := &common.MessageCommandLong{
 		TargetSystem:    uint8(req.TargetSystemId),
@@ -47,6 +48,32 @@ func (d *MAVLinkCommandDispatcher) SendCommand(req *flightpath.SendCommandReques
 		Param5:          req.Param5,
 		Param6:          req.Param6,
 		Param7:          req.Param7,
+	}
+
+	// Send to all active channels
+	return d.node.WriteMessageAll(msg)
+}
+
+// SendCommandInt
+// Sends a MAVLink COMMAND_INT (75) message to the drone.
+// Converts the protobuf request to a MAVLink MessageCommandInt and sends it.
+// Parameters 5 and 6 (x, y) are int32 for higher precision (e.g., lat/lon scaled by 1E7).
+func (d *MAVLinkCommandDispatcher) SendCommandInt(req *flightpath.SendCommandIntRequest) error {
+	// Convert protobuf request to MAVLink MessageCommandInt
+	msg := &common.MessageCommandInt{
+		TargetSystem:    uint8(req.TargetSystemId),
+		TargetComponent: uint8(req.TargetComponentId),
+		Frame:           common.MAV_FRAME(req.Frame),
+		Command:         common.MAV_CMD(req.Command),
+		Current:         0, // Not used, set to 0
+		Autocontinue:    0, // Not used, set to 0
+		Param1:          req.Param1,
+		Param2:          req.Param2,
+		Param3:          req.Param3,
+		Param4:          req.Param4,
+		X:               req.X, // int32 for param5 (lat * 1E7 or local x * 1E4)
+		Y:               req.Y, // int32 for param6 (lon * 1E7 or local y * 1E4)
+		Z:               req.Z, // float for param7 (altitude in meters)
 	}
 
 	// Send to all active channels
