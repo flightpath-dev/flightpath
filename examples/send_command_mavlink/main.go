@@ -287,6 +287,52 @@ func writeAndWaitCommandLong(
 	}
 }
 
+// writeAndWaitCommandInt
+// Sends a COMMAND_INT message and waits for COMMAND_ACK response.
+func writeAndWaitCommandInt(
+	node *gomavlib.Node,
+	channel *gomavlib.Channel,
+	cmd *common.MessageCommandInt,
+	timeout time.Duration,
+) error {
+	log.Printf("Sending command %d to system %d, component %d...", cmd.Command, cmd.TargetSystem, cmd.TargetComponent)
+	err := node.WriteMessageTo(channel, cmd)
+	if err != nil {
+		return fmt.Errorf("failed to write command: %w", err)
+	}
+
+	t := time.NewTimer(timeout)
+	defer t.Stop()
+
+	for {
+		select {
+		case evt := <-node.Events():
+			if evt, ok := evt.(*gomavlib.EventFrame); ok {
+				if ack, ok2 := evt.Message().(*common.MessageCommandAck); ok2 {
+					if ack.Command == cmd.Command &&
+						evt.SystemID() == cmd.TargetSystem &&
+						evt.ComponentID() == cmd.TargetComponent {
+						switch {
+						case ack.Result == common.MAV_RESULT_IN_PROGRESS:
+							log.Printf("Command progress: %d%%\n", ack.Progress)
+
+						case ack.Result != common.MAV_RESULT_ACCEPTED:
+							return fmt.Errorf("command failed with result %v", ack.Result)
+
+						default:
+							log.Printf("Command succeeded (result: %v)\n", ack.Result)
+							return nil
+						}
+					}
+				}
+			}
+
+		case <-t.C:
+			return fmt.Errorf("command timed out after %v", timeout)
+		}
+	}
+}
+
 // sleepWhileListening
 // Sleeps for the specified duration while continuing to process node events.
 func sleepWhileListening(node *gomavlib.Node, d time.Duration) {
@@ -303,7 +349,7 @@ func sleepWhileListening(node *gomavlib.Node, d time.Duration) {
 }
 
 // sendArmCommand
-// Sends an arm command to the drone.
+// Sends an arm command to the drone using MAV_CMD_COMPONENT_ARM_DISARM.
 func sendArmCommand(
 	node *gomavlib.Node,
 	channel *gomavlib.Channel,
@@ -315,45 +361,123 @@ func sendArmCommand(
 			TargetSystem:    targetSystemID,
 			TargetComponent: targetComponentID,
 			Command:         common.MAV_CMD_COMPONENT_ARM_DISARM,
-			Param1:          1,
-			Param2:          0,
-			Param3:          0,
-			Param4:          0,
-			Param5:          0,
-			Param6:          0,
-			Param7:          0,
+			Param1:          1, // 1 to arm, 0 to disarm
+			Param2:          0, // 0 = normal arming (not force)
+			Param3:          0, // Unused
+			Param4:          0, // Unused
+			Param5:          0, // Unused
+			Param6:          0, // Unused
+			Param7:          0, // Unused
 		},
 		5*time.Second,
 	)
 }
 
+// requestGlobalPositionInt
+// Requests GLOBAL_POSITION_INT message using MAV_CMD_REQUEST_MESSAGE and waits for the response.
+func requestGlobalPositionInt(
+	node *gomavlib.Node,
+	channel *gomavlib.Channel,
+	targetSystemID, targetComponentID uint8,
+	timeout time.Duration,
+) (*common.MessageGlobalPositionInt, error) {
+	// Request GLOBAL_POSITION_INT (message ID 33) using MAV_CMD_REQUEST_MESSAGE
+	log.Println("Requesting GLOBAL_POSITION_INT message...")
+	err := node.WriteMessageTo(channel, &common.MessageCommandLong{
+		TargetSystem:    targetSystemID,
+		TargetComponent: targetComponentID,
+		Command:         common.MAV_CMD_REQUEST_MESSAGE,
+		Param1:          33, // Message ID for GLOBAL_POSITION_INT
+		Param2:          0,
+		Param3:          0,
+		Param4:          0,
+		Param5:          0,
+		Param6:          0,
+		Param7:          0,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to request GLOBAL_POSITION_INT: %w", err)
+	}
+
+	t := time.NewTimer(timeout)
+	defer t.Stop()
+
+	for {
+		select {
+		case evt := <-node.Events():
+			if evt, ok := evt.(*gomavlib.EventFrame); ok {
+				if pos, ok2 := evt.Message().(*common.MessageGlobalPositionInt); ok2 {
+					if evt.SystemID() == targetSystemID && evt.ComponentID() == targetComponentID {
+						log.Printf("Received GLOBAL_POSITION_INT: lat=%d, lon=%d, alt=%d mm\n",
+							pos.Lat, pos.Lon, pos.Alt)
+						return pos, nil
+					}
+				}
+			}
+
+		case <-t.C:
+			return nil, fmt.Errorf("timeout waiting for GLOBAL_POSITION_INT after %v", timeout)
+		}
+	}
+}
+
 // sendTakeoffCommand
-// Sends a takeoff command by setting mode to AUTO/TAKEOFF using MAV_CMD_DO_SET_MODE.
+// Sends a takeoff command using MAV_CMD_NAV_TAKEOFF with COMMAND_INT for high precision lat/lon.
+// First requests the current position, then calculates takeoff altitude as current MSL altitude + 10 meters.
+// Uses MAV_FRAME_GLOBAL_INT frame with absolute MSL altitude.
 func sendTakeoffCommand(
 	node *gomavlib.Node,
 	channel *gomavlib.Channel,
 	targetSystemID, targetComponentID uint8,
 ) error {
-	return writeAndWaitCommandLong(node,
+	// Step 1: Request current global position
+	pos, err := requestGlobalPositionInt(node, channel, targetSystemID, targetComponentID, CommandTimeout)
+	if err != nil {
+		return fmt.Errorf("failed to get current position: %w", err)
+	}
+
+	// Step 2: Extract position data
+	// GLOBAL_POSITION_INT uses:
+	// - lat/lon: int32 in degrees * 1E7
+	// - alt: int32 in mm (MSL)
+	latitude := pos.Lat     // Already in degrees * 1E7
+	longitude := pos.Lon    // Already in degrees * 1E7
+	currentAltMm := pos.Alt // MSL altitude in mm
+
+	// Step 3: Calculate takeoff altitude (current MSL + 10 meters)
+	// 10 meters = 10000 mm
+	takeoffAltMm := currentAltMm + 10000
+	// Convert to meters for COMMAND_INT Z parameter (float)
+	takeoffAltM := float32(takeoffAltMm) / 1000.0
+
+	log.Printf("Current position: lat=%.7f, lon=%.7f, alt=%.2f m MSL\n",
+		float32(latitude)/1e7, float32(longitude)/1e7, float32(currentAltMm)/1000.0)
+	log.Printf("Takeoff altitude: %.2f m MSL\n", takeoffAltM)
+
+	// Step 4: Send takeoff command with MAV_FRAME_GLOBAL_INT
+	return writeAndWaitCommandInt(node,
 		channel,
-		&common.MessageCommandLong{
+		&common.MessageCommandInt{
 			TargetSystem:    targetSystemID,
 			TargetComponent: targetComponentID,
-			Command:         common.MAV_CMD_DO_SET_MODE,
-			Param1:          129, // MAV_MODE_FLAG_SAFETY_ARMED (128) | MAV_MODE_FLAG_CUSTOM_MODE_ENABLED (1)
-			Param2:          4,   // MAIN_MODE_AUTO
-			Param3:          2,   // SUB_MODE_AUTO_TAKEOFF
-			Param4:          0,
-			Param5:          0,
-			Param6:          0,
-			Param7:          0,
+			Frame:           common.MAV_FRAME_GLOBAL_INT,
+			Command:         common.MAV_CMD_NAV_TAKEOFF,
+			Current:         0,           // Not used
+			Autocontinue:    0,           // Not used
+			Param1:          -1,          // Minimum pitch (-1 = undefined, use default)
+			Param2:          0,           // Empty
+			Param3:          0,           // Empty
+			Param4:          0,           // Yaw angle (0 = undefined, use current heading)
+			X:               latitude,    // int32: latitude in degrees * 1E7
+			Y:               longitude,   // int32: longitude in degrees * 1E7
+			Z:               takeoffAltM, // float: altitude in meters (MSL, absolute)
 		},
 		CommandTimeout,
 	)
 }
 
 // sendRTLCommand
-// Sends a return-to-launch (RTL) command by setting mode to AUTO/RTL using MAV_CMD_DO_SET_MODE.
+// Sends a return-to-launch (RTL) command using MAV_CMD_NAV_RETURN_TO_LAUNCH.
 func sendRTLCommand(
 	node *gomavlib.Node,
 	channel *gomavlib.Channel,
@@ -364,14 +488,14 @@ func sendRTLCommand(
 		&common.MessageCommandLong{
 			TargetSystem:    targetSystemID,
 			TargetComponent: targetComponentID,
-			Command:         common.MAV_CMD_DO_SET_MODE,
-			Param1:          129, // MAV_MODE_FLAG_SAFETY_ARMED (128) | MAV_MODE_FLAG_CUSTOM_MODE_ENABLED (1)
-			Param2:          4,   // MAIN_MODE_AUTO
-			Param3:          5,   // SUB_MODE_AUTO_RTL
-			Param4:          0,
-			Param5:          0,
-			Param6:          0,
-			Param7:          0,
+			Command:         common.MAV_CMD_NAV_RETURN_TO_LAUNCH,
+			Param1:          0, // Unused
+			Param2:          0, // Unused
+			Param3:          0, // Unused
+			Param4:          0, // Unused
+			Param5:          0, // Unused
+			Param6:          0, // Unused
+			Param7:          0, // Unused
 		},
 		CommandTimeout,
 	)

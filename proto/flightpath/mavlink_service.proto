@@ -6,6 +6,7 @@ import "flightpath/extended_sys_state.proto";
 import "flightpath/global_position_int.proto";
 import "flightpath/gps_raw_int.proto";
 import "flightpath/heartbeat.proto";
+import "flightpath/mavlink_commands.proto";
 import "flightpath/mission_current.proto";
 import "flightpath/mission_item_reached.proto";
 import "flightpath/radio_status.proto";
@@ -18,8 +19,13 @@ service MAVLinkService {
   // Subscribe to all MAVLink messages (or a filtered subset)
   rpc SubscribeMessages(SubscribeMessagesRequest) returns (stream SubscribeMessagesResponse);
 
-  // Send a MAVLink command to the drone
-  rpc SendCommand(SendCommandRequest) returns (SendCommandResponse);
+  // Send a MAVLink COMMAND_LONG (76) message to the drone
+  // All parameters are floats
+  rpc SendCommandLong(SendCommandLongRequest) returns (SendCommandLongResponse);
+
+  // Send a MAVLink COMMAND_INT (75) message to the drone
+  // Parameters 5 and 6 (x, y) are int32 for higher precision (e.g., lat/lon)
+  rpc SendCommandInt(SendCommandIntRequest) returns (SendCommandIntResponse);
 }
 
 // MavlinkMessageType identifies the type of MAVLink message
@@ -73,8 +79,9 @@ message SubscribeMessagesResponse {
   }
 }
 
-// Send a MAVLink command to the drone
-message SendCommandRequest {
+// Send a MAVLink COMMAND_LONG (76) message to the drone
+// All parameters are floats
+message SendCommandLongRequest {
   // Target system ID (typically 1 for autopilot)
   uint32 target_system_id = 1;
 
@@ -84,7 +91,7 @@ message SendCommandRequest {
   // MAV_CMD enum value (e.g., 22 for MAV_CMD_NAV_TAKEOFF, 20 for MAV_CMD_NAV_RETURN_TO_LAUNCH)
   uint32 command = 3;
 
-  // Command parameters (param1 through param7)
+  // Command parameters (param1 through param7, all floats)
   float param1 = 4;
   float param2 = 5;
   float param3 = 6;
@@ -94,8 +101,48 @@ message SendCommandRequest {
   float param7 = 10;
 }
 
-// Response to a SendCommand request
-message SendCommandResponse {
+// Response to a SendCommandLong request
+message SendCommandLongResponse {
+  // Whether the command was sent successfully
+  bool success = 1;
+
+  // Error message if the command failed (optional)
+  string error_message = 2;
+}
+
+// Send a MAVLink COMMAND_INT (75) message to the drone
+// Parameters 5 and 6 (x, y) are int32 for higher precision (e.g., lat/lon scaled by 1E7)
+message SendCommandIntRequest {
+  // Target system ID (typically 1 for autopilot)
+  uint32 target_system_id = 1;
+
+  // Target component ID (typically 1 for autopilot)
+  uint32 target_component_id = 2;
+
+  // MAV_FRAME enum value specifying the coordinate frame
+  MavFrame frame = 3;
+
+  // MAV_CMD enum value (e.g., 16 for MAV_CMD_NAV_WAYPOINT)
+  uint32 command = 4;
+
+  // Command parameters (param1 through param4 are floats)
+  float param1 = 5;
+  float param2 = 6;
+  float param3 = 7;
+  float param4 = 8;
+
+  // Parameter 5 (x): int32 for latitude (degrees * 1E7) or local x (m * 1E4)
+  int32 x = 9;
+
+  // Parameter 6 (y): int32 for longitude (degrees * 1E7) or local y (m * 1E4)
+  int32 y = 10;
+
+  // Parameter 7 (z): float for altitude (MSL) in meters
+  float z = 11;
+}
+
+// Response to a SendCommandInt request
+message SendCommandIntResponse {
   // Whether the command was sent successfully
   bool success = 1;
 

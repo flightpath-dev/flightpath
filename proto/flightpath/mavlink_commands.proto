@@ -203,3 +203,29 @@ enum MavModeFlag {
   // Bit 7 (128): Safety switch is currently engaged (armed)
   MAV_MODE_FLAG_SAFETY_ARMED = 128;
 }
+
+// MavFrame represents MAV_FRAME enum values.
+// Used in COMMAND_INT messages to specify the coordinate frame.
+// Reference: https://mavlink.io/en/messages/common.html#MAV_FRAME
+enum MavFrame {
+  MAV_FRAME_UNSPECIFIED = 0; // Unspecified frame (maps to MAV_FRAME_GLOBAL = 0 in MAVLink)
+  MAV_FRAME_LOCAL_NED = 1; // Local coordinate frame, Z-down (x: north, y: east, z: down)
+  MAV_FRAME_MISSION = 2; // NOT a coordinate frame, indicates a mission command
+  MAV_FRAME_GLOBAL_RELATIVE_ALT = 3; // Global (WGS84) coordinate frame + altitude relative to the home position
+  MAV_FRAME_LOCAL_ENU = 4; // Local coordinate frame, Z-up (x: east, y: north, z: up)
+  MAV_FRAME_GLOBAL_INT = 5; // Global (WGS84) coordinate frame (scaled) + altitude relative to mean sea level (MSL)
+  MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6; // Global (WGS84) coordinate frame (scaled) + altitude relative to the home position
+  MAV_FRAME_LOCAL_OFFSET_NED = 7; // Offset to the current local frame. Whatever the current local frame is, the altitude value is added to it
+  MAV_FRAME_BODY_NED = 8; // Setpoint in body NED frame. This makes sense when all position control is externalized - e.g. useful to command 2 m/s^2 acceleration to the right
+  MAV_FRAME_BODY_OFFSET_NED = 9; // Offset in body NED frame. This makes sense when adding setpoints to the current flight path, to avoid an obstacle or similar
+  MAV_FRAME_GLOBAL_TERRAIN_ALT = 10; // Global (WGS84) coordinate frame with AGL altitude (at the waypoint coordinate). First value is longitude, second is latitude, third is AGL altitude
+  MAV_FRAME_GLOBAL_TERRAIN_ALT_INT = 11; // Global (WGS84) coordinate frame (scaled) with AGL altitude (at the waypoint coordinate). First value is longitude, second is latitude, third is AGL altitude
+  MAV_FRAME_BODY_FRD = 12; // Body fixed frame of reference, Z-down (x: forward, y: right, z: down)
+  MAV_FRAME_BODY_FLU = 13; // Body fixed frame of reference, Z-up (x: forward, y: left, z: up)
+  MAV_FRAME_MOCAP_NED = 14; // Odometry local coordinate frame of data given by a motion capture system, Z-down (x: north, y: east, z: down)
+  MAV_FRAME_MOCAP_ENU = 15; // Odometry local coordinate frame of data given by a motion capture system, Z-up (x: east, y: north, z: up)
+  MAV_FRAME_VISION_NED = 16; // Odometry local coordinate frame of data given by a vision estimation system, Z-down (x: north, y: east, z: down)
+  MAV_FRAME_VISION_ENU = 17; // Odometry local coordinate frame of data given by a vision estimation system, Z-up (x: east, y: north, z: up)
+  MAV_FRAME_ESTIM_NED = 18; // Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-down (x: north, y: east, z: down)
+  MAV_FRAME_ESTIM_ENU = 19; // Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-up (x: east, y: north, z: up)
+}

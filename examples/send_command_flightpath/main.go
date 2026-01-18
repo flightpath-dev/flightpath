@@ -323,9 +323,9 @@ func waitForHeartbeatCondition(
 }
 
 // sendArmCommand
-// Sends an arm command to the drone.
+// Sends an arm command to the drone using MAV_CMD_COMPONENT_ARM_DISARM.
 func sendArmCommand(ctx context.Context, mavlinkService flightpathconnect.MAVLinkServiceClient, targetSystemID, targetComponentID uint32) error {
-	req := connect.NewRequest(&flightpath.SendCommandRequest{
+	req := connect.NewRequest(&flightpath.SendCommandLongRequest{
 		TargetSystemId:    targetSystemID,
 		TargetComponentId: targetComponentID,
 		Command:           uint32(flightpath.MavCmd_MAV_CMD_COMPONENT_ARM_DISARM),
@@ -338,9 +338,9 @@ func sendArmCommand(ctx context.Context, mavlinkService flightpathconnect.MAVLin
 		Param7:            0.0, // Unused
 	})
 
-	resp, err := mavlinkService.SendCommand(ctx, req)
+	resp, err := mavlinkService.SendCommandLong(ctx, req)
 	if err != nil {
-		return fmt.Errorf("failed to call SendCommand: %w", err)
+		return fmt.Errorf("failed to call SendCommandLong: %w", err)
 	}
 
 	if !resp.Msg.Success {
@@ -350,25 +350,135 @@ func sendArmCommand(ctx context.Context, mavlinkService flightpathconnect.MAVLin
 	return nil
 }
 
-// sendTakeoffCommand
-// Sends a takeoff command by setting mode to AUTO/TAKEOFF using MAV_CMD_DO_SET_MODE.
-func sendTakeoffCommand(ctx context.Context, mavlinkService flightpathconnect.MAVLinkServiceClient, targetSystemID, targetComponentID uint32) error {
-	req := connect.NewRequest(&flightpath.SendCommandRequest{
+// requestGlobalPositionInt
+// Requests GLOBAL_POSITION_INT message using MAV_CMD_REQUEST_MESSAGE and waits for the response.
+func requestGlobalPositionInt(
+	ctx context.Context,
+	mavlinkService flightpathconnect.MAVLinkServiceClient,
+	targetSystemID, targetComponentID uint32,
+	timeout time.Duration,
+) (*flightpath.GlobalPositionInt, error) {
+	// Step 1: Request GLOBAL_POSITION_INT (message ID 33) using MAV_CMD_REQUEST_MESSAGE
+	fmt.Println("Requesting GLOBAL_POSITION_INT message...")
+	reqCmd := connect.NewRequest(&flightpath.SendCommandLongRequest{
 		TargetSystemId:    targetSystemID,
 		TargetComponentId: targetComponentID,
-		Command:           uint32(flightpath.MavCmd_MAV_CMD_DO_SET_MODE),
-		Param1:            float32(uint32(flightpath.MavModeFlag_MAV_MODE_FLAG_SAFETY_ARMED) | uint32(flightpath.MavModeFlag_MAV_MODE_FLAG_CUSTOM_MODE_ENABLED)),
-		Param2:            float32(flightpath.MainMode_MAIN_MODE_AUTO),
-		Param3:            float32(flightpath.SubMode_SUB_MODE_AUTO_TAKEOFF),
+		Command:           uint32(flightpath.MavCmd_MAV_CMD_REQUEST_MESSAGE),
+		Param1:            33, // Message ID for GLOBAL_POSITION_INT
+		Param2:            0.0,
+		Param3:            0.0,
 		Param4:            0.0,
 		Param5:            0.0,
 		Param6:            0.0,
 		Param7:            0.0,
 	})
 
-	resp, err := mavlinkService.SendCommand(ctx, req)
+	respCmd, err := mavlinkService.SendCommandLong(ctx, reqCmd)
 	if err != nil {
-		return fmt.Errorf("failed to call SendCommand: %w", err)
+		return nil, fmt.Errorf("failed to request GLOBAL_POSITION_INT: %w", err)
+	}
+	if !respCmd.Msg.Success {
+		return nil, fmt.Errorf("request command failed: %s", respCmd.Msg.ErrorMessage)
+	}
+
+	// Step 2: Subscribe to GLOBAL_POSITION_INT messages and wait for the response
+	req := connect.NewRequest(&flightpath.SubscribeMessagesRequest{
+		MessageTypes: []flightpath.MavlinkMessageType{
+			flightpath.MavlinkMessageType_MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT,
+		},
+	})
+
+	stream, err := mavlinkService.SubscribeMessages(ctx, req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to subscribe to GLOBAL_POSITION_INT: %w", err)
+	}
+
+	// Use a channel to receive the position from a goroutine
+	posChan := make(chan *flightpath.GlobalPositionInt, 1)
+	errChan := make(chan error, 1)
+
+	// Start a goroutine to read from the stream
+	go func() {
+		for stream.Receive() {
+			msg := stream.Msg()
+			if msg.MessageType == flightpath.MavlinkMessageType_MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT {
+				if pos := msg.GetGlobalPositionInt(); pos != nil {
+					if msg.SystemId == targetSystemID && msg.ComponentId == targetComponentID {
+						fmt.Printf("Received GLOBAL_POSITION_INT: lat=%d, lon=%d, alt=%d mm\n",
+							pos.Lat, pos.Lon, pos.Alt)
+						posChan <- pos
+						return
+					}
+				}
+			}
+		}
+
+		// Stream ended
+		if err := stream.Err(); err != nil {
+			errChan <- fmt.Errorf("stream error: %w", err)
+		} else {
+			errChan <- fmt.Errorf("stream closed unexpectedly")
+		}
+	}()
+
+	// Wait for either the position or timeout
+	select {
+	case pos := <-posChan:
+		return pos, nil
+	case err := <-errChan:
+		return nil, err
+	case <-time.After(timeout):
+		return nil, fmt.Errorf("timeout waiting for GLOBAL_POSITION_INT after %v", timeout)
+	}
+}
+
+// sendTakeoffCommand
+// Sends a takeoff command using MAV_CMD_NAV_TAKEOFF with COMMAND_INT for high precision lat/lon.
+// First requests the current position, then calculates takeoff altitude as current MSL altitude + 10 meters.
+// Uses MAV_FRAME_GLOBAL_INT frame with absolute MSL altitude.
+func sendTakeoffCommand(ctx context.Context, mavlinkService flightpathconnect.MAVLinkServiceClient, targetSystemID, targetComponentID uint32) error {
+	// Step 1: Request current global position
+	pos, err := requestGlobalPositionInt(ctx, mavlinkService, targetSystemID, targetComponentID, CommandTimeout)
+	if err != nil {
+		return fmt.Errorf("failed to get current position: %w", err)
+	}
+
+	// Step 2: Extract position data
+	// GLOBAL_POSITION_INT uses:
+	// - lat/lon: int32 in degrees * 1E7
+	// - alt: int32 in mm (MSL)
+	latitude := pos.Lat     // Already in degrees * 1E7
+	longitude := pos.Lon    // Already in degrees * 1E7
+	currentAltMm := pos.Alt // MSL altitude in mm
+
+	// Step 3: Calculate takeoff altitude (current MSL + 10 meters)
+	// 10 meters = 10000 mm
+	takeoffAltMm := currentAltMm + 10000
+	// Convert to meters for COMMAND_INT Z parameter (float)
+	takeoffAltM := float32(takeoffAltMm) / 1000.0
+
+	fmt.Printf("Current position: lat=%.7f, lon=%.7f, alt=%.2f m MSL\n",
+		float32(latitude)/1e7, float32(longitude)/1e7, float32(currentAltMm)/1000.0)
+	fmt.Printf("Takeoff altitude: %.2f m MSL\n", takeoffAltM)
+
+	// Step 4: Send takeoff command with MAV_FRAME_GLOBAL_INT using SendCommandInt
+	req := connect.NewRequest(&flightpath.SendCommandIntRequest{
+		TargetSystemId:    targetSystemID,
+		TargetComponentId: targetComponentID,
+		Frame:             flightpath.MavFrame_MAV_FRAME_GLOBAL_INT,
+		Command:           uint32(flightpath.MavCmd_MAV_CMD_NAV_TAKEOFF),
+		Param1:            -1.0,        // Minimum pitch (-1 = undefined, use default)
+		Param2:            0.0,         // Empty
+		Param3:            0.0,         // Empty
+		Param4:            0.0,         // Yaw angle (0 = undefined, use current heading)
+		X:                 latitude,    // int32: latitude in degrees * 1E7
+		Y:                 longitude,   // int32: longitude in degrees * 1E7
+		Z:                 takeoffAltM, // float: altitude in meters (MSL, absolute)
+	})
+
+	resp, err := mavlinkService.SendCommandInt(ctx, req)
+	if err != nil {
+		return fmt.Errorf("failed to call SendCommandInt: %w", err)
 	}
 
 	if !resp.Msg.Success {
@@ -379,24 +489,24 @@ func sendTakeoffCommand(ctx context.Context, mavlinkService flightpathconnect.MA
 }
 
 // sendRTLCommand
-// Sends a return-to-launch (RTL) command by setting mode to AUTO/RTL using MAV_CMD_DO_SET_MODE.
+// Sends a return-to-launch (RTL) command using MAV_CMD_NAV_RETURN_TO_LAUNCH.
 func sendRTLCommand(ctx context.Context, mavlinkService flightpathconnect.MAVLinkServiceClient, targetSystemID, targetComponentID uint32) error {
-	req := connect.NewRequest(&flightpath.SendCommandRequest{
+	req := connect.NewRequest(&flightpath.SendCommandLongRequest{
 		TargetSystemId:    targetSystemID,
 		TargetComponentId: targetComponentID,
-		Command:           uint32(flightpath.MavCmd_MAV_CMD_DO_SET_MODE),
-		Param1:            float32(uint32(flightpath.MavModeFlag_MAV_MODE_FLAG_SAFETY_ARMED) | uint32(flightpath.MavModeFlag_MAV_MODE_FLAG_CUSTOM_MODE_ENABLED)),
-		Param2:            float32(flightpath.MainMode_MAIN_MODE_AUTO),
-		Param3:            float32(flightpath.SubMode_SUB_MODE_AUTO_RTL),
-		Param4:            0.0,
-		Param5:            0.0,
-		Param6:            0.0,
-		Param7:            0.0,
+		Command:           uint32(flightpath.MavCmd_MAV_CMD_NAV_RETURN_TO_LAUNCH),
+		Param1:            0.0, // Unused
+		Param2:            0.0, // Unused
+		Param3:            0.0, // Unused
+		Param4:            0.0, // Unused
+		Param5:            0.0, // Unused
+		Param6:            0.0, // Unused
+		Param7:            0.0, // Unused
 	})
 
-	resp, err := mavlinkService.SendCommand(ctx, req)
+	resp, err := mavlinkService.SendCommandLong(ctx, req)
 	if err != nil {
-		return fmt.Errorf("failed to call SendCommand: %w", err)
+		return fmt.Errorf("failed to call SendCommandLong: %w", err)
 	}
 
 	if !resp.Msg.Success {
