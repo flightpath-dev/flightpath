@@ -25,40 +25,46 @@ const (
 type MavlinkMessageType int32
 
 const (
-	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_UNSPECIFIED         MavlinkMessageType = 0
-	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_HEARTBEAT           MavlinkMessageType = 1
-	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_SYS_STATUS          MavlinkMessageType = 2
-	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_GPS_RAW_INT         MavlinkMessageType = 3
-	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT MavlinkMessageType = 4
-	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_VFR_HUD             MavlinkMessageType = 5
-	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_RADIO_STATUS        MavlinkMessageType = 6
-	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE  MavlinkMessageType = 7
-	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_STATUSTEXT          MavlinkMessageType = 8
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_UNSPECIFIED          MavlinkMessageType = 0
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_HEARTBEAT            MavlinkMessageType = 1
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_SYS_STATUS           MavlinkMessageType = 2
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_GPS_RAW_INT          MavlinkMessageType = 3
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT  MavlinkMessageType = 4
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_VFR_HUD              MavlinkMessageType = 5
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_RADIO_STATUS         MavlinkMessageType = 6
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE   MavlinkMessageType = 7
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_STATUSTEXT           MavlinkMessageType = 8
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_MISSION_CURRENT      MavlinkMessageType = 9
+	MavlinkMessageType_MAVLINK_MESSAGE_TYPE_MISSION_ITEM_REACHED MavlinkMessageType = 10
 )
 
 // Enum value maps for MavlinkMessageType.
 var (
 	MavlinkMessageType_name = map[int32]string{
-		0: "MAVLINK_MESSAGE_TYPE_UNSPECIFIED",
-		1: "MAVLINK_MESSAGE_TYPE_HEARTBEAT",
-		2: "MAVLINK_MESSAGE_TYPE_SYS_STATUS",
-		3: "MAVLINK_MESSAGE_TYPE_GPS_RAW_INT",
-		4: "MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT",
-		5: "MAVLINK_MESSAGE_TYPE_VFR_HUD",
-		6: "MAVLINK_MESSAGE_TYPE_RADIO_STATUS",
-		7: "MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE",
-		8: "MAVLINK_MESSAGE_TYPE_STATUSTEXT",
+		0:  "MAVLINK_MESSAGE_TYPE_UNSPECIFIED",
+		1:  "MAVLINK_MESSAGE_TYPE_HEARTBEAT",
+		2:  "MAVLINK_MESSAGE_TYPE_SYS_STATUS",
+		3:  "MAVLINK_MESSAGE_TYPE_GPS_RAW_INT",
+		4:  "MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT",
+		5:  "MAVLINK_MESSAGE_TYPE_VFR_HUD",
+		6:  "MAVLINK_MESSAGE_TYPE_RADIO_STATUS",
+		7:  "MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE",
+		8:  "MAVLINK_MESSAGE_TYPE_STATUSTEXT",
+		9:  "MAVLINK_MESSAGE_TYPE_MISSION_CURRENT",
+		10: "MAVLINK_MESSAGE_TYPE_MISSION_ITEM_REACHED",
 	}
 	MavlinkMessageType_value = map[string]int32{
-		"MAVLINK_MESSAGE_TYPE_UNSPECIFIED":         0,
-		"MAVLINK_MESSAGE_TYPE_HEARTBEAT":           1,
-		"MAVLINK_MESSAGE_TYPE_SYS_STATUS":          2,
-		"MAVLINK_MESSAGE_TYPE_GPS_RAW_INT":         3,
-		"MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT": 4,
-		"MAVLINK_MESSAGE_TYPE_VFR_HUD":             5,
-		"MAVLINK_MESSAGE_TYPE_RADIO_STATUS":        6,
-		"MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE":  7,
-		"MAVLINK_MESSAGE_TYPE_STATUSTEXT":          8,
+		"MAVLINK_MESSAGE_TYPE_UNSPECIFIED":          0,
+		"MAVLINK_MESSAGE_TYPE_HEARTBEAT":            1,
+		"MAVLINK_MESSAGE_TYPE_SYS_STATUS":           2,
+		"MAVLINK_MESSAGE_TYPE_GPS_RAW_INT":          3,
+		"MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT":  4,
+		"MAVLINK_MESSAGE_TYPE_VFR_HUD":              5,
+		"MAVLINK_MESSAGE_TYPE_RADIO_STATUS":         6,
+		"MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE":   7,
+		"MAVLINK_MESSAGE_TYPE_STATUSTEXT":           8,
+		"MAVLINK_MESSAGE_TYPE_MISSION_CURRENT":      9,
+		"MAVLINK_MESSAGE_TYPE_MISSION_ITEM_REACHED": 10,
 	}
 )
 
@@ -159,6 +165,8 @@ type SubscribeMessagesResponse struct {
 	//	*SubscribeMessagesResponse_RadioStatus
 	//	*SubscribeMessagesResponse_ExtendedSysState
 	//	*SubscribeMessagesResponse_StatusText
+	//	*SubscribeMessagesResponse_MissionCurrent
+	//	*SubscribeMessagesResponse_MissionItemReached
 	Message       isSubscribeMessagesResponse_Message `protobuf_oneof:"message"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -301,6 +309,24 @@ func (x *SubscribeMessagesResponse) GetStatusText() *StatusText {
 	return nil
 }
 
+func (x *SubscribeMessagesResponse) GetMissionCurrent() *MissionCurrent {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_MissionCurrent); ok {
+			return x.MissionCurrent
+		}
+	}
+	return nil
+}
+
+func (x *SubscribeMessagesResponse) GetMissionItemReached() *MissionItemReached {
+	if x != nil {
+		if x, ok := x.Message.(*SubscribeMessagesResponse_MissionItemReached); ok {
+			return x.MissionItemReached
+		}
+	}
+	return nil
+}
+
 type isSubscribeMessagesResponse_Message interface {
 	isSubscribeMessagesResponse_Message()
 }
@@ -337,6 +363,14 @@ type SubscribeMessagesResponse_StatusText struct {
 	StatusText *StatusText `protobuf:"bytes,12,opt,name=status_text,json=statusText,proto3,oneof"`
 }
 
+type SubscribeMessagesResponse_MissionCurrent struct {
+	MissionCurrent *MissionCurrent `protobuf:"bytes,13,opt,name=mission_current,json=missionCurrent,proto3,oneof"`
+}
+
+type SubscribeMessagesResponse_MissionItemReached struct {
+	MissionItemReached *MissionItemReached `protobuf:"bytes,14,opt,name=mission_item_reached,json=missionItemReached,proto3,oneof"`
+}
+
 func (*SubscribeMessagesResponse_Heartbeat) isSubscribeMessagesResponse_Message() {}
 
 func (*SubscribeMessagesResponse_SysStatus) isSubscribeMessagesResponse_Message() {}
@@ -352,6 +386,10 @@ func (*SubscribeMessagesResponse_RadioStatus) isSubscribeMessagesResponse_Messag
 func (*SubscribeMessagesResponse_ExtendedSysState) isSubscribeMessagesResponse_Message() {}
 
 func (*SubscribeMessagesResponse_StatusText) isSubscribeMessagesResponse_Message() {}
+
+func (*SubscribeMessagesResponse_MissionCurrent) isSubscribeMessagesResponse_Message() {}
+
+func (*SubscribeMessagesResponse_MissionItemReached) isSubscribeMessagesResponse_Message() {}
 
 // Send a MAVLink command to the drone
 type SendCommandRequest struct {
@@ -534,9 +572,9 @@ var File_flightpath_mavlink_service_proto protoreflect.FileDescriptor
 const file_flightpath_mavlink_service_proto_rawDesc = "" +
 	"\n" +
 	" flightpath/mavlink_service.proto\x12\n" +
-	"flightpath\x1a#flightpath/extended_sys_state.proto\x1a$flightpath/global_position_int.proto\x1a\x1cflightpath/gps_raw_int.proto\x1a\x1aflightpath/heartbeat.proto\x1a\x1dflightpath/radio_status.proto\x1a\x1bflightpath/statustext.proto\x1a\x1bflightpath/sys_status.proto\x1a\x18flightpath/vfr_hud.proto\"_\n" +
+	"flightpath\x1a#flightpath/extended_sys_state.proto\x1a$flightpath/global_position_int.proto\x1a\x1cflightpath/gps_raw_int.proto\x1a\x1aflightpath/heartbeat.proto\x1a flightpath/mission_current.proto\x1a%flightpath/mission_item_reached.proto\x1a\x1dflightpath/radio_status.proto\x1a\x1bflightpath/statustext.proto\x1a\x1bflightpath/sys_status.proto\x1a\x18flightpath/vfr_hud.proto\"_\n" +
 	"\x18SubscribeMessagesRequest\x12C\n" +
-	"\rmessage_types\x18\x01 \x03(\x0e2\x1e.flightpath.MavlinkMessageTypeR\fmessageTypes\"\xbb\x05\n" +
+	"\rmessage_types\x18\x01 \x03(\x0e2\x1e.flightpath.MavlinkMessageTypeR\fmessageTypes\"\xd6\x06\n" +
 	"\x19SubscribeMessagesResponse\x12!\n" +
 	"\ftimestamp_ms\x18\x01 \x01(\x03R\vtimestampMs\x12\x1b\n" +
 	"\tsystem_id\x18\x02 \x01(\rR\bsystemId\x12!\n" +
@@ -552,7 +590,9 @@ const file_flightpath_mavlink_service_proto_rawDesc = "" +
 	" \x01(\v2\x17.flightpath.RadioStatusH\x00R\vradioStatus\x12L\n" +
 	"\x12extended_sys_state\x18\v \x01(\v2\x1c.flightpath.ExtendedSysStateH\x00R\x10extendedSysState\x129\n" +
 	"\vstatus_text\x18\f \x01(\v2\x16.flightpath.StatusTextH\x00R\n" +
-	"statusTextB\t\n" +
+	"statusText\x12E\n" +
+	"\x0fmission_current\x18\r \x01(\v2\x1a.flightpath.MissionCurrentH\x00R\x0emissionCurrent\x12R\n" +
+	"\x14mission_item_reached\x18\x0e \x01(\v2\x1e.flightpath.MissionItemReachedH\x00R\x12missionItemReachedB\t\n" +
 	"\amessage\"\xb0\x02\n" +
 	"\x12SendCommandRequest\x12(\n" +
 	"\x10target_system_id\x18\x01 \x01(\rR\x0etargetSystemId\x12.\n" +
@@ -568,7 +608,7 @@ const file_flightpath_mavlink_service_proto_rawDesc = "" +
 	" \x01(\x02R\x06param7\"T\n" +
 	"\x13SendCommandResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
-	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage*\xf2\x02\n" +
+	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage*\xcb\x03\n" +
 	"\x12MavlinkMessageType\x12$\n" +
 	" MAVLINK_MESSAGE_TYPE_UNSPECIFIED\x10\x00\x12\"\n" +
 	"\x1eMAVLINK_MESSAGE_TYPE_HEARTBEAT\x10\x01\x12#\n" +
@@ -578,7 +618,10 @@ const file_flightpath_mavlink_service_proto_rawDesc = "" +
 	"\x1cMAVLINK_MESSAGE_TYPE_VFR_HUD\x10\x05\x12%\n" +
 	"!MAVLINK_MESSAGE_TYPE_RADIO_STATUS\x10\x06\x12+\n" +
 	"'MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE\x10\a\x12#\n" +
-	"\x1fMAVLINK_MESSAGE_TYPE_STATUSTEXT\x10\b2\xc4\x01\n" +
+	"\x1fMAVLINK_MESSAGE_TYPE_STATUSTEXT\x10\b\x12(\n" +
+	"$MAVLINK_MESSAGE_TYPE_MISSION_CURRENT\x10\t\x12-\n" +
+	")MAVLINK_MESSAGE_TYPE_MISSION_ITEM_REACHED\x10\n" +
+	"2\xc4\x01\n" +
 	"\x0eMAVLinkService\x12b\n" +
 	"\x11SubscribeMessages\x12$.flightpath.SubscribeMessagesRequest\x1a%.flightpath.SubscribeMessagesResponse0\x01\x12N\n" +
 	"\vSendCommand\x12\x1e.flightpath.SendCommandRequest\x1a\x1f.flightpath.SendCommandResponseB\xa5\x01\n" +
@@ -615,6 +658,8 @@ var file_flightpath_mavlink_service_proto_goTypes = []any{
 	(*RadioStatus)(nil),               // 10: flightpath.RadioStatus
 	(*ExtendedSysState)(nil),          // 11: flightpath.ExtendedSysState
 	(*StatusText)(nil),                // 12: flightpath.StatusText
+	(*MissionCurrent)(nil),            // 13: flightpath.MissionCurrent
+	(*MissionItemReached)(nil),        // 14: flightpath.MissionItemReached
 }
 var file_flightpath_mavlink_service_proto_depIdxs = []int32{
 	0,  // 0: flightpath.SubscribeMessagesRequest.message_types:type_name -> flightpath.MavlinkMessageType
@@ -627,15 +672,17 @@ var file_flightpath_mavlink_service_proto_depIdxs = []int32{
 	10, // 7: flightpath.SubscribeMessagesResponse.radio_status:type_name -> flightpath.RadioStatus
 	11, // 8: flightpath.SubscribeMessagesResponse.extended_sys_state:type_name -> flightpath.ExtendedSysState
 	12, // 9: flightpath.SubscribeMessagesResponse.status_text:type_name -> flightpath.StatusText
-	1,  // 10: flightpath.MAVLinkService.SubscribeMessages:input_type -> flightpath.SubscribeMessagesRequest
-	3,  // 11: flightpath.MAVLinkService.SendCommand:input_type -> flightpath.SendCommandRequest
-	2,  // 12: flightpath.MAVLinkService.SubscribeMessages:output_type -> flightpath.SubscribeMessagesResponse
-	4,  // 13: flightpath.MAVLinkService.SendCommand:output_type -> flightpath.SendCommandResponse
-	12, // [12:14] is the sub-list for method output_type
-	10, // [10:12] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	13, // 10: flightpath.SubscribeMessagesResponse.mission_current:type_name -> flightpath.MissionCurrent
+	14, // 11: flightpath.SubscribeMessagesResponse.mission_item_reached:type_name -> flightpath.MissionItemReached
+	1,  // 12: flightpath.MAVLinkService.SubscribeMessages:input_type -> flightpath.SubscribeMessagesRequest
+	3,  // 13: flightpath.MAVLinkService.SendCommand:input_type -> flightpath.SendCommandRequest
+	2,  // 14: flightpath.MAVLinkService.SubscribeMessages:output_type -> flightpath.SubscribeMessagesResponse
+	4,  // 15: flightpath.MAVLinkService.SendCommand:output_type -> flightpath.SendCommandResponse
+	14, // [14:16] is the sub-list for method output_type
+	12, // [12:14] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_flightpath_mavlink_service_proto_init() }
@@ -647,6 +694,8 @@ func file_flightpath_mavlink_service_proto_init() {
 	file_flightpath_global_position_int_proto_init()
 	file_flightpath_gps_raw_int_proto_init()
 	file_flightpath_heartbeat_proto_init()
+	file_flightpath_mission_current_proto_init()
+	file_flightpath_mission_item_reached_proto_init()
 	file_flightpath_radio_status_proto_init()
 	file_flightpath_statustext_proto_init()
 	file_flightpath_sys_status_proto_init()
@@ -660,6 +709,8 @@ func file_flightpath_mavlink_service_proto_init() {
 		(*SubscribeMessagesResponse_RadioStatus)(nil),
 		(*SubscribeMessagesResponse_ExtendedSysState)(nil),
 		(*SubscribeMessagesResponse_StatusText)(nil),
+		(*SubscribeMessagesResponse_MissionCurrent)(nil),
+		(*SubscribeMessagesResponse_MissionItemReached)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
