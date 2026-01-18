@@ -6,6 +6,8 @@ import "flightpath/extended_sys_state.proto";
 import "flightpath/global_position_int.proto";
 import "flightpath/gps_raw_int.proto";
 import "flightpath/heartbeat.proto";
+import "flightpath/mission_current.proto";
+import "flightpath/mission_item_reached.proto";
 import "flightpath/radio_status.proto";
 import "flightpath/statustext.proto";
 import "flightpath/sys_status.proto";
@@ -31,6 +33,8 @@ enum MavlinkMessageType {
   MAVLINK_MESSAGE_TYPE_RADIO_STATUS = 6;
   MAVLINK_MESSAGE_TYPE_EXTENDED_SYS_STATE = 7;
   MAVLINK_MESSAGE_TYPE_STATUSTEXT = 8;
+  MAVLINK_MESSAGE_TYPE_MISSION_CURRENT = 9;
+  MAVLINK_MESSAGE_TYPE_MISSION_ITEM_REACHED = 10;
 }
 
 // Subscribe to all messages or a filtered subset
@@ -64,6 +68,8 @@ message SubscribeMessagesResponse {
     RadioStatus radio_status = 10;
     ExtendedSysState extended_sys_state = 11;
     StatusText status_text = 12;
+    MissionCurrent mission_current = 13;
+    MissionItemReached mission_item_reached = 14;
   }
 }
 

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package flightpath;
+
+// MissionItemReached represents the MISSION_ITEM_REACHED (46) MAVLink message
+// A certain mission item has been reached. The system will either hold this position
+// (or circle on the orbit) or (if the autocontinue on the WP was set) continue to the next waypoint.
+message MissionItemReached {
+  // Sequence number of the mission item that has been reached
+  uint32 seq = 1;
+}
