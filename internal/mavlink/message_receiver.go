@@ -126,6 +126,10 @@ func (r *MAVLinkMessageReceiver) run() {
 					r.dispatchGlobalPositionInt(systemID, componentID, msg)
 				case *common.MessageVfrHud:
 					r.dispatchVfrHud(systemID, componentID, msg)
+				case *common.MessageMissionCurrent:
+					r.dispatchMissionCurrent(systemID, componentID, msg)
+				case *common.MessageMissionItemReached:
+					r.dispatchMissionItemReached(systemID, componentID, msg)
 				}
 			}
 		}
@@ -191,4 +195,16 @@ func (r *MAVLinkMessageReceiver) dispatchGlobalPositionInt(systemID, componentID
 // Converts a VFR_HUD message to protobuf and dispatches it to the registered handler.
 func (r *MAVLinkMessageReceiver) dispatchVfrHud(systemID, componentID uint8, msg *common.MessageVfrHud) {
 	r.dispatch("common.MessageVfrHud", systemID, componentID, message_converters.VfrHudToProtobuf(msg))
+}
+
+// dispatchMissionCurrent
+// Converts a MISSION_CURRENT message to protobuf and dispatches it to the registered handler.
+func (r *MAVLinkMessageReceiver) dispatchMissionCurrent(systemID, componentID uint8, msg *common.MessageMissionCurrent) {
+	r.dispatch("common.MessageMissionCurrent", systemID, componentID, message_converters.MissionCurrentToProtobuf(msg))
+}
+
+// dispatchMissionItemReached
+// Converts a MISSION_ITEM_REACHED message to protobuf and dispatches it to the registered handler.
+func (r *MAVLinkMessageReceiver) dispatchMissionItemReached(systemID, componentID uint8, msg *common.MessageMissionItemReached) {
+	r.dispatch("common.MessageMissionItemReached", systemID, componentID, message_converters.MissionItemReachedToProtobuf(msg))
 }

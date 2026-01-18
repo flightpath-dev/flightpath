@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package flightpath;
+
+// MissionCurrent represents the MISSION_CURRENT (42) MAVLink message
+// Message that announces the sequence number of the current target mission item
+// (that the system will fly towards/execute when the mission is running).
+// This message should be streamed all the time (nominally at 1Hz).
+message MissionCurrent {
+  // Sequence number of the current mission item (indexed from zero)
+  uint32 seq = 1;
+
+  // Total number of mission items on vehicle (on last item, sequence == total).
+  // If the autopilot stores its home location as part of the mission this will be excluded from the total.
+  // 0: Not supported, UINT16_MAX if no mission is present on the vehicle.
+  uint32 total = 2;
+
+  // Mission state machine state. MISSION_STATE_UNSPECIFIED if state reporting not supported.
+  MissionState mission_state = 3;
+
+  // Vehicle is in a mode that can execute mission items or suspended.
+  // 0: Unknown, 1: In mission mode, 2: Suspended (not in mission mode).
+  uint32 mission_mode = 4;
+
+  // Id of current on-vehicle mission plan, or 0 if IDs are not supported or there is no mission loaded.
+  // GCS can use this to track changes to the mission plan type. The same value is returned on mission upload (in the MISSION_ACK).
+  uint32 mission_id = 5;
+
+  // Id of current on-vehicle fence plan, or 0 if IDs are not supported or there is no fence loaded.
+  // GCS can use this to track changes to the fence plan type. The same value is returned on fence upload (in the MISSION_ACK).
+  uint32 fence_id = 6;
+
+  // Id of current on-vehicle rally point plan, or 0 if IDs are not supported or there are no rally points loaded.
+  // GCS can use this to track changes to the rally point plan type. The same value is returned on rally point upload (in the MISSION_ACK).
+  uint32 rally_points_id = 7;
+}
+
+// MissionState represents states from MAVLink MISSION_STATE enum
+// MAVLink 0 (UNKNOWN) maps to proto 0 (UNSPECIFIED), MAVLink 1 (NO_MISSION) maps to proto 1, etc.
+enum MissionState {
+  MISSION_STATE_UNSPECIFIED = 0; // MAVLink 0: The mission status reporting is not supported
+  MISSION_STATE_NO_MISSION = 1; // MAVLink 1: No mission on the vehicle
+  MISSION_STATE_NOT_STARTED = 2; // MAVLink 2: Mission has not started. This is the case after a mission has uploaded but not yet started executing
+  MISSION_STATE_ACTIVE = 3; // MAVLink 3: Mission is active, and will execute mission items when in auto mode
+  MISSION_STATE_PAUSED = 4; // MAVLink 4: Mission is paused when in auto mode
+  MISSION_STATE_COMPLETE = 5; // MAVLink 5: Mission has executed all mission items
+}

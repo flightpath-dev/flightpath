@@ -55,6 +55,8 @@ func NewMAVLinkService(ctx *ServiceContext) *MAVLinkService {
 		ctx.MessageReceiver.RegisterHandler("common.MessageRadioStatus", service)
 		ctx.MessageReceiver.RegisterHandler("common.MessageGlobalPositionInt", service)
 		ctx.MessageReceiver.RegisterHandler("common.MessageVfrHud", service)
+		ctx.MessageReceiver.RegisterHandler("common.MessageMissionCurrent", service)
+		ctx.MessageReceiver.RegisterHandler("common.MessageMissionItemReached", service)
 	}
 
 	return service
@@ -144,6 +146,10 @@ func (s *MAVLinkService) OnMessage(systemID, componentID uint8, msg interface{})
 		s.distributeMessage(systemID, componentID, flightpath.MavlinkMessageType_MAVLINK_MESSAGE_TYPE_GLOBAL_POSITION_INT, &flightpath.SubscribeMessagesResponse_GlobalPositionInt{GlobalPositionInt: m})
 	case *flightpath.VfrHud:
 		s.distributeMessage(systemID, componentID, flightpath.MavlinkMessageType_MAVLINK_MESSAGE_TYPE_VFR_HUD, &flightpath.SubscribeMessagesResponse_VfrHud{VfrHud: m})
+	case *flightpath.MissionCurrent:
+		s.distributeMessage(systemID, componentID, flightpath.MavlinkMessageType_MAVLINK_MESSAGE_TYPE_MISSION_CURRENT, &flightpath.SubscribeMessagesResponse_MissionCurrent{MissionCurrent: m})
+	case *flightpath.MissionItemReached:
+		s.distributeMessage(systemID, componentID, flightpath.MavlinkMessageType_MAVLINK_MESSAGE_TYPE_MISSION_ITEM_REACHED, &flightpath.SubscribeMessagesResponse_MissionItemReached{MissionItemReached: m})
 	}
 }
 
@@ -179,6 +185,10 @@ func createSubscribeMessagesResponse(
 	case *flightpath.SubscribeMessagesResponse_ExtendedSysState:
 		base.Message = m
 	case *flightpath.SubscribeMessagesResponse_StatusText:
+		base.Message = m
+	case *flightpath.SubscribeMessagesResponse_MissionCurrent:
+		base.Message = m
+	case *flightpath.SubscribeMessagesResponse_MissionItemReached:
 		base.Message = m
 	default:
 		return nil // Unknown message type
