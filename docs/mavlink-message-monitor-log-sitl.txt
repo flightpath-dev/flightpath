@@ -1,0 +1,53 @@
+=== MAVLink Message Monitor ===
+
+Latest HEARTBEAT:
+System ID: 1, Component ID: 1
+{
+  "Autopilot": "MAV_AUTOPILOT_PX4",
+  "BaseMode": "MAV_MODE_FLAG_STABILIZE_ENABLED | MAV_MODE_FLAG_GUIDED_ENABLED | MAV_MODE_FLAG_AUTO_ENABLED | MAV_MODE_FLAG_CUSTOM_MODE_ENABLED",
+  "CustomMode": 50593792,
+  "CustomModeDecoded": {
+    "main_mode": "0x04",
+    "main_mode_str": "AUTO",
+    "raw": "0x3040000",
+    "sub_mode": "0x03",
+    "sub_mode_str": "LOITER"
+  },
+  "MavlinkVersion": 3,
+  "SystemStatus": "MAV_STATE_STANDBY",
+  "Type": "MAV_TYPE_QUADROTOR"
+}
+
+Message Counts:
+---------------
+  ALTITUDE (141)                 71
+  ATTITUDE (30)                  3527
+  ATTITUDE_QUATERNION (31)       3527
+  ATTITUDE_TARGET (83)           3561
+  BATTERY_STATUS (147)           35
+  CURRENT_EVENT_SEQUENCE (411)   24
+  CURRENT_MODE (436)             35
+  ESC_INFO (290)                 71
+  ESC_STATUS (291)               71
+  ESTIMATOR_STATUS (230)         35
+  EVENT (410)                    14
+  EXTENDED_SYS_STATE (245)       71
+  GLOBAL_POSITION_INT (33)       3474
+  GPS_GLOBAL_ORIGIN (49)         1
+  GPS_RAW_INT (24)               179
+  HEARTBEAT (0)                  71
+  HOME_POSITION (242)            35
+  LINK_NODE_STATUS (8)           71
+  LOCAL_POSITION_NED (32)        3561
+  MISSION_CURRENT (42)           71
+  OPEN_DRONE_ID_LOCATION (12901) 71
+  OPEN_DRONE_ID_SYSTEM (12904)   71
+  PING (4)                       7
+  POSITION_TARGET_LOCAL_NED (85) 3561
+  SCALED_PRESSURE (29)           71
+  SERVO_OUTPUT_RAW (36)          3581
+  STATUSTEXT (253)               1
+  SYS_STATUS (1)                 71
+  TIME_ESTIMATE_TO_TARGET (380)  35
+  VFR_HUD (74)                   285
+  VIBRATION (241)                7

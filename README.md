@@ -66,6 +66,10 @@ go run cmd/server/main.go
 go run examples/message_monitor_flightpath/main.go
 ```
 
+See sample logs:
+- [from SITL](./docs/mavlink-message-monitor-log-sitl.txt)
+- [from live vehicle](./docs/mavlink-message-monitor-log-live-vehicle.txt)
+
 ### Run with a drone connected to a serial port
 
 ```bash
